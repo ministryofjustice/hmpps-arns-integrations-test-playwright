@@ -145,6 +145,11 @@ export async function browserTest() {
     console.log(sanPage.title());
     console.log("=========================");
 
+    // Confirm privacy data and submit form
+    await sanPage.locator('//*[@id="privacy_screen_declaration"]').check();
+    simulateThinkingTime();
+    await sanPage.locator('//*[@id="confirm-privacy-form"]/div[2]/button').click();
+
     // Select No accomodation
     await sanPage.locator('#current_accommodation-3').check();
     simulateThinkingTime();
@@ -181,7 +186,7 @@ export async function browserTest() {
     sleep(3);
 
     // Move onto Employment and education section
-    await sanPage.locator('//*[@id="main-content"]/div/div[3]/div[1]/nav/ul/li[2]/a/span').click();
+    await sanPage.locator('//*[@id="main-content"]/div/div[4]/div[1]/nav/ul/li[2]/a').click();
     simulateThinkingTime();
     await sanPage.locator('//*[@id="employment_status-2"]').check();
     simulateThinkingTime();
@@ -208,7 +213,7 @@ export async function browserTest() {
     simulateThinkingTime();
 
     // Submit form
-    await page2.locator('//*[@id="form"]/div[11]/button').click();
+    await sanPage.locator('//*[@id="form"]/div[11]/button').click();
     simulateThinkingTime();
 
     // Submit practitioner analysis
