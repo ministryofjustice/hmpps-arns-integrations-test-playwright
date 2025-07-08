@@ -397,7 +397,7 @@ export class SentencePlanPage {
 
     async checkPlanCreationIsNotOverwritten() {
         const todayDate = getTodayDateFormatted();
-        await expect(newTabGlobal!.locator('p').filter({ hasText: 'Plan created on ' + todayDate }).getByRole('strong'))
+        await expect(newTabGlobal!.locator('p').filter({ hasText: 'Plan agreed on ' + todayDate }).getByRole('strong'))
             .toHaveCount(0);
     }
 
