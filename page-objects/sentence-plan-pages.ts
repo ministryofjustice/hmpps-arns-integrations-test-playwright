@@ -1,5 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test';
-import { GOAL_CREATED_DATA } from './pages-common';
+import { PLAN_CREATED_DATA } from './pages-common';
 
 const { chromium } = require('playwright');
 const getTodayDateFormatted = (): string => {
@@ -391,13 +391,13 @@ export class SentencePlanPage {
     }
 
     async checkPlanCreationUpdateIsUnique() {
-        await expect(newTabGlobal!.locator('p').filter({ hasText: GOAL_CREATED_DATA }).getByRole('strong'))
+        await expect(newTabGlobal!.locator('p').filter({ hasText: PLAN_CREATED_DATA }).getByRole('strong'))
             .toHaveCount(1);
     }
 
     async checkPlanCreationIsNotOverwritten() {
         const todayDate = getTodayDateFormatted();
-        await expect(newTabGlobal!.locator('p').filter({ hasText: 'Plan created on ' + todayDate }).getByRole('strong'))
+        await expect(newTabGlobal!.locator('p').filter({ hasText: 'Plan agreed on ' + todayDate }).getByRole('strong'))
             .toHaveCount(0);
     }
 
@@ -594,11 +594,11 @@ export class SentencePlanPage {
     }
 
     async checkUpdateButtonAppears() {
-        await expect(newTabGlobal!.getByRole('link', { name: 'Update   (test)' })).toBeVisible();
+        await expect(newTabGlobal!.getByRole('link', { name: 'Update' })).toBeVisible();
     }
 
     async checkUpdateButtonHidden() {
-        await expect(newTabGlobal!.getByRole('link', { name: 'Update   (test)' })).toBeHidden();
+        await expect(newTabGlobal!.getByRole('link', { name: 'Update)' })).toBeHidden();
     }
 
     async clickRemovedGoalsButton() {

@@ -1,5 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test';
-import { SP_TEST_ENV_LINK } from './pages-common';
+import { SP_DEV_ENV_LINK } from './pages-common';
 
 const { chromium } = require('playwright');
 
@@ -698,6 +698,6 @@ export class StrengthsAndNeedsLandingPage {
     }
 
     async navigateToSPLink() {
-        await newTabGlobal!.goto(SP_TEST_ENV_LINK);
+        await newTabGlobal!.goto(SP_DEV_ENV_LINK);
     }
 }
