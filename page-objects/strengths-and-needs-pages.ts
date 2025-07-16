@@ -689,7 +689,7 @@ export class StrengthsAndNeedsLandingPage {
     }
 
     async checkSectionIsComplete() {
-        await expect(newTabGlobal!.getByText('Complete')).toBeVisible();
+        await expect(newTabGlobal!.getByText('Complete', { exact: true })).toBeVisible();
     }
 
     async confirmUserIsOnOffenceAnalysisPage() {
