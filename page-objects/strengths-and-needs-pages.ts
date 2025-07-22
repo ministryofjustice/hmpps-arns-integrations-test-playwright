@@ -44,6 +44,7 @@ export class StrengthsAndNeedsLandingPage {
 
     async checkPageTitlePreviousVersion() {
         await expect(newTabGlobal).toHaveTitle('Previous versions - Strengths and needs');
+
     }
 
     async clickConfirmButtonOnDataPrivacyScreen() {
@@ -113,6 +114,10 @@ export class StrengthsAndNeedsLandingPage {
         await newTabGlobal!.locator('#tab_practitioner-analysis').click();
     }
 
+    async clickSummaryTab() {
+        await newTabGlobal!.locator('#tab_summary').click();
+    }
+
     async tickYesFactors() {
         await newTabGlobal!.locator('#accommodation_practitioner_analysis_strengths_or_protective_factors').check();
     }
@@ -155,6 +160,18 @@ export class StrengthsAndNeedsLandingPage {
 
     async clickRiskOfReOffendingChangeLink() {
         await newTabGlobal!.getByRole('link', { name: 'Change  value for Linked to risk of reoffending' }).click();
+    }
+
+    async selectShelterAnswer() {
+        await newTabGlobal!.getByLabel('Shelter').click();
+    }
+
+    async selectCampsiteAnswer() {
+        await newTabGlobal!.getByLabel('Campsite').click();
+    }
+
+    async changeFirstAccomodationQuestion() {
+        await newTabGlobal!.getByRole('link', { name: 'Change  value for What type' }).click();
     }
 
     // Employment
@@ -719,6 +736,14 @@ export class StrengthsAndNeedsLandingPage {
         await newTabGlobal!.getByRole('link', { name: 'View previous versions' }).click();
     }
 
+    async clickViewAllAnswers() {
+        await newTabGlobal!.getByRole('link', { name: 'View all answers' }).click();
+    }
+
+    async clickBack() {
+        await newTabGlobal!.getByRole('link', { name: 'Back' }).click();
+    }
+
     async checkPreviousVersionsHeader() {
         const heading = newTabGlobal!.getByRole('heading', { name: 'Previous versions' });
         await expect(heading).toBeVisible();
@@ -733,4 +758,24 @@ export class StrengthsAndNeedsLandingPage {
         await newTabGlobal!.getByRole('link', { name: 'View' }).click();
     }
 
+    async checkPreviousAssessment() {
+        const today = new Date();
+        const dayOfWeek = today.getDay(); // 0 (Sunday) to 6 (Saturday)
+
+        if (dayOfWeek === 1) { // Monday
+            today.setDate(today.getDate() - 3); // Go back to Friday
+        } else if (dayOfWeek === 0) { // Sunday (if ever relevant)
+            today.setDate(today.getDate() - 2); // Go back to Friday
+        } else {
+            today.setDate(today.getDate() - 1); // Previous day
+        }
+        let s = today.toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+        const previousVersionsDate= newTabGlobal!.locator('div').filter({ hasText: s }).nth(3);
+        await expect(previousVersionsDate).toBeVisible();
+
+    }
 }

@@ -101,7 +101,7 @@ test('User tries editing capabilities on view only for strengths and needs asses
     // Accommodation tab has visible question but no save/continue button
     await strengthsAndNeedsLandingPage.checkSaveAndContinueButtonHidden();
     await strengthsAndNeedsLandingPage.checkAccommodationTypeQuestion();
-    await strengthsAndNeedsLandingPage.checkSaveAndContinueButtonHidden();
+    await strengthsAndNeedsLandingPage.checkSectionIsComplete();
     await strengthsAndNeedsLandingPage.clickPracitionerAnalysisButton();
 
     // Employments and education tabs

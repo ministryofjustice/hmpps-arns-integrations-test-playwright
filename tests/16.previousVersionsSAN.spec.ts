@@ -41,12 +41,38 @@ test('User checks previous versions of SAN', async ({ page }) => {
 
     // Check previous version tab opens
     await strengthsAndNeedsLandingPage.checkPreviousVersionsHeader();
+    await strengthsAndNeedsLandingPage.checkPreviousAssessment();
+    await strengthsAndNeedsLandingPage.clickBack();
+
+    // Make a change and save so previous assessment is available for tomorrow
+    await strengthsAndNeedsLandingPage.changeFirstAccomodationQuestion();
+    await strengthsAndNeedsLandingPage.selectShelterAnswer();
+    await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
+    await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
+    await strengthsAndNeedsLandingPage.clickPracticionerAnalysisTab();
+    await strengthsAndNeedsLandingPage.clickMarkAsComplete();
+
+    // Change answer back to original for future re-runs
+    await strengthsAndNeedsLandingPage.clickSummaryTab();
+    await strengthsAndNeedsLandingPage.changeFirstAccomodationQuestion();
+    await strengthsAndNeedsLandingPage.selectCampsiteAnswer();
+    await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
+    await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
+    await strengthsAndNeedsLandingPage.clickPracticionerAnalysisTab();
+    await strengthsAndNeedsLandingPage.clickMarkAsComplete();
+
+    // Go back to previous versions tab
+    await strengthsAndNeedsLandingPage.clickViewPreviousVersions();
+    await strengthsAndNeedsLandingPage.checkPreviousVersionsHeader();
 
     // Click on view for previous version
     await strengthsAndNeedsLandingPage.clickAPreviousVersion();
 
     // Check new tab opens and title is correct
     await strengthsAndNeedsLandingPage.checkPageTitlePreviousVersion();
+
+    // Check previous version banner appears
+    await strengthsAndNeedsLandingPage.checkSaveAndContinueButtonHidden();
 
     console.log('Previous version tab works as expected');
 });
