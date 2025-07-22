@@ -1,5 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test';
 import { SP_DEV_ENV_LINK } from './pages-common';
+import exp from "node:constants";
 
 const { chromium } = require('playwright');
 
@@ -16,7 +17,16 @@ export class StrengthsAndNeedsLandingPage {
         //wait for Load 
         await newTab.waitForLoadState();
         newTabGlobal = newTab;
-        await expect(newTab).toHaveTitle('Strengths and needs');
+        await expect(newTab).toHaveTitle('- Strengths and needs');
+    }
+
+    async checkViewOnlyPageTitle() {
+        const newTabPromise = this.page.waitForEvent('popup');
+        const newTab = await newTabPromise;
+        //wait for Load
+        await newTab.waitForLoadState();
+        newTabGlobal = newTab;
+        await expect(newTab).toHaveTitle('Summary - Strengths and needs');
     }
 
     async checkPageTitleDataPrivacyScreen() {
@@ -30,6 +40,10 @@ export class StrengthsAndNeedsLandingPage {
 
     async checkPageTitleStrengthsAndNeedsAfterDataPrivacyScreen() {
         await expect(newTabGlobal).toHaveTitle('Strengths and needs');
+    }
+
+    async checkPageTitlePreviousVersion() {
+        await expect(newTabGlobal).toHaveTitle('Previous versions - Strengths and needs');
     }
 
     async clickConfirmButtonOnDataPrivacyScreen() {
@@ -700,4 +714,23 @@ export class StrengthsAndNeedsLandingPage {
     async navigateToSPLink() {
         await newTabGlobal!.goto(SP_DEV_ENV_LINK);
     }
+
+    async clickViewPreviousVersions() {
+        await newTabGlobal!.getByRole('link', { name: 'View previous versions' }).click();
+    }
+
+    async checkPreviousVersionsHeader() {
+        const heading = newTabGlobal!.getByRole('heading', { name: 'Previous versions' });
+        await expect(heading).toBeVisible();
+    }
+
+    async checkViewOnlyPreviousVersionBanner() {
+        const banner = newTabGlobal!.getByLabel('information: Assessment');
+        await expect(banner).toBeVisible();
+    }
+
+    async clickAPreviousVersion() {
+        await newTabGlobal!.getByRole('link', { name: 'View' }).click();
+    }
+
 }

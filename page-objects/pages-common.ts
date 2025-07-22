@@ -2,6 +2,8 @@ export const DEFAULT_CLICK_OPTIONS = { delay: 1000 };
 
 export const PK_WITH_COMPLETED_SAN = '705011'
 
+export const PK_WITH_PREVIOUS_ANSWERS = '721662'
+
 export const PK_VIEW_ONLY_SAN = '777849'
 
 export const PK_FOR_ACCESS_MODE = '212692'
