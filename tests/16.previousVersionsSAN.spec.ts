@@ -59,10 +59,10 @@ test('User checks previous versions of SAN', async ({ page }) => {
     await strengthsAndNeedsLandingPage.checkPreviousVersionsHeader();
 
     // Click on view for previous version
-    // await strengthsAndNeedsLandingPage.clickAPreviousVersion();
+    await strengthsAndNeedsLandingPage.clickLatestPreviousVersion();
 
     // Check new tab opens and title is correct
-    // await strengthsAndNeedsLandingPage.checkPageTitlePreviousVersion();
+    await strengthsAndNeedsLandingPage.checkPageTitlePreviousVersion();
 
     // Check previous version banner appears
     // await strengthsAndNeedsLandingPage.checkSaveAndContinueButtonHidden();

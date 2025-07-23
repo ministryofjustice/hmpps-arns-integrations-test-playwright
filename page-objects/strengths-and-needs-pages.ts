@@ -787,8 +787,23 @@ export class StrengthsAndNeedsLandingPage {
         await expect(banner).toBeVisible();
     }
 
-    async clickAPreviousVersion() {
-        await newTabGlobal!.getByRole('link', { name: 'View' }).click();
+    async clickLatestPreviousVersion() {
+        const day = new Date();
+        const dayOfWeek = day.getDay(); // 0 (Sunday) to 6 (Saturday)
+
+        if (dayOfWeek === 1) { // Monday
+            day.setDate(day.getDate() - 3); // Go back to Friday
+        } else if (dayOfWeek === 0) { // Sunday (if ever relevant)
+            day.setDate(day.getDate() - 2); // Go back to Friday
+        } else {
+            day.setDate(day.getDate() - 1); // Previous day
+        }
+        let s = day.toLocaleDateString('en-GB', {
+            day: 'numeric',
+        });
+        let previousVersionsDate:string = 'View   assessment from'+" "+s ;
+        console.log(previousVersionsDate);
+        await newTabGlobal!.getByRole('link', { name: previousVersionsDate }).click();
     }
 
     async checkPreviousAssessment() {
