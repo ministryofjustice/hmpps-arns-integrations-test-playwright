@@ -170,8 +170,17 @@ export class StrengthsAndNeedsLandingPage {
         await newTabGlobal!.getByLabel('Campsite').click();
     }
 
-    async changeFirstAccomodationQuestion() {
+    async changeFirstAccommodationQuestion() {
         await newTabGlobal!.getByRole('link', { name: 'Change  value for What type' }).click();
+    }
+
+    async changeSecondAccommodationQuestion() {
+        await newTabGlobal!.getByRole('link', { name: 'Change  value for Why does' }).click();
+    }
+
+    async fillInOptionalInfo() {
+        await newTabGlobal!.locator('#employment_history_unknown_details')
+            .fill('test');
     }
 
     // Employment
@@ -475,9 +484,33 @@ export class StrengthsAndNeedsLandingPage {
         await newTabGlobal!.locator('#personal_relationships_community_children_details').check();
     }
 
+    async changeYesChildrenLiving() {
+        await newTabGlobal!.getByRole('link', { name: 'Change  value for Are there' }).click();
+    }
+
     async fillInInfoAboutChildren() {
         await newTabGlobal!.locator('#personal_relationships_community_children_details_yes_children_living_with_pop_details')
             .fill('child 1');
+    }
+
+    async fillInInfoAboutChildrenDynamic() {
+        const answer = new Date();
+        const dayOfWeek = answer.getDay(); // 0 (Sunday) to 6 (Saturday)
+
+        if (dayOfWeek === 1) { // Monday
+            answer.setDate(answer.getDate() - 3); // Go back to Friday
+        } else if (dayOfWeek === 0) { // Sunday (if ever relevant)
+            answer.setDate(answer.getDate() - 2); // Go back to Friday
+        } else {
+            answer.setDate(answer.getDate() - 1); // Previous day
+        }
+        let d = answer.toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+        await newTabGlobal!.locator('#personal_relationships_community_children_details_yes_children_living_with_pop_details')
+            .fill(d);
     }
 
     async tickPartnerImportantPeople() {
