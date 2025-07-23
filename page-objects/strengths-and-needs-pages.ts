@@ -802,7 +802,6 @@ export class StrengthsAndNeedsLandingPage {
             day: 'numeric',
         });
         let previousVersionsDate:string = 'View   assessment from'+" "+s ;
-        console.log(previousVersionsDate);
         await newTabGlobal!.getByRole('link', { name: previousVersionsDate }).click();
     }
 
