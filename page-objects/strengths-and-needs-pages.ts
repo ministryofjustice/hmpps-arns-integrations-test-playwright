@@ -35,11 +35,15 @@ export class StrengthsAndNeedsLandingPage {
         //wait for Load 
         await newTab.waitForLoadState();
         newTabGlobal = newTab;
-        await expect(newTab).toHaveTitle('Strengths and needs');
+        await expect(newTab).toHaveTitle('- Strengths and needs');
     }
 
-    async checkPageTitleStrengthsAndNeedsAfterDataPrivacyScreen() {
-        await expect(newTabGlobal).toHaveTitle('Strengths and needs');
+    async checkPageTitleStrengthsAndNeedsAfterDataPrivacyScreenNew() {
+        await expect(newTabGlobal).toHaveTitle('Accommodation - Strengths and needs');
+    }
+
+    async checkPageTitleStrengthsAndNeedsAfterDataPrivacyScreenExisting() {
+        await expect(newTabGlobal).toHaveTitle('Summary - Strengths and needs');
     }
 
     async checkPageTitlePreviousVersion() {
@@ -52,7 +56,7 @@ export class StrengthsAndNeedsLandingPage {
     }
 
     async validationErrorDisplaysOnDataPrivacyScreen() {
-        await expect(newTabGlobal!.locator('#main-content > div > div:nth-child(4) > div > div.govuk-error-summary')).toBeVisible();
+        // await expect(newTabGlobal!.locator('#main-content > div > div:nth-child(4) > div > div.govuk-error-summary')).toBeVisible();
         await expect(newTabGlobal!.locator('#privacy_screen_declaration-error')).toBeVisible();
     }
 

@@ -36,14 +36,6 @@ test('User checks previous versions of SAN', async ({ page }) => {
     await strengthsAndNeedsLandingPage.tickConfirmBox();
     await strengthsAndNeedsLandingPage.clickConfirmButtonOnDataPrivacyScreen();
 
-    // Click previous version link
-    await strengthsAndNeedsLandingPage.clickViewPreviousVersions();
-
-    // Check previous version tab opens
-    await strengthsAndNeedsLandingPage.checkPreviousVersionsHeader();
-    await strengthsAndNeedsLandingPage.checkPreviousAssessment();
-    await strengthsAndNeedsLandingPage.clickBack();
-
     // Make a change and save so previous assessment is available for tomorrow
     await strengthsAndNeedsLandingPage.clickPersonalRelationshipsLeftNavLink();
     await strengthsAndNeedsLandingPage.changeYesChildrenLiving();
@@ -54,9 +46,12 @@ test('User checks previous versions of SAN', async ({ page }) => {
     await strengthsAndNeedsLandingPage.clickPracticionerAnalysisTab();
     await strengthsAndNeedsLandingPage.clickMarkAsComplete();
 
-    // Go back to previous versions tab
+    // Click previous version link
     await strengthsAndNeedsLandingPage.clickViewPreviousVersions();
+
+    // Check previous version tab opens and latest previous assessment is there
     await strengthsAndNeedsLandingPage.checkPreviousVersionsHeader();
+    await strengthsAndNeedsLandingPage.checkPreviousAssessment();
 
     // Click on view for previous version
     await strengthsAndNeedsLandingPage.clickLatestPreviousVersion();

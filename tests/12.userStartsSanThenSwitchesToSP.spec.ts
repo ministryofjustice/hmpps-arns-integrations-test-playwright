@@ -52,7 +52,7 @@ test('User navigates to their About page from an incomplete San assessment', asy
   await strengthsAndNeedsLandingPage.clickConfirmButtonOnDataPrivacyScreen();
 
   // Check page title
-  await strengthsAndNeedsLandingPage.checkPageTitleStrengthsAndNeedsAfterDataPrivacyScreen();
+  await strengthsAndNeedsLandingPage.checkPageTitleStrengthsAndNeedsAfterDataPrivacyScreenExisting();
 
   // Simulate navigating to SP without going via OASYS
   await strengthsAndNeedsLandingPage.navigateToSPLink();

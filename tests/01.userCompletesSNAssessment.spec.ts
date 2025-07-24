@@ -25,7 +25,7 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
   await stubHomePage.clickOpenButton();
 
   // Check the data privacy page title is correct
-  await strengthsAndNeedsLandingPage.checkPageTitleDataPrivacyScreen();
+  await strengthsAndNeedsLandingPage.checkPageTitle();
 
   // Check page has no accessiblity violations
   await accessibility.shouldHaveNoAccessibilityViolations();
@@ -44,7 +44,7 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
   await strengthsAndNeedsLandingPage.clickConfirmButtonOnDataPrivacyScreen();
 
   // Check page title
-  await strengthsAndNeedsLandingPage.checkPageTitleStrengthsAndNeedsAfterDataPrivacyScreen();
+  await strengthsAndNeedsLandingPage.checkPageTitleStrengthsAndNeedsAfterDataPrivacyScreenNew();
 
   // Try to submit form - expect validation error
   await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
