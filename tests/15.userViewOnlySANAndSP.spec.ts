@@ -93,12 +93,15 @@ test('User tries editing capabilities on view only for strengths and needs asses
     await stubHomePage.clickOpenButton();
 
     // Check the page title is correct
-    await strengthsAndNeedsLandingPage.checkPageTitle();
+    await strengthsAndNeedsLandingPage.checkViewOnlyPageTitle();
+
+    // Check previous version banner appears
+    await strengthsAndNeedsLandingPage.checkViewOnlyPreviousVersionBanner();
 
     // Accommodation tab has visible question but no save/continue button
     await strengthsAndNeedsLandingPage.checkSaveAndContinueButtonHidden();
     await strengthsAndNeedsLandingPage.checkAccommodationTypeQuestion();
-    await strengthsAndNeedsLandingPage.checkSaveAndContinueButtonHidden();
+    await strengthsAndNeedsLandingPage.checkSectionIsComplete();
     await strengthsAndNeedsLandingPage.clickPracitionerAnalysisButton();
 
     // Employments and education tabs

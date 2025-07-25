@@ -1,5 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test';
 import { SP_DEV_ENV_LINK } from './pages-common';
+import exp from "node:constants";
 
 const { chromium } = require('playwright');
 
@@ -16,7 +17,16 @@ export class StrengthsAndNeedsLandingPage {
         //wait for Load 
         await newTab.waitForLoadState();
         newTabGlobal = newTab;
-        await expect(newTab).toHaveTitle('Strengths and needs');
+        await expect(newTab).toHaveTitle('- Strengths and needs');
+    }
+
+    async checkViewOnlyPageTitle() {
+        const newTabPromise = this.page.waitForEvent('popup');
+        const newTab = await newTabPromise;
+        //wait for Load
+        await newTab.waitForLoadState();
+        newTabGlobal = newTab;
+        await expect(newTab).toHaveTitle('Summary - Strengths and needs');
     }
 
     async checkPageTitleDataPrivacyScreen() {
@@ -25,11 +35,20 @@ export class StrengthsAndNeedsLandingPage {
         //wait for Load 
         await newTab.waitForLoadState();
         newTabGlobal = newTab;
-        await expect(newTab).toHaveTitle('Strengths and needs');
+        await expect(newTab).toHaveTitle('- Strengths and needs');
     }
 
-    async checkPageTitleStrengthsAndNeedsAfterDataPrivacyScreen() {
-        await expect(newTabGlobal).toHaveTitle('Strengths and needs');
+    async checkPageTitleStrengthsAndNeedsAfterDataPrivacyScreenNew() {
+        await expect(newTabGlobal).toHaveTitle('Accommodation - Strengths and needs');
+    }
+
+    async checkPageTitleStrengthsAndNeedsAfterDataPrivacyScreenExisting() {
+        await expect(newTabGlobal).toHaveTitle('Summary - Strengths and needs');
+    }
+
+    async checkPageTitlePreviousVersion() {
+        await expect(newTabGlobal).toHaveTitle('Previous versions - Strengths and needs');
+
     }
 
     async clickConfirmButtonOnDataPrivacyScreen() {
@@ -37,7 +56,7 @@ export class StrengthsAndNeedsLandingPage {
     }
 
     async validationErrorDisplaysOnDataPrivacyScreen() {
-        await expect(newTabGlobal!.locator('#main-content > div > div:nth-child(4) > div > div.govuk-error-summary')).toBeVisible();
+        await expect(newTabGlobal!.locator('#main-content > div > div:nth-child(5) > div > div.govuk-error-summary')).toBeVisible();
         await expect(newTabGlobal!.locator('#privacy_screen_declaration-error')).toBeVisible();
     }
 
@@ -99,6 +118,10 @@ export class StrengthsAndNeedsLandingPage {
         await newTabGlobal!.locator('#tab_practitioner-analysis').click();
     }
 
+    async clickSummaryTab() {
+        await newTabGlobal!.locator('#tab_summary').click();
+    }
+
     async tickYesFactors() {
         await newTabGlobal!.locator('#accommodation_practitioner_analysis_strengths_or_protective_factors').check();
     }
@@ -141,6 +164,27 @@ export class StrengthsAndNeedsLandingPage {
 
     async clickRiskOfReOffendingChangeLink() {
         await newTabGlobal!.getByRole('link', { name: 'Change  value for Linked to risk of reoffending' }).click();
+    }
+
+    async selectShelterAnswer() {
+        await newTabGlobal!.getByLabel('Shelter').click();
+    }
+
+    async selectCampsiteAnswer() {
+        await newTabGlobal!.getByLabel('Campsite').click();
+    }
+
+    async changeFirstAccommodationQuestion() {
+        await newTabGlobal!.getByRole('link', { name: 'Change  value for What type' }).click();
+    }
+
+    async changeSecondAccommodationQuestion() {
+        await newTabGlobal!.getByRole('link', { name: 'Change  value for Why does' }).click();
+    }
+
+    async fillInOptionalInfo() {
+        await newTabGlobal!.locator('#employment_history_unknown_details')
+            .fill('test');
     }
 
     // Employment
@@ -444,9 +488,33 @@ export class StrengthsAndNeedsLandingPage {
         await newTabGlobal!.locator('#personal_relationships_community_children_details').check();
     }
 
+    async changeYesChildrenLiving() {
+        await newTabGlobal!.getByRole('link', { name: 'Change  value for Are there' }).click();
+    }
+
     async fillInInfoAboutChildren() {
         await newTabGlobal!.locator('#personal_relationships_community_children_details_yes_children_living_with_pop_details')
             .fill('child 1');
+    }
+
+    async fillInInfoAboutChildrenDynamic() {
+        const answer = new Date();
+        const dayOfWeek = answer.getDay(); // 0 (Sunday) to 6 (Saturday)
+
+        if (dayOfWeek === 1) { // Monday
+            answer.setDate(answer.getDate() - 3); // Go back to Friday
+        } else if (dayOfWeek === 0) { // Sunday (if ever relevant)
+            answer.setDate(answer.getDate() - 2); // Go back to Friday
+        } else {
+            answer.setDate(answer.getDate() - 1); // Previous day
+        }
+        let d = answer.toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+        await newTabGlobal!.locator('#personal_relationships_community_children_details_yes_children_living_with_pop_details')
+            .fill(d);
     }
 
     async tickPartnerImportantPeople() {
@@ -699,5 +767,66 @@ export class StrengthsAndNeedsLandingPage {
 
     async navigateToSPLink() {
         await newTabGlobal!.goto(SP_DEV_ENV_LINK);
+    }
+
+    async clickViewPreviousVersions() {
+        await newTabGlobal!.getByRole('link', { name: 'View previous versions' }).click();
+    }
+
+    async clickViewAllAnswers() {
+        await newTabGlobal!.getByRole('link', { name: 'View all answers' }).click();
+    }
+
+    async clickBack() {
+        await newTabGlobal!.getByRole('link', { name: 'Back' }).click();
+    }
+
+    async checkPreviousVersionsHeader() {
+        const heading = newTabGlobal!.getByRole('heading', { name: 'Previous versions' });
+        await expect(heading).toBeVisible();
+    }
+
+    async checkViewOnlyPreviousVersionBanner() {
+        const banner = newTabGlobal!.getByLabel('information: Assessment');
+        await expect(banner).toBeVisible();
+    }
+
+    async clickLatestPreviousVersion() {
+        const day = new Date();
+        const dayOfWeek = day.getDay(); // 0 (Sunday) to 6 (Saturday)
+
+        if (dayOfWeek === 1) { // Monday
+            day.setDate(day.getDate() - 3); // Go back to Friday
+        } else if (dayOfWeek === 0) { // Sunday (if ever relevant)
+            day.setDate(day.getDate() - 2); // Go back to Friday
+        } else {
+            day.setDate(day.getDate() - 1); // Previous day
+        }
+        let s = day.toLocaleDateString('en-GB', {
+            day: 'numeric',
+        });
+        let previousVersionsDate:string = 'View   assessment from'+" "+s ;
+        await newTabGlobal!.getByRole('link', { name: previousVersionsDate }).click();
+    }
+
+    async checkPreviousAssessment() {
+        const today = new Date();
+        const dayOfWeek = today.getDay(); // 0 (Sunday) to 6 (Saturday)
+
+        if (dayOfWeek === 1) { // Monday
+            today.setDate(today.getDate() - 3); // Go back to Friday
+        } else if (dayOfWeek === 0) { // Sunday (if ever relevant)
+            today.setDate(today.getDate() - 2); // Go back to Friday
+        } else {
+            today.setDate(today.getDate() - 1); // Previous day
+        }
+        let s = today.toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+        const previousVersionsDate= newTabGlobal!.locator('div').filter({ hasText: s }).nth(3);
+        await expect(previousVersionsDate).toBeVisible();
+
     }
 }
