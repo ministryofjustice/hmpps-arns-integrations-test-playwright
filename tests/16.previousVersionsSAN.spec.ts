@@ -59,8 +59,5 @@ test('User checks previous versions of SAN', async ({ page }) => {
     // Check new tab opens and title is correct
     await strengthsAndNeedsLandingPage.checkPageTitlePreviousVersion();
 
-    // Check previous version banner appears
-    // await strengthsAndNeedsLandingPage.checkSaveAndContinueButtonHidden();
-
     console.log('Previous version tab works as expected');
 });
