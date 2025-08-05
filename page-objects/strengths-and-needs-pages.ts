@@ -805,7 +805,9 @@ export class StrengthsAndNeedsLandingPage {
         let s = day.toLocaleDateString('en-GB', {
             day: 'numeric',
         });
-        let previousVersionsDate:string = 'View   assessment from'+" "+s ;
+        let twoDigitDay:string = ('0'+s).slice(-2);
+        let previousVersionsDate:string = 'View   assessment from'+" "+twoDigitDay ;
+        console.log(previousVersionsDate);
         await newTabGlobal!.getByRole('link', { name: previousVersionsDate }).click();
     }
 
