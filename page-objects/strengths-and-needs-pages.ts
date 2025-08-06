@@ -787,7 +787,7 @@ export class StrengthsAndNeedsLandingPage {
     }
 
     async checkViewOnlyPreviousVersionBanner() {
-        const banner = newTabGlobal!.getByLabel('information: Assessment');
+        const banner = newTabGlobal!.getByRole('banner');
         await expect(banner).toBeVisible();
     }
 
