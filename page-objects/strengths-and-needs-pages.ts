@@ -17,7 +17,7 @@ export class StrengthsAndNeedsLandingPage {
         //wait for Load 
         await newTab.waitForLoadState();
         newTabGlobal = newTab;
-        await expect(newTab).toHaveTitle('- Strengths and needs');
+        await expect(newTab).toHaveTitle('Remember to close any other applications before starting an appointment - Strengths and needs');
     }
 
     async checkViewOnlyPageTitle() {
@@ -35,7 +35,7 @@ export class StrengthsAndNeedsLandingPage {
         //wait for Load 
         await newTab.waitForLoadState();
         newTabGlobal = newTab;
-        await expect(newTab).toHaveTitle('- Strengths and needs');
+        await expect(newTab).toHaveTitle('Remember to close any other applications before starting an appointment - Strengths and needs');
     }
 
     async checkPageTitleStrengthsAndNeedsAfterDataPrivacyScreenNew() {
