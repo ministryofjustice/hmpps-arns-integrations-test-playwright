@@ -17,7 +17,7 @@ export class StrengthsAndNeedsLandingPage {
         //wait for Load 
         await newTab.waitForLoadState();
         newTabGlobal = newTab;
-        await expect(newTab).toHaveTitle('- Strengths and needs');
+        await expect(newTab).toHaveTitle('Remember to close any other applications before starting an appointment - Strengths and needs');
     }
 
     async checkViewOnlyPageTitle() {
@@ -35,7 +35,7 @@ export class StrengthsAndNeedsLandingPage {
         //wait for Load 
         await newTab.waitForLoadState();
         newTabGlobal = newTab;
-        await expect(newTab).toHaveTitle('- Strengths and needs');
+        await expect(newTab).toHaveTitle('Remember to close any other applications before starting an appointment - Strengths and needs');
     }
 
     async checkPageTitleStrengthsAndNeedsAfterDataPrivacyScreenNew() {
@@ -56,7 +56,7 @@ export class StrengthsAndNeedsLandingPage {
     }
 
     async validationErrorDisplaysOnDataPrivacyScreen() {
-        await expect(newTabGlobal!.locator('#main-content > div > div:nth-child(5) > div > div.govuk-error-summary')).toBeVisible();
+        await expect(newTabGlobal!.locator('#main-content div').filter({ hasText: 'There is a problem Confirm' }).nth(3)).toBeVisible();
         await expect(newTabGlobal!.locator('#privacy_screen_declaration-error')).toBeVisible();
     }
 
