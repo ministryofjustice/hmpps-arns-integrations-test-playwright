@@ -22,7 +22,9 @@ export class StubHomePage {
     private accStrengths: Locator = page.locator('#accStrengths'),
     private accOtherWeightedScore: Locator = page.locator('#accOtherWeightedScore'),
     private accThreshold: Locator = page.locator('#accThreshold'),
-    private pkField: Locator = page.locator('#oasys-assessment-pk')
+    private pkField: Locator = page.locator('#oasys-assessment-pk'),
+    private practionerDetailsLocationDropdown: Locator = page.locator('#staff-location'),
+    private defaultLocationInPractionerDetailsTab: Locator = page.locator('#staff-location option:checked')
   ) { }
 
   async goto() {
@@ -53,8 +55,22 @@ export class StubHomePage {
     await this.openbutton.click(DEFAULT_CLICK_OPTIONS);
   }
 
+  // Practioner Tab Elements
   async clickPractionerDetailsTab() {
     await this.practionerDetailsTab.click();
+  }
+
+  async selectCommunityOptionInTheLocationDropdownMenuOfPractionerTab() {
+    await this.practionerDetailsLocationDropdown.selectOption('COMMUNITY');
+  }
+
+  async selectPrisonOptionInTheLocationDropdownMenuOfPractionerTab() {
+    await this.practionerDetailsLocationDropdown.selectOption('PRISON');
+  }
+
+  async getDefaultOptionInLocationDropdownMenu() {
+    const defaultSelection = await this.defaultLocationInPractionerDetailsTab.innerText();
+    expect(defaultSelection).toBe('Community');
   }
 
   async selectViewOnlyAccessMode() {
