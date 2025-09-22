@@ -33,5 +33,7 @@ Runs the tests in debug mode.
 
 For other browsers available in the config, pass the desired browser in your command.
 
+NOTE: a .env file is required to run certain test features locally. This file is available upon request as and when needed.
+
 ## Generating reports
 To open last HTML report run: npx playwright show-report

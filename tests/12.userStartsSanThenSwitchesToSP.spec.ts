@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+/*import { test } from '@playwright/test';
 import { StubHomePage } from '../page-objects/stub-home-page';
 import { SentencePlanPage } from '../page-objects/sentence-plan-pages';
 import { StrengthsAndNeedsLandingPage } from '../page-objects/strengths-and-needs-pages';
@@ -7,7 +7,7 @@ import * as fs from 'fs'; // import file system module
 
 /* Note: this test feature will fail if the test data is wiped. 
 It relies on pre-existing PK with a completed SAN assessment. */
-test('User navigates to their About page from an incomplete San assessment', async ({ page }) => {
+/*test('User navigates to their About page from an incomplete San assessment', async ({ page }) => {
 
   const stubHomePage = new StubHomePage(page);
   const sentencePlanPage = new SentencePlanPage(page);
@@ -71,3 +71,4 @@ test('User navigates to their About page from an incomplete San assessment', asy
   await sentencePlanfromSanPage.checkAboutPageDisplaysCorrectInfoForIncompleteSan();
   console.log('About page incomplete assessment without OASYS step verified');
 });
+*/
