@@ -7,6 +7,8 @@ import {
 import { createOffender } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/offender/create-offender'
 import fs from 'fs';
 
+var globalCRN = '' //Need to think of another way to do this in case tests run in parallel
+
 test('Create offender in Ndelius', async ({ page }) => {
   // Login using environment variables
   await loginToDelius(page)
@@ -20,6 +22,7 @@ test('Create offender in Ndelius', async ({ page }) => {
   // Log new offender details for test report and local runs
   test.info().annotations.push({ type: 'CRN', description: crn })
   console.log('Created offender:', person, 'CRN:', crn)
+  globalCRN = crn
 })
 
 test('create and add a sentence plan against the offender', async ({ request }) => {
@@ -48,18 +51,18 @@ test('create and add a sentence plan against the offender', async ({ request }) 
   console.log('Created plan with ID:', planId);
 
   // Step 2: PUT to update the plan
-  const putResponse = await request.put(`https://sentence-plan-api-dev.hmpps.service.justice.gov.uk/plans/associate/${planId}/${crn}`, {
+  const putResponse = await request.put(`https://sentence-plan-api-dev.hmpps.service.justice.gov.uk/plans/associate/${planId}/${globalCRN}`, {
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
     data: {
       planUuid: planId,
-      crn: 'officer-123',
+      crn: globalCRN,
     },
   });
 
-  expect(putResponse.status()).toBe(200); 
+  expect(putResponse.status()).toBe(202);
   const putBody = await putResponse.json();
 
   console.log('Assigned plan:', putBody);
