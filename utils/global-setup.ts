@@ -31,19 +31,16 @@ async function globalSetup() {
             },
             body: params.toString(),
         });
-        console.log(resp);
 
         if (!resp.ok) {
             throw new Error(`Token request failed: ${resp.status} ${resp.statusText}`);
         }
 
         const tokenData = await resp.json();
-        console.log(tokenData);
-        console.log('Access token received:', tokenData.access_token);
+        console.log('Access token received')
 
         // Save token to file
         fs.writeFileSync(TOKEN_PATH, JSON.stringify(tokenData, null, 2), 'utf-8');
-        console.log('Token written to:', TOKEN_PATH);
 
     } catch (err) {
         console.error('Global setup failed:', err);

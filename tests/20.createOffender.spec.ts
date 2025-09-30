@@ -19,8 +19,7 @@ test('Create offender in Ndelius', async ({ page }) => {
   // Pass a person object to match createOffender signature
   const crn = await createOffender(page, { person })
 
-  // Log new offender details for test report and local runs
-  test.info().annotations.push({ type: 'CRN', description: crn })
+  // Log new offender details
   console.log('Created offender:', person, 'CRN:', crn)
   globalCRN = crn
 })
@@ -44,9 +43,7 @@ test('create and add a sentence plan against the offender', async ({ request }) 
 
   expect(postResponse.status()).toBe(201);
   const postBody = await postResponse.json();
-  console.log(postBody);
-
-  const planId = postBody.planId; // or postBody.uuid, depending on your API
+  const planId = postBody.planId;
 
   console.log('Created plan with ID:', planId);
 
@@ -56,14 +53,9 @@ test('create and add a sentence plan against the offender', async ({ request }) 
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
-    data: {
-      planUuid: planId,
-      crn: globalCRN,
-    },
   });
 
   expect(putResponse.status()).toBe(202);
-  const putBody = await putResponse.json();
 
-  console.log('Assigned plan:', putBody);
+  console.log('Plan assigned successfully');
 });
