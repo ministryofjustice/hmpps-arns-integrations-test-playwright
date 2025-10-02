@@ -29,8 +29,8 @@ jobs:
           ORACLE_DB_USER: ${{ secrets.ORACLE_DB_USER }}
           ORACLE_DB_PASSWORD: ${{ secrets.ORACLE_DB_PASSWORD }}
           ORACLE_DB_CONNECT_STRING: ${{ secrets.ORACLE_DB_CONNECT_STRING }}
-          CLIENT_ID_SCRIPT: ${{ secrets.SP_CLIENT_ID }}
-          CLIENT_SECRET_SCRIPT: ${{ secrets.SP_CLIENT_SECRET }}
+          SP_CLIENT_ID: ${{ secrets.SP_CLIENT_ID }}
+          SP_CLIENT_SECRET: ${{ secrets.SP_CLIENT_SECRET }}
           # URLs
           DELIUS_URL: https://ndelius.test.probation.service.justice.gov.uk
           TOKEN_URL: ${{ secrets.TOKEN_URL }}
