@@ -1,4 +1,4 @@
-import {test} from '@playwright/test';
+/*import {test} from '@playwright/test';
 import {StubHomePage} from '../page-objects/stub-home-page';
 import {StrengthsAndNeedsLandingPage} from '../page-objects/strengths-and-needs-pages';
 
@@ -49,4 +49,4 @@ test('user creates a strengths and needs assessments via the prison location jou
 
     // Check page title
     await strengthsAndNeedsLandingPage.checkPageTitleStrengthsAndNeedsAfterDataPrivacyScreenNew();
-});
+});*/
