@@ -36,8 +36,8 @@ jobs:
           DELIUS_USERNAME: ${{ secrets.E2E_DELIUS_USERNAME }}
           DELIUS_PASSWORD: ${{ secrets.E2E_DELIUS_PASSWORD }}
           # Scripts
-          CLIENT_ID_SCRIPT: ${{ secrets.CLIENT_ID_SCRIPT }}
-          CLIENT_SECRET_SCRIPT: ${{ secrets.CLIENT_SECRET_SCRIPT }}
+          CLIENT_ID_SCRIPT: echo ${{ secrets.CLIENT_ID_SCRIPT }}
+          CLIENT_SECRET_SCRIPT: echo ${{ secrets.CLIENT_SECRET_SCRIPT }}
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
