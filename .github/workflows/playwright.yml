@@ -29,17 +29,15 @@ jobs:
           ORACLE_DB_USER: ${{ secrets.ORACLE_DB_USER }}
           ORACLE_DB_PASSWORD: ${{ secrets.ORACLE_DB_PASSWORD }}
           ORACLE_DB_CONNECT_STRING: ${{ secrets.ORACLE_DB_CONNECT_STRING }}
+          SP_CLIENT_ID: ${{ secrets.SP_CLIENT_ID }}
+          SP_CLIENT_SECRET: ${{ secrets.SP_CLIENT_SECRET }}
           # URLs
           DELIUS_URL: https://ndelius.test.probation.service.justice.gov.uk
+          TOKEN_URL: ${{ secrets.TOKEN_URL }}
           # Credentials
           DELIUS_USERNAME: ${{ secrets.E2E_DELIUS_USERNAME }}
           DELIUS_PASSWORD: ${{ secrets.E2E_DELIUS_PASSWORD }}
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30
+          
       - name: Slack notification
         if: failure() && inputs.channel_id != 'NO_SLACK'
         uses: ./.github/actions/slack_integration_notification
