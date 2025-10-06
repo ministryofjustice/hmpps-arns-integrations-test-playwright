@@ -9,7 +9,13 @@ This framework is built using Playwright and Typescript. The idea is to start wi
 - Install playwright with 'npx playwright install'
 - Once you have cloned this repository, run the following commands to install depedencies:
 
-npm install
+`npm install`
+
+- you'll also need to run the following commands:
+
+`npm install --save-dev @ministryofjustice/hmpps-probation-integration-e2e-tests`
+`npm install dotenv --save-dev`
+
 
 ## Overview
 Initially, the config is set to have tests run on the following browsers:
@@ -22,13 +28,13 @@ Test runs on the pipeline are configured dto run on Chrome for runtime speed pur
 These can be later expanded in the playwright.config file.
 
 ## Running the tests
-npx playwright test --project=chromium
+`npx playwright test --project=chromium`
 Runs the tests only on Desktop Chrome.
 
-npx playwright test --project=chromium --debug tests/01.userCompletesS&NAssessment.spec.ts 
+`npx playwright test --project=chromium --debug tests/01.userCompletesS&NAssessment.spec.ts` 
 Runs only the specified test in debug mode.
 
-npx playwright test --project=chromium --debug 
+`npx playwright test --project=chromium --debug` 
 Runs the tests in debug mode.
 
 For other browsers available in the config, pass the desired browser in your command.
