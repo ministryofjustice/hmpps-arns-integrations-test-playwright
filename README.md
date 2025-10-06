@@ -11,12 +11,6 @@ This framework is built using Playwright and Typescript. The idea is to start wi
 
 `npm install`
 
-- you'll also need to run the following commands:
-
-`npm install --save-dev @ministryofjustice/hmpps-probation-integration-e2e-tests`
-`npm install dotenv --save-dev`
-
-
 ## Overview
 Initially, the config is set to have tests run on the following browsers:
 
