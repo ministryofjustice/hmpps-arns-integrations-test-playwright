@@ -46,9 +46,11 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
   // Check page title
   await strengthsAndNeedsLandingPage.checkPageTitleStrengthsAndNeedsAfterDataPrivacyScreenNew();
 
-  // Try to submit form - expect validation error
-  await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
-  await strengthsAndNeedsLandingPage.validationErrorDisplays();
+  //banner confirmation 
+   await strengthsAndNeedsLandingPage.verifyBannerIsVisible();
+
+  //click on assessment
+   await strengthsAndNeedsLandingPage.clickOnAssessmentLink();
 
   // Fill in accomodation assessment
   await strengthsAndNeedsLandingPage.tickSettled();
@@ -62,7 +64,7 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
   await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
 
   // Fill in practicioner analysis 
-  await strengthsAndNeedsLandingPage.clickPracticionerAnalysisTab();
+  await strengthsAndNeedsLandingPage.clickContinueToPractitionerAnalysisButton();
   await strengthsAndNeedsLandingPage.tickNoAccomodationFactors();
   await strengthsAndNeedsLandingPage.tickNoRiskOfHarm();
   await strengthsAndNeedsLandingPage.tickNoRiskOfReoffending();
@@ -72,6 +74,10 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
 
   // Fill in Employment assessment
   await strengthsAndNeedsLandingPage.clickEmploymentAndEducationLeftNavLink();
+ 
+  //click on assessment
+   await strengthsAndNeedsLandingPage.clickOnAssessmentLink();
+
   await strengthsAndNeedsLandingPage.tickEmployed();
   await strengthsAndNeedsLandingPage.tickFullTime();
   await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
@@ -88,7 +94,7 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
   await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
 
   // Fill in practicioner analysis 
-  await strengthsAndNeedsLandingPage.clickPracticionerAnalysisTab();
+  await strengthsAndNeedsLandingPage.clickContinueToPractitionerAnalysisButton();
   await strengthsAndNeedsLandingPage.tickEmploymentFactors();
   await strengthsAndNeedsLandingPage.tickEmploymentRiskOfHarm();
   await strengthsAndNeedsLandingPage.tickEmploymentRiskOfReoffending();
@@ -98,6 +104,10 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
 
   // Fill in finances assessment
   await strengthsAndNeedsLandingPage.clickFinancesLeftNavLink();
+
+  //click on assessment
+   await strengthsAndNeedsLandingPage.clickOnAssessmentLink();
+
   await strengthsAndNeedsLandingPage.tickCarersAllowance();
   await strengthsAndNeedsLandingPage.tickOwnBankAccount();
   await strengthsAndNeedsLandingPage.tickAbleToManageMoney();
@@ -108,7 +118,7 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
   await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
 
   // Fill in practicioner analysis 
-  await strengthsAndNeedsLandingPage.clickPracticionerAnalysisTab();
+  await strengthsAndNeedsLandingPage.clickContinueToPractitionerAnalysisButton();
   await strengthsAndNeedsLandingPage.tickFinanceFactors();
   await strengthsAndNeedsLandingPage.tickFinanceRiskOfHarm();
   await strengthsAndNeedsLandingPage.tickFinanceRiskOfReoffending();
@@ -118,6 +128,10 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
 
   // Fill in drug use assessment
   await strengthsAndNeedsLandingPage.clickDrugUseLeftNavLink();
+
+    //click on assessment
+   await strengthsAndNeedsLandingPage.clickOnAssessmentLink();
+
   await strengthsAndNeedsLandingPage.tickYesToDrugUse();
   await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
 
@@ -136,7 +150,7 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
   await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
 
   // Fill in practicioner analysis 
-  await strengthsAndNeedsLandingPage.clickPracticionerAnalysisTab();
+  await strengthsAndNeedsLandingPage.clickContinueToPractitionerAnalysisButton();
   await strengthsAndNeedsLandingPage.tickDrugFactors();
   await strengthsAndNeedsLandingPage.tickDrugRiskOfHarm();
   await strengthsAndNeedsLandingPage.tickDrugRiskOfReoffending();
@@ -149,11 +163,15 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
 
   // Fill in alcohol use assessment
   await strengthsAndNeedsLandingPage.clickAlcoholUseLeftNavLink();
+
+      //click on assessment
+   await strengthsAndNeedsLandingPage.clickOnAssessmentLink();
+
   await strengthsAndNeedsLandingPage.tickNoAlcoholUse();
   await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
 
   // Fill in practicioner analysis 
-  await strengthsAndNeedsLandingPage.clickPracticionerAnalysisTab();
+  await strengthsAndNeedsLandingPage.clickContinueToPractitionerAnalysisButton();
   await strengthsAndNeedsLandingPage.tickAlcoholFactors();
   await strengthsAndNeedsLandingPage.tickAlcoholRiskOfHarm();
   await strengthsAndNeedsLandingPage.tickAlcoholRiskOfReoffending();
@@ -163,6 +181,10 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
 
   // Fill in health and wellbeing assessment
   await strengthsAndNeedsLandingPage.clickHealthAndWellbeingLeftNavLink();
+
+      //click on assessment
+   await strengthsAndNeedsLandingPage.clickOnAssessmentLink();
+
   await strengthsAndNeedsLandingPage.tickHealthPhysicalHealthCondition();
   await strengthsAndNeedsLandingPage.tickMentalHealthCondition();
   await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
@@ -180,7 +202,7 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
   await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
 
   // Fill in practicioner analysis 
-  await strengthsAndNeedsLandingPage.clickPracticionerAnalysisTab();
+  await strengthsAndNeedsLandingPage.clickContinueToPractitionerAnalysisButton();
   await strengthsAndNeedsLandingPage.tickHealthFactors();
   await strengthsAndNeedsLandingPage.tickHealthRiskOfHarm();
   await strengthsAndNeedsLandingPage.tickHealthRiskOfReoffending();
@@ -190,6 +212,9 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
 
   // Fill in personal relationships and community assessment
   await strengthsAndNeedsLandingPage.clickPersonalRelationshipsLeftNavLink();
+
+  //click on assessment
+   await strengthsAndNeedsLandingPage.clickOnAssessmentLink();
   await strengthsAndNeedsLandingPage.tickYesChildrenLiving();
   await strengthsAndNeedsLandingPage.fillInInfoAboutChildren();
   await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
@@ -207,7 +232,7 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
   await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
 
   // Fill in practicioner analysis
-  await strengthsAndNeedsLandingPage.clickPracticionerAnalysisTab();
+  await strengthsAndNeedsLandingPage.clickContinueToPractitionerAnalysisButton();
   await strengthsAndNeedsLandingPage.tickPersonalRelationshipsFactors();
   await strengthsAndNeedsLandingPage.tickPersonalRelationshipsRiskOfHarm();
   await strengthsAndNeedsLandingPage.tickPersonalRelationshipsRiskOfReoffending();
@@ -217,6 +242,9 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
 
   // Fill in thinking behaviours and attitudes assessment
   await strengthsAndNeedsLandingPage.clickThinkingAndAttitudesLeftNavLink();
+
+      //click on assessment
+   await strengthsAndNeedsLandingPage.clickOnAssessmentLink();
   await strengthsAndNeedsLandingPage.tickAwareOfConsequences();
   await strengthsAndNeedsLandingPage.tickShowsStableBehaviour();
   await strengthsAndNeedsLandingPage.tickEngagesInActivities();
@@ -240,7 +268,7 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
   await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
 
   // Fill in practicioner analysis
-  await strengthsAndNeedsLandingPage.clickPracticionerAnalysisTab();
+  await strengthsAndNeedsLandingPage.clickContinueToPractitionerAnalysisButton();
   await strengthsAndNeedsLandingPage.tickThinkingBehaviourFactors();
   await strengthsAndNeedsLandingPage.fillProtectiveFactorsComment();
   await strengthsAndNeedsLandingPage.tickThinkingBehaviourRiskOfHarm();
@@ -249,7 +277,7 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
   await strengthsAndNeedsLandingPage.checkThinkingBehaviourSectionCompleteIconDisplays();
   console.log('Thinking behaviour assessment completed');
 
-  // Fill in offence analysis
+  // // Fill in offence analysis
   await strengthsAndNeedsLandingPage.clickOffenceAnalysisLeftNavLink();
   await strengthsAndNeedsLandingPage.fillBriefDescription();
   await strengthsAndNeedsLandingPage.tickWeapon();
