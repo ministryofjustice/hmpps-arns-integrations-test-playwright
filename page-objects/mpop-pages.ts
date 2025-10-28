@@ -1,6 +1,6 @@
-import { expect, Locator, Page } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
+import { MPOP_DEV_LINK } from './pages-common';
 
-const mpopDevLink = process.env.MPOP_DEV_LINK;
 const hmppsAuthUsername = process.env.DELIUS_USERNAME;
 const hmppsAuthPassword = process.env.DELIUS_PASSWORD;
 
@@ -20,7 +20,7 @@ export class MpopPages {
     ) { }
 
     async navigateToMpopLink() {
-        await this.page.goto(mpopDevLink);
+        await this.page.goto(MPOP_DEV_LINK);
     }
 
     async authenticateWithHmppsAuthCredentials() {

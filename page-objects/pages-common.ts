@@ -13,3 +13,5 @@ export const PLAN_CREATED_DATA = 'Plan agreed on 7 July 2025 by Kaitlyn Labadie'
 export const PK_WITH_INCOMPLETE_SAN = '917191'
 
 export const SP_DEV_ENV_LINK = 'https://sentence-plan-dev.hmpps.service.justice.gov.uk/plan'
+
+export const MPOP_DEV_LINK = 'https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk'
