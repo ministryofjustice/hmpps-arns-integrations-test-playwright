@@ -4,8 +4,6 @@ import { MPOP_DEV_LINK } from './pages-common';
 const hmppsAuthUsername = process.env.DELIUS_USERNAME;
 const hmppsAuthPassword = process.env.DELIUS_PASSWORD;
 
-let newTabGlobal: Page | null = null;
-
 export class MpopPages {
     constructor(
         private page: Page,
