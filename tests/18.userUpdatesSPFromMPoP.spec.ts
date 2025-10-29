@@ -56,4 +56,10 @@ test('user updates a sentence plan from mpop', async ({ page }) => {
   await sentencePlanPage.checkStepStatusBackToNotStarted();
   console.log('Goal step status updated back to not started via MPoP');
 
+  // Check About link is not displayed when accessing Setnence Plan from MPoP
+  await sentencePlanPage.checkAboutLinkIsNotDisplayedWhenInMpop();
+
+  // Check return to Oasys button is not displayed on plan history page
+  await sentencePlanPage.clickPlanHistoryTopNavLink();
+  await sentencePlanPage.checkReturnToAsysButtonIsNotDisplayedWhenInMpop();
   });

@@ -605,7 +605,15 @@ export class SentencePlanPage {
         await newTabGlobal!.locator('#main-content > div > div > nav > ul > li:nth-child(3) > a').click();
     }
 
-    async checkRemovedGoalsTabIsThere(){
+    async checkRemovedGoalsTabIsThere() {
         await expect(newTabGlobal!.locator('#goal-summary-card-1 div').filter({ hasText: 'test' }).nth(1)).toBeVisible();
+    }
+
+    async checkReturnToAsysButtonIsNotDisplayedWhenInMpop() {
+        await expect(newTabGlobal!.getByRole('button', { name: 'Return to OASys' })).toBeHidden();
+    }
+
+    async checkAboutLinkIsNotDisplayedWhenInMpop() {
+        await expect(newTabGlobal!.getByRole('link', { name: 'About', exact: false })).toBeHidden();
     }
 }
