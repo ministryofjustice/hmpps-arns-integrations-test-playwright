@@ -150,6 +150,9 @@ export async function browserTest() {
     simulateThinkingTime();
     await sanPage.locator('//*[@id="confirm-privacy-form"]/div[2]/button').click();
 
+    // Navigate to Accomodation information section
+    await sanPage.locator('//*[@id="main-content"]/div/div[4]/div[2]/ul/li[1]/a').click();
+
     // Select No accomodation
     await sanPage.locator('#current_accommodation-3').check();
     simulateThinkingTime();
@@ -172,7 +175,7 @@ export async function browserTest() {
     await sanPage.locator('//*[@id="form"]/div[5]/button').click();
 
     // Submit practitioner analysis
-    await sanPage.locator('//*[@id="tab_practitioner-analysis"]').click();
+    await sanPage.locator('//*[@id="main-content"]/div/div[4]/div[2]/div[2]/a').click();
     simulateThinkingTime();
     await sanPage.locator('//*[@id="accommodation_practitioner_analysis_strengths_or_protective_factors-2"]').check();
     simulateThinkingTime();
@@ -182,11 +185,13 @@ export async function browserTest() {
     simulateThinkingTime();
     await sanPage.locator('//*[@id="accommodation_practitioner_analysis_risk_of_reoffending_yes_details"]').type('Performance test');
     simulateThinkingTime();
-    await sanPage.locator('//*[@id="form"]/div[4]/button').click();
+    await sanPage.locator('//*[@id="summaryAnalysis"]/div[4]/button').click();
     sleep(3);
 
     // Move onto Employment and education section
     await sanPage.locator('//*[@id="main-content"]/div/div[4]/div[1]/nav/ul/li[2]/a').click();
+    simulateThinkingTime();
+    await sanPage.locator('//*[@id="main-content"]/div/div[4]/div[2]/ul/li[1]/a').click();
     simulateThinkingTime();
     await sanPage.locator('//*[@id="employment_status-2"]').check();
     simulateThinkingTime();
@@ -217,7 +222,7 @@ export async function browserTest() {
     simulateThinkingTime();
 
     // Submit practitioner analysis
-    await sanPage.locator('//*[@id="tab_practitioner-analysis"]').click();
+    await sanPage.locator('//*[@id="main-content"]/div/div[4]/div[2]/div[2]/a').click();
     simulateThinkingTime();
     await sanPage.locator('//*[@id="employment_education_practitioner_analysis_strengths_or_protective_factors-2"]').check();
     simulateThinkingTime();
@@ -227,7 +232,7 @@ export async function browserTest() {
     simulateThinkingTime();
     await sanPage.locator('//*[@id="employment_education_practitioner_analysis_risk_of_reoffending_yes_details"]').type('Performance test');
     simulateThinkingTime();
-    await sanPage.locator('//*[@id="form"]/div[4]/button').click();
+    await sanPage.locator('//*[@id="summaryAnalysis"]/div[4]/button').click();
     sleep(3);
 
   } finally {
