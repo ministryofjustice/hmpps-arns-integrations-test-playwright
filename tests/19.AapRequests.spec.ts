@@ -3,6 +3,7 @@ import fs from 'fs';
 
 // Generate ISO timestamp in "yyyy-MM-ddTHH:mm:ss" UTC format
 const timeStamp: string = new Date().toISOString().split('.')[0];
+console.log(timeStamp);
 
 test('create an assessment in AAP and query', async ({ request }) => {
     // Step 1: POST Command request
@@ -29,7 +30,12 @@ test('create an assessment in AAP and query', async ({ request }) => {
 
     expect(commandResponse.status()).toBe(200);
     const postBody = await commandResponse.json();
-    const assessmentUuid = postBody.assessmentUuid;
+
+    const assessmentUuid =
+        postBody?.commands?.[0]?.result?.assessmentUuid ??
+        (() => {
+            throw new Error('Could not find assessmentUuid in response');
+        })();
 
     console.log('Created AAP assessment with ID:', assessmentUuid);
 
@@ -48,13 +54,13 @@ test('create an assessment in AAP and query', async ({ request }) => {
                         name: 'Test User',
                     },
                     timeStamp,
-                    assessmentUuid: 'daebf9de-bfdd-4831-bfdc-a8dcac86a92a',
+                    assessmentUuid,
                 },
             ],
         },
     });
 
     expect(queryResponse.status()).toBe(200);
-    const putBody = await queryResponse.json();
+    const postQuerytBody = await queryResponse.json();
     console.log('AAP assessment queried successfully');
 });
