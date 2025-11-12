@@ -60,8 +60,6 @@ async function globalSetup() {
       clientSecretAap = execSync(process.env.AAP_CLIENT_SECRET_SCRIPT!).toString().trim();
     }
 
-    console.log('Fetched client ID and client secret for AAP token');
-
     const tokenUrlAap = process.env.TOKEN_URL!;
     const paramsAap = new URLSearchParams();
     paramsAap.append('grant_type', 'client_credentials');
