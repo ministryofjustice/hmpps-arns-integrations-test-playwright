@@ -22,7 +22,7 @@ const BASE_URL = "https://arns-assessment-platform-api-dev.hmpps.service.justice
 const TOKEN = JSON.parse(open("../../utils/aapToken.json")).access_token;
 
 export default function () {
-  const timeStamp = new Date().toISOString().split(".")[0];
+  const timeStamp = new Date().toISOString().split('.')[0];
 
   // Step 1: Create AAP assessment
   const commandPayload = JSON.stringify({
