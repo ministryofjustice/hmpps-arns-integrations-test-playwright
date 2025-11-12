@@ -35,23 +35,23 @@ export default function () {
     ],
   });
 
-  const commandRes = http.post(`${BASE_URL}/command`, commandPayload, {
+  const commandResponse = http.post(`${BASE_URL}/command`, commandPayload, {
     headers: {
       Authorization: `Bearer ${TOKEN}`,
       "Content-Type": "application/json",
     },
   });
 
-  check(commandRes, { "command status 200": (r) => r.status === 200 });
+  check(commandResponse, { "command status 200": (r) => r.status === 200 });
 
   const assessmentUuid =
-    commandRes.json()?.commands?.[0]?.result?.assessmentUuid;
+    commandResponse.json()?.commands?.[0]?.result?.assessmentUuid;
 
   // Log and track failures
   if (!assessmentUuid) {
     createFailures.add(1);
     console.error(
-      `Failed to create AAP assessment! Status: ${commandRes.status}, Body: ${commandRes.body}`
+      `Failed to create AAP assessment! Status: ${commandResponse.status}, Body: ${commandResponse.body}`
     );
 
     // Step 2: Query AAP assessment
@@ -67,14 +67,14 @@ export default function () {
         ],
       });
 
-      const queryRes = http.post(`${BASE_URL}/query`, queryPayload, {
+      const queryResponse = http.post(`${BASE_URL}/query`, queryPayload, {
         headers: {
           Authorization: `Bearer ${TOKEN}`,
           "Content-Type": "application/json",
         },
       });
 
-      check(queryRes, { "query status 200": (r) => r.status === 200 });
+      check(queryResponse, { "query status 200": (r) => r.status === 200 });
     }
 
     sleep(1);
