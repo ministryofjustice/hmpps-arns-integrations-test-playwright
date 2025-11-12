@@ -4,7 +4,7 @@ import path from 'path';
 import fetch from 'node-fetch';
 
 const TOKEN_PATH = path.resolve(__dirname, 'token.json'); // SP token
-const TOKEN_PATH_2 = path.resolve(__dirname, 'aapToken.json'); // AAP token
+const TOKEN_PATH_AAP = path.resolve(__dirname, 'aapToken.json'); // AAP token
 
 let clientId: string;
 let clientSecret: string;
@@ -82,9 +82,9 @@ async function globalSetup() {
     const tokenDataAap = await respAap.json();
     console.log('Aap access token received');
 
-    fs.writeFileSync(TOKEN_PATH_2, JSON.stringify(tokenDataAap, null, 2), 'utf-8');
+    fs.writeFileSync(TOKEN_PATH_AAP, JSON.stringify(tokenDataAap, null, 2), 'utf-8');
 
-    console.log('✅ All tokens fetched and saved successfully.');
+    console.log('All tokens fetched and saved successfully.');
   } catch (err) {
     console.error('Global setup failed:', err);
     throw err;
