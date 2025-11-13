@@ -26,7 +26,7 @@ export async function createAssessment(): Promise<CreateAssessmentResult> {
         fs.readFileSync('utils/aapToken.json', 'utf8')
     ).access_token;
 
-    const resp = await fetch(`${BASE_URL}/command`, {
+    const response = await fetch(`${BASE_URL}/command`, {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${token}`,
@@ -42,15 +42,15 @@ export async function createAssessment(): Promise<CreateAssessmentResult> {
         }),
     });
 
-    if (!resp.ok) {
+    if (!response.ok) {
         throw new Error(
-            `CreateAssessment failed: ${resp.status} ${resp.statusText}`
+            `CreateAssessment failed: ${response.status} ${response.statusText}`
         );
     }
 
-    const body: CreateAssessmentResult = await resp.json();
+    const body: CreateAssessmentResult = await response.json();
 
-    // Sanity check the UUID exists
+    // Check the UUID exists
     const assessmentUuid = body?.commands?.[0]?.result?.assessmentUuid;
     if (!assessmentUuid) throw new Error('No assessmentUuid found');
 
@@ -63,7 +63,7 @@ export async function queryAssessment(assessmentUuid: string) {
     ).access_token;
     const timeStamp = new Date().toISOString().split('.')[0];
 
-    const resp = await fetch(`${BASE_URL}/query`, {
+    const response = await fetch(`${BASE_URL}/query`, {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${token}`,
@@ -81,11 +81,11 @@ export async function queryAssessment(assessmentUuid: string) {
         }),
     });
 
-    if (!resp.ok) {
+    if (!response.ok) {
         throw new Error(
-            `QueryAssessment failed: ${resp.status} ${resp.statusText}`
+            `QueryAssessment failed: ${response.status} ${response.statusText}`
         );
     }
 
-    return resp.json();
+    return response.json();
 }
