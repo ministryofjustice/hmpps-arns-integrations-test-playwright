@@ -58,6 +58,8 @@ test('create and query AAP assessment', async () => {
 
   const queryResult = query.result;
   expect(queryResult.type).toBe('AssessmentVersionQueryResult');
+  expect(queryResult).toHaveProperty('formVersion');
+  expect(queryResult.formVersion).toBeDefined();
   expect(queryResult).toHaveProperty('answers');
   expect(queryResult).toHaveProperty('collaborators');
   expect(Array.isArray(queryResult.collaborators)).toBe(true);
