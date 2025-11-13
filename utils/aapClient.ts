@@ -26,8 +26,6 @@ export async function createAssessment(): Promise<CreateAssessmentResult> {
         fs.readFileSync('utils/aapToken.json', 'utf8')
     ).access_token;
 
-    const timeStamp = new Date().toISOString().split('.')[0];
-
     const resp = await fetch(`${BASE_URL}/command`, {
         method: 'POST',
         headers: {
@@ -38,7 +36,6 @@ export async function createAssessment(): Promise<CreateAssessmentResult> {
             commands: [
                 {
                     type: 'CreateAssessmentCommand',
-                    timeStamp,
                     user: { id: 'test-user', name: 'Test User' },
                 },
             ],
