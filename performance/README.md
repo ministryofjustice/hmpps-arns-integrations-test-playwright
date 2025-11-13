@@ -31,6 +31,9 @@ From the root of the project, you can run the following commands, or navigate to
 - API tests
 Before running those, you need to capture the one-time handover link as  extracted url. The extract scenario must be run first to get that value, which is run as part of the execution of the bash script.
 
+- AAP API tests
+`k6 run performance/tests/aapPerformance.js`
+
 ## Technical description:
 
 The run_test.sh script is a Bash automation wrapper designed to run a two-phase performance testing workflow using k6. It first executes a browser-based extraction step to retrieve a dynamic URL, then passes that URL as an environment variable to run following API-based performance tests.
