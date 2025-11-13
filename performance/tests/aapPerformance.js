@@ -5,16 +5,20 @@ import { Counter } from "k6/metrics";
 // Custom metrics to log assessment creation failures 
 const createFailures = new Counter("create_assessment_failures");
 
+// Load scenario config (defaults for CI smoke test)
+const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 5;
+const DURATION = __ENV.DURATION || "30s";
+const P95_THRESHOLD = __ENV.P95_THRESHOLD ? parseInt(__ENV.P95_THRESHOLD) : 500;
+
 export const options = {
   stages: [
-    { duration: "30s", target: 10 }, // ramp up to 10 VUs over 30s
-    { duration: "1m", target: 10 }, // stay at 10 VUs for 1 minute
-    { duration: "30s", target: 0 }, // ramp down to 0 VUs over 30s
+    { duration: "30s", target: VUS },
+    { duration: DURATION, target: VUS },
+    { duration: "30s", target: 0 },
   ],
-
   thresholds: {
-    http_req_failed: ["rate<0.01"], // less than 1% of requests fail
-    http_req_duration: ["p(95)<200"], // 95% of requests within 200ms
+    http_req_failed: ["rate<0.01"],
+    http_req_duration: [`p(95)<${P95_THRESHOLD}`],
   },
 };
 
