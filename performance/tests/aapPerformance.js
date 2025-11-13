@@ -29,7 +29,6 @@ export default function () {
     commands: [
       {
         type: "CreateAssessmentCommand",
-        timeStamp,
         user: { id: "test-user", name: "Test User" },
       },
     ],
