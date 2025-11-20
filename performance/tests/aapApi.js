@@ -7,8 +7,17 @@ const createFailures = new Counter("create_assessment_failures");
 
 const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 5;
 const DURATION = __ENV.DURATION || "30s";
+const P90_THRESHOLD = __ENV.P90_THRESHOLD ? parseInt(__ENV.P90_THRESHOLD) : 200;
 const P95_THRESHOLD = __ENV.P95_THRESHOLD ? parseInt(__ENV.P95_THRESHOLD) : 500;
-const P90_THRESHOLD = __ENV.P90_THRESHOLD ? parseInt(__ENV.P95_THRESHOLD) : 200;
+
+/* Note: these will be adjusted when running other scenarios, examples:
+Stress test
+P90_THRESHOLD = 800;
+P95_THRESHOLD = 1200;
+
+Soak test
+P90_THRESHOLD = 450;
+P95_THRESHOLD = 550;*/
 
 export const options = {
   stages: [
@@ -18,8 +27,10 @@ export const options = {
   ],
   thresholds: {
     http_req_failed: ["rate<0.01"],
-    http_req_duration: [`p(95)<${P95_THRESHOLD}`],
-    http_req_duration: [`p(90)<${P90_THRESHOLD}`],
+    http_req_duration: [
+      `p(95)<${P95_THRESHOLD}`,
+      `p(90)<${P90_THRESHOLD}`,
+    ],
   },
 };
 
