@@ -40,7 +40,7 @@ export default function () {
     ],
   });
 
-  const commandResponse = http.post(`${BASE_URL}/comman`, commandPayload, {
+  const commandResponse = http.post(`${BASE_URL}/command`, commandPayload, {
     headers: {
       Authorization: `Bearer ${TOKEN}`,
       "Content-Type": "application/json",
