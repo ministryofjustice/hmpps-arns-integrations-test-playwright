@@ -7,6 +7,11 @@ export interface CreateAssessmentResult {
     commands: {
         request: {
             type: 'CreateAssessmentCommand';
+            formVersion: string;
+            timeline?: {
+                type: string;
+                data: Record<string, any>;
+            }
             user: {
                 id: string;
                 name: string;
@@ -36,6 +41,7 @@ export async function createAssessment(): Promise<CreateAssessmentResult> {
             commands: [
                 {
                     type: 'CreateAssessmentCommand',
+                    formVersion: '1.0',
                     user: { id: 'test-user', name: 'Test User' },
                 },
             ],

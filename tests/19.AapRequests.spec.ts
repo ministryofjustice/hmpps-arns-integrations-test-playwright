@@ -11,7 +11,7 @@ interface AssessmentQueryResponse {
     };
     result: {
       type: 'AssessmentVersionQueryResult';
-      formVersion: string | null;
+      formVersion: string;
       answers: Record<string, any>;
       collaborators: { id: string; name: string }[];
     };
@@ -28,6 +28,7 @@ test('create and query AAP assessment', async () => {
 
   const command = createResponse.commands[0];
   expect(command.request.type).toBe('CreateAssessmentCommand');
+  expect(command.request.formVersion).toBe('1.0');
   expect(command.request.user).toMatchObject({
     id: 'test-user',
     name: 'Test User',
