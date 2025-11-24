@@ -44,7 +44,7 @@ jobs:
         uses: grafana/setup-k6-action@v1
       - name: Run k6 performance test
         run: |
-          k6 run performance/tests/aapPerformance.js
+          k6 run performance/tests/aapApi.js
           
       - name: Slack notification
         if: failure() && inputs.channel_id != 'NO_SLACK'
