@@ -5,6 +5,7 @@ import { Counter } from "k6/metrics";
 // Track assessment creation failures
 const createFailures = new Counter("create_assessment_failures");
 
+// Default config, smoke test running on CI
 const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 5;
 const DURATION = __ENV.DURATION || "30s";
 const P90_THRESHOLD = __ENV.P90_THRESHOLD ? parseInt(__ENV.P90_THRESHOLD) : 200;
@@ -29,6 +30,25 @@ export const options = {
     { duration: DURATION, target: VUS },
     { duration: "30s", target: 0 },
   ],
+
+/* Note: options will also be adjusted when running other scenarios locally: 
+Load:
+Ramp-up:   0 → 600 VUS over 10 minutes  
+Steady:    Hold 600 VUS for 30 minutes  
+Ramp-down: 600 → 0 VUS over 5 minutes
+
+Stress:
+Ramp-up:   0 → 1000 VUS in 5 minutes  
+Ramp-up:   1000 → 3000 VUS in 10 minutes  
+Ramp-up:   3000 → 4000 VUS in 10 minutes  
+Steady:    Hold 4000 VUS for 10 minutes  
+Ramp-down: 4000 → 0 in 5 minutes
+
+Soak:
+Ramp-up:   0 → 300 VUS over 10 minutes  
+Steady:    Hold 300 VUS for 8 hours  
+Ramp-down: 300 → 0 VUS over 10 minutes*/
+
   thresholds: {
     http_req_failed: ["rate<0.01"],
     http_req_duration: [`p(95)<${P95_THRESHOLD}`, `p(90)<${P90_THRESHOLD}`],
