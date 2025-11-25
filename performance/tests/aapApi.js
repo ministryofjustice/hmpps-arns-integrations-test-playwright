@@ -10,13 +10,17 @@ const DURATION = __ENV.DURATION || "30s";
 const P90_THRESHOLD = __ENV.P90_THRESHOLD ? parseInt(__ENV.P90_THRESHOLD) : 200;
 const P95_THRESHOLD = __ENV.P95_THRESHOLD ? parseInt(__ENV.P95_THRESHOLD) : 500;
 
-/* Note: these will be adjusted when running other scenarios, examples:
-Stress test
-P90_THRESHOLD = 800;
-P95_THRESHOLD = 1200;
+/* Note: these will be adjusted when running other scenarios, examples: 
+Load test
+P90_THRESHOLD = 700"; 
+P95_THRESHOLD = 1000; 
 
-Soak test
-P90_THRESHOLD = 450;
+Stress test 
+P90_THRESHOLD = 800; 
+P95_THRESHOLD = 1200; 
+
+Soak test 
+P90_THRESHOLD = 450; 
 P95_THRESHOLD = 550;*/
 
 export const options = {
@@ -31,8 +35,7 @@ export const options = {
   },
 };
 
-const BASE_URL =
-  "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk";
+const BASE_URL = "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk";
 const TOKEN = JSON.parse(open("../../utils/aapToken.json")).access_token;
 
 export default function () {
@@ -58,56 +61,54 @@ export default function () {
 
   check(commandResponse, { "command status 200": (r) => r.status === 200 });
 
-  const assessmentUuid =
-    commandResponse.json()?.commands?.[0]?.result?.assessmentUuid;
+  const data = commandResponse.json();
+  const command = data.commands[0];
+  const request = command.request;
+  const result = command.result;
+  const assessmentUuid = result?.assessmentUuid;
 
+  check(data, {
+    "commands array exists": (d) => Array.isArray(d.commands),
+    "command[0] exists": (d) => d.commands.length > 0,
+  });
+
+  check(request, {
+    "request exists": (r) => r !== undefined,
+    "request.type is correct": (r) => r.type === "CreateAssessmentCommand",
+
+    "user exists": (r) => typeof r.user === "object",
+    "user.id exists": (r) => typeof r.user.id === "string",
+    "user.name exists": (r) => typeof r.user.name === "string",
+
+    "formVersion exists": (r) => typeof r.formVersion === "string",
+
+    "properties exists (even {})": (r) =>
+      r.hasOwnProperty("properties") && typeof r.properties === "object",
+
+    "timeline present (can be null)": (r) => r.hasOwnProperty("timeline"),
+  });
+
+  check(result, {
+    "result exists": (res) => res !== undefined,
+    "result.type correct": (res) =>
+      res.type === "CreateAssessmentCommandResult",
+
+    "assessmentUuid exists": (res) => typeof res.assessmentUuid === "string",
+    "assessmentUuid is UUID-ish": (res) =>
+      /^[0-9a-fA-F-]{36}$/.test(res.assessmentUuid),
+
+    "message exists": (res) =>
+      typeof res.message === "string" && res.message.length > 0,
+
+    "success is true": (res) => res.success === true,
+  });
+
+  // Log failures
   if (!assessmentUuid) {
     createFailures.add(1);
     console.error(
       `Failed to create assessment | status: ${commandResponse.status} | body: ${commandResponse.body}`
     );
-
-    const data = commandResponse.json();
-    const command = data.commands[0];
-    const request = command.request;
-    const result = command.result;
-
-    check(data, {
-      "commands array exists": (d) => Array.isArray(d.commands),
-      "command[0] exists": (d) => d.commands.length > 0,
-    });
-
-    check(request, {
-      "request exists": (r) => r !== undefined,
-      "request.type is correct": (r) => r.type === "CreateAssessmentCommand",
-
-      "user exists": (r) => typeof r.user === "object",
-      "user.id exists": (r) => typeof r.user.id === "string",
-      "user.name exists": (r) => typeof r.user.name === "string",
-
-      "formVersion exists": (r) => typeof r.formVersion === "string",
-
-      "properties exists (even {})": (r) =>
-        r.hasOwnProperty("properties") && typeof r.properties === "object",
-
-      "timeline present (can be null)": (r) => r.hasOwnProperty("timeline"),
-    });
-
-    check(result, {
-      "result exists": (res) => res !== undefined,
-      "result.type correct": (res) =>
-        res.type === "CreateAssessmentCommandResult",
-
-      "assessmentUuid exists": (res) => typeof res.assessmentUuid === "string",
-      "assessmentUuid is UUID-ish": (res) =>
-        /^[0-9a-fA-F-]{36}$/.test(res.assessmentUuid),
-
-      "message exists": (res) =>
-        typeof res.message === "string" && res.message.length > 0,
-
-      "success is true": (res) => res.success === true,
-    });
-
     sleep(1);
     return;
   }
@@ -133,10 +134,10 @@ export default function () {
 
   check(queryResponse, { "query status 200": (r) => r.status === 200 });
 
-  const data = queryResponse.json();
-  const result = data.queries[0].result;
+  const queryData = queryResponse.json();
+  const queryResult = queryData.queries[0].result;
 
-  check(result, {
+  check(queryResult, {
     "result exists": (r) => r !== undefined,
     "has assessmentUuid": (r) => typeof r.assessmentUuid === "string",
     "has aggregateUuid": (r) => typeof r.aggregateUuid === "string",
