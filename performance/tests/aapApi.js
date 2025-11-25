@@ -55,7 +55,8 @@ Ramp-down: 300 → 0 VUS over 10 minutes*/
   },
 };
 
-const BASE_URL = "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk";
+const BASE_URL =
+  "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk";
 const TOKEN = JSON.parse(open("../../utils/aapToken.json")).access_token;
 
 export default function () {
