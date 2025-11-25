@@ -12,8 +12,8 @@ const createFailures = new Counter("create_assessment_failures");
 // Default config, smoke test running on CI
 const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 5;
 const DURATION = __ENV.DURATION || "30s";
-const P90_THRESHOLD = __ENV.P90_THRESHOLD ? parseInt(__ENV.P90_THRESHOLD) : 700;
-const P95_THRESHOLD = __ENV.P95_THRESHOLD ? parseInt(__ENV.P95_THRESHOLD) : 1000;
+const P90_THRESHOLD = __ENV.P90_THRESHOLD ? parseInt(__ENV.P90_THRESHOLD) : 200;
+const P95_THRESHOLD = __ENV.P95_THRESHOLD ? parseInt(__ENV.P95_THRESHOLD) : 500;
 
 /* Note: these will be adjusted when running other scenarios, examples: 
 Load test
