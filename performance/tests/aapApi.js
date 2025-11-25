@@ -60,7 +60,7 @@ const BASE_URL =
 const TOKEN = JSON.parse(open("../../utils/aapToken.json")).access_token;
 
 export default function () {
-  const timeStamp = new Date().toISOString().split(".")[0];
+  const timeStamp = new Date().toISOString().split('.')[0];
 
   // Step 1 — Create Assessment
   const commandPayload = JSON.stringify({
