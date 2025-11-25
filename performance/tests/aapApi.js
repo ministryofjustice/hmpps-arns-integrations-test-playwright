@@ -145,7 +145,6 @@ export default function () {
     "createdAt exists": (r) => typeof r.createdAt === "string",
     "updatedAt exists": (r) => typeof r.updatedAt === "string",
 
-    // Validate timestamp format
     "createdAt looks like a timestamp": (r) =>
       /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(r.createdAt),
     "updatedAt looks like a timestamp": (r) =>
