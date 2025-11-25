@@ -42,11 +42,10 @@ Steady:    Hold 200 VUS for 30 minutes
 Ramp-down: 600 → 0 VUS over 5 minutes
 
 Stress:
-Ramp-up:   0 → 300 VUS in 5 minutes  
-Ramp-up:   300 → 600 VUS in 10 minutes  
-Ramp-up:   600 → 900 VUS in 10 minutes  
-Steady:    Hold 900 VUS for 10 minutes  
-Ramp-down: 900 → 0 in 5 minutes
+Ramp-up:   0 → 200 VUS in 5 minutes  
+Ramp-up:   200 → 400 VUS in 10 minutes   
+Steady:    Hold 400 VUS for 10 minutes  
+Ramp-down: 400 → 0 in 5 minutes
 
 Soak:
 Ramp-up:   0 → 100 VUS over 10 minutes  
