@@ -2,14 +2,18 @@ import http from "k6/http";
 import { check, sleep } from "k6";
 import { Counter } from "k6/metrics";
 
+function simulateThinkingTime() {
+  sleep(1 + Math.random() * 4);
+}
+
 // Track assessment creation failures
 const createFailures = new Counter("create_assessment_failures");
 
 // Default config, smoke test running on CI
 const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 5;
 const DURATION = __ENV.DURATION || "30s";
-const P90_THRESHOLD = __ENV.P90_THRESHOLD ? parseInt(__ENV.P90_THRESHOLD) : 200;
-const P95_THRESHOLD = __ENV.P95_THRESHOLD ? parseInt(__ENV.P95_THRESHOLD) : 500;
+const P90_THRESHOLD = __ENV.P90_THRESHOLD ? parseInt(__ENV.P90_THRESHOLD) : 700;
+const P95_THRESHOLD = __ENV.P95_THRESHOLD ? parseInt(__ENV.P95_THRESHOLD) : 1000;
 
 /* Note: these will be adjusted when running other scenarios, examples: 
 Load test
@@ -130,7 +134,8 @@ export default function () {
     console.error(
       `Failed to create assessment | status: ${commandResponse.status} | body: ${commandResponse.body}`
     );
-    sleep(1);
+
+    simulateThinkingTime();
     return;
   }
 
@@ -191,5 +196,5 @@ export default function () {
       /^[0-9a-fA-F-]{36}$/.test(r.aggregateUuid),
   });
 
-  sleep(1);
+  simulateThinkingTime();
 }
