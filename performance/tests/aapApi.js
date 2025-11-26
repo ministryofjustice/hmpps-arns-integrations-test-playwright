@@ -2,6 +2,7 @@ import http from "k6/http";
 import { check, sleep } from "k6";
 import { Counter } from "k6/metrics";
 
+// Note: default smoke test values below, adjust up for load test e.g between 15 and 30 seconds
 function simulateThinkingTime() {
   sleep(1 + Math.random() * 4);
 }
