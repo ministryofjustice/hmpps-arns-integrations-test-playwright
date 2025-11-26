@@ -30,9 +30,9 @@ P95_THRESHOLD = 550;*/
 
 export const options = {
   stages: [
-    { duration: "5m", target: 100 },  // Ramp-up to 600 VUS
-    { duration: "5m", target: 200 },  // Hold at 600 VUS
-    { duration: "5m", target: 0 },     // Ramp-down to 0
+    { duration: "30s", target: VUS },
+    { duration: DURATION, target: VUS },
+    { duration: "30s", target: 0 },
   ],
 
   /* Note: options will also be adjusted when running other scenarios locally: 
