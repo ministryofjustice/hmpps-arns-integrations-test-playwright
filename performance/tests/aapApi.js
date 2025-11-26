@@ -30,9 +30,9 @@ P95_THRESHOLD = 550;*/
 
 export const options = {
   stages: [
-    { duration: "30s", target: VUS },
-    { duration: DURATION, target: VUS },
-    { duration: "30s", target: 0 },
+    { duration: "5m", target: 100 },  // Ramp-up to 600 VUS
+    { duration: "5m", target: 200 },  // Hold at 600 VUS
+    { duration: "5m", target: 0 },     // Ramp-down to 0
   ],
 
   /* Note: options will also be adjusted when running other scenarios locally: 
@@ -87,7 +87,7 @@ export default function () {
   if (commandResponse.status !== 200) {
     console.error(`NON-200 RESPONSE from /command`);
     console.error(`STATUS: ${commandResponse.status}`);
-    console.error(`BODY:\n${commandResponse.body}`);
+    console.error(`BODY: ${commandResponse.body}`);
   }
 
   check(commandResponse, { "command status 200": (r) => r.status === 200 });
@@ -98,7 +98,7 @@ export default function () {
   } catch (err) {
     console.error(`JSON parse error on /command response`);
     console.error(`STATUS: ${commandResponse.status}`);
-    console.error(`BODY (likely HTML or text):\n${commandResponse.body}`);
+    console.error(`BODY: ${commandResponse.body}`);
     return;
   }
 
