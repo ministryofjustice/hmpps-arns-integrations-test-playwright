@@ -87,7 +87,8 @@ export default function () {
   if (commandResponse.status !== 200) {
     console.error(`NON-200 RESPONSE from /command`);
     console.error(`STATUS: ${commandResponse.status}`);
-    console.error(`BODY: ${commandResponse.body}`);
+    console.error(`BODY: ${JSON.stringify(commandResponse.body, null, 2)}`);
+    console.error(`HEADERS: ${JSON.stringify(commandResponse.headers, null, 2)}`);
   }
 
   check(commandResponse, { "command status 200": (r) => r.status === 200 });
@@ -98,7 +99,8 @@ export default function () {
   } catch (err) {
     console.error(`JSON parse error on /command response`);
     console.error(`STATUS: ${commandResponse.status}`);
-    console.error(`BODY: ${commandResponse.body}`);
+    console.error(`BODY: ${JSON.stringify(commandResponse.body, null, 2)}`);
+    console.error(`HEADERS: ${JSON.stringify(commandResponse.headers, null, 2)}`);
     return;
   }
 
