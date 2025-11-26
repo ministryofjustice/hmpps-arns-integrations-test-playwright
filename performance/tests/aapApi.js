@@ -35,7 +35,7 @@ export const options = {
     { duration: "30s", target: 0 },
   ],
 
-/* Note: options will also be adjusted when running other scenarios locally: 
+  /* Note: options will also be adjusted when running other scenarios locally: 
 Load:
 Ramp-up:   0 → 200 VUS over 10 minutes  
 Steady:    Hold 200 VUS for 30 minutes  
@@ -83,9 +83,25 @@ export default function () {
     },
   });
 
+  // If status is NOT 200, log details
+  if (commandResponse.status !== 200) {
+    console.error(`NON-200 RESPONSE from /command`);
+    console.error(`STATUS: ${commandResponse.status}`);
+    console.error(`BODY:\n${commandResponse.body}`);
+  }
+
   check(commandResponse, { "command status 200": (r) => r.status === 200 });
 
-  const data = commandResponse.json();
+  let data;
+  try {
+    data = commandResponse.json();
+  } catch (err) {
+    console.error(`JSON parse error on /command response`);
+    console.error(`STATUS: ${commandResponse.status}`);
+    console.error(`BODY (likely HTML or text):\n${commandResponse.body}`);
+    return;
+  }
+
   const command = data.commands[0];
   const request = command.request;
   const result = command.result;
@@ -133,11 +149,6 @@ export default function () {
     console.error(
       `Failed to create assessment | status: ${commandResponse.status} | body: ${commandResponse.body}`
     );
-
-  if (commandResponse.status !== 200) {
-    console.error("STATUS:", commandResponse.status);
-    console.error("BODY:", commandResponse.body);
-  }
 
     simulateThinkingTime();
     return;
