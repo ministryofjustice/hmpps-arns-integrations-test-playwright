@@ -134,6 +134,11 @@ export default function () {
       `Failed to create assessment | status: ${commandResponse.status} | body: ${commandResponse.body}`
     );
 
+  if (commandResponse.status !== 200) {
+    console.error("STATUS:", commandResponse.status);
+    console.error("BODY:", commandResponse.body);
+  }
+
     simulateThinkingTime();
     return;
   }
