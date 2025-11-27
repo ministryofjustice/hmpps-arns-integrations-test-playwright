@@ -18,6 +18,10 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: lts/*
+      - name: Disable dotenvx in CI
+        run: echo "DOTENVX_DISABLE_AUTOLOAD=true" >> $GITHUB_ENV
+             echo "DOTENV_CONFIG_SILENT=true" >> $GITHUB_ENV
+
       - name: Install dependencies
         run: npm ci
       - name: Install Playwright
