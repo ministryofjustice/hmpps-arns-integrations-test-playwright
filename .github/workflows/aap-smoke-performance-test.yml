@@ -21,7 +21,6 @@ jobs:
           docker run --rm \
             -u root:root \
             -v ${{ github.workspace }}:/src \
-            # Pass secrets required by k6 setup() for authentication
             -e AAP_CLIENT_ID="${{ secrets.AAP_CLIENT_ID }}" \
             -e AAP_CLIENT_SECRET="${{ secrets.AAP_CLIENT_SECRET }}" \
             -e TOKEN_URL="${{ secrets.TOKEN_URL }}" \
