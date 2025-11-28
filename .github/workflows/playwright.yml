@@ -43,23 +43,24 @@ jobs:
           # Credentials
           DELIUS_USERNAME: ${{ secrets.E2E_DELIUS_USERNAME }}
           DELIUS_PASSWORD: ${{ secrets.E2E_DELIUS_PASSWORD }}
-
-    performance_smoke_test:
+          
+  performance_smoke_test:
     name: Run k6 with Dashboard
     runs-on: ubuntu-latest   
     container: ghcr.io/grafana/xk6-dashboard:latest     
+    needs: [test]    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4      
+      - name: checkout code
+        uses: actions/checkout@v4           
       - name: Run performance smoke test and export dashboard
-        run: k6 run --out 'dashboard=export=aap-perf-report.html&port=-1' performance/tests/aapApi.js
+        run: k6 run --out 'dashboard=export=aap-perf-report.html&port=-1' performance/tests/aapApi.js     
       - name: Upload Dashboard Report
         uses: actions/upload-artifact@v4
         with:
           name: k6-dashboard-report
           path: aap-perf-report.html
           retention-days: 1
-          
+      
       - name: Slack notification
         if: failure() && inputs.channel_id != 'NO_SLACK'
         uses: ./.github/actions/slack_integration_notification
