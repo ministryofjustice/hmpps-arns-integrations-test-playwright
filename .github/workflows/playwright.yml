@@ -44,9 +44,14 @@ jobs:
           DELIUS_USERNAME: ${{ secrets.E2E_DELIUS_USERNAME }}
           DELIUS_PASSWORD: ${{ secrets.E2E_DELIUS_PASSWORD }}
 
-      - name: Run AAP performance smoke test with xk6-dashboard Docker image
-        container: ghcr.io/grafana/xk6-dashboard:latest
-      - name: Run smoke test and export dashboard
+    performance_smoke_test:
+    name: Run k6 with Dashboard
+    runs-on: ubuntu-latest   
+    container: ghcr.io/grafana/xk6-dashboard:latest     
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4      
+      - name: Run performance smoke test and export dashboard
         run: k6 run --out 'dashboard=export=aap-perf-report.html&port=-1' performance/tests/aapApi.js
       - name: Upload Dashboard Report
         uses: actions/upload-artifact@v4
