@@ -1,7 +1,7 @@
 import http from "k6/http";
 import { check, sleep } from "k6";
 import { Counter } from "k6/metrics";
-import { encoding } from "k6";
+import { b64encode } from 'k6/encoding';
 
 // Note: default smoke test values below, adjust up for load test e.g between 15 and 30 seconds
 function simulateThinkingTime() {
@@ -79,7 +79,7 @@ export function setup() {
   const authString = `${clientIdAap}:${clientSecretAap}`;
 
   // Use k6 encoding utility
-  const base64Encoded = encoding.b64encode(authString);
+  const base64Encoded = b64encode(authString)
   const authHeader = "Basic " + base64Encoded;
 
   const paramsAap = "grant_type=client_credentials";
