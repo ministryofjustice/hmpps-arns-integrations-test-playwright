@@ -45,11 +45,9 @@ jobs:
           DELIUS_PASSWORD: ${{ secrets.E2E_DELIUS_PASSWORD }}
 
       - name: Run AAP performance smoke test with xk6-dashboard Docker image
-        run: |
-          docker run --rm \
-            -v ${{ github.workspace }}:/src \
-            ghcr.io/grafana/xk6-dashboard:latest \
-            run --out 'dashboard=export=aap-perf-report.html&port=-1' /src/performance/tests/aapApi.js
+        container: ghcr.io/grafana/xk6-dashboard:latest
+      - name: Run smoke test and export dashboard
+        run: k6 run --out 'dashboard=export=aap-perf-report.html&port=-1' performance/tests/aapApi.js
       - name: Upload Dashboard Report
         uses: actions/upload-artifact@v4
         with:
