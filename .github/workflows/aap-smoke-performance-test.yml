@@ -1,0 +1,28 @@
+name: K6 Performance Smoke Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 21 * * 1-5'
+
+jobs:
+  performance_smoke_test:
+    name: Run k6 with Dashboard
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/grafana/xk6-dashboard:latest
+      user: root
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Run performance smoke test and export dashboard
+        run: k6 run --out 'dashboard=export=aap-perf-report.html&port=-1' performance/tests/aapApi.js
+      - name: Upload Dashboard Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-dashboard-report
+          path: aap-perf-report.html
+          retention-days: 1
