@@ -1,6 +1,7 @@
 import http from "k6/http";
 import { check, sleep } from "k6";
 import { Counter } from "k6/metrics";
+import { encoding } from "k6";
 
 // Note: default smoke test values below, adjust up for load test e.g between 15 and 30 seconds
 function simulateThinkingTime() {
@@ -29,7 +30,8 @@ Soak test
 P90_THRESHOLD = 450; 
 P95_THRESHOLD = 550;*/
 
-const BASE_URL = "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk"; 
+const BASE_URL =
+  "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk";
 
 export const options = {
   stages: [
@@ -62,8 +64,8 @@ Ramp-down: 100 → 0 VUS over 10 minutes*/
 };
 
 export function setup() {
-  console.log('Starting API authentication setup...');
-  
+  console.log("Starting API authentication setup...");
+
   // Retrieve environment variables
   const clientIdAap = __ENV.AAP_CLIENT_ID;
   const clientSecretAap = __ENV.AAP_CLIENT_SECRET;
@@ -73,30 +75,36 @@ export function setup() {
     throw new Error("Missing required environment variables for AAP token.");
   }
 
-  const paramsAap = 'grant_type=client_credentials';
-  const authHeader = 'Basic ' + btoa(`${clientIdAap}:${clientSecretAap}`);
+  // Build the string to be encoded
+  const authString = `${clientIdAap}:${clientSecretAap}`;
+
+  // Use k6 encoding utility
+  const base64Encoded = encoding.b64encode(authString);
+  const authHeader = "Basic " + base64Encoded;
+
+  const paramsAap = "grant_type=client_credentials";
 
   const respAap = http.post(tokenUrl, paramsAap, {
     headers: {
       Authorization: authHeader,
-      'Content-Type': 'application/x-www-form-urlencoded',
+      "Content-Type": "application/x-www-form-urlencoded",
     },
   });
 
   // Check and extract token
   check(respAap, {
-    'setup: AAP token request status 200': (r) => r.status === 200,
+    "setup: AAP token request status 200": (r) => r.status === 200,
   });
 
   const tokenData = respAap.json();
 
   if (respAap.status !== 200 || !tokenData || !tokenData.access_token) {
-     throw new Error(`Authentication failed. Status: ${respAap.status}`);
+    throw new Error(`Authentication failed. Status: ${respAap.status}`);
   }
 
   const token = tokenData.access_token;
-  
-  console.log('AAP access token received()');
+
+  console.log("AAP access token received()");
 
   // Return the token
   return { apiToken: token };
@@ -125,7 +133,9 @@ export default function (data) {
   });
 
   if (commandResponse.status !== 200) {
-    console.error(`NON-200 RESPONSE from /command | STATUS: ${commandResponse.status}`);
+    console.error(
+      `NON-200 RESPONSE from /command | STATUS: ${commandResponse.status}`
+    );
   }
 
   check(commandResponse, { "command status 200": (r) => r.status === 200 });
@@ -134,7 +144,9 @@ export default function (data) {
   try {
     dataJson = commandResponse.json();
   } catch (err) {
-    console.error(`JSON parse error on /command response | STATUS: ${commandResponse.status}`);
+    console.error(
+      `JSON parse error on /command response | STATUS: ${commandResponse.status}`
+    );
     return;
   }
 
@@ -152,14 +164,17 @@ export default function (data) {
     "request exists": (r) => r !== undefined,
     "request.type is correct": (r) => r.type === "CreateAssessmentCommand",
     "user.id exists": (r) => typeof r.user.id === "string",
-    "properties exists (even {})": (r) => r.hasOwnProperty("properties") && typeof r.properties === "object",
+    "properties exists (even {})": (r) =>
+      r.hasOwnProperty("properties") && typeof r.properties === "object",
   });
 
   check(result, {
     "result exists": (res) => res !== undefined,
-    "result.type correct": (res) => res.type === "CreateAssessmentCommandResult",
+    "result.type correct": (res) =>
+      res.type === "CreateAssessmentCommandResult",
     "assessmentUuid exists": (res) => typeof res.assessmentUuid === "string",
-    "assessmentUuid is UUID-ish": (res) => /^[0-9a-fA-F-]{36}$/.test(res.assessmentUuid),
+    "assessmentUuid is UUID-ish": (res) =>
+      /^[0-9a-fA-F-]{36}$/.test(res.assessmentUuid),
     "success is true": (res) => res.success === true,
   });
 
@@ -191,14 +206,20 @@ export default function (data) {
   check(queryResponse, { "query status 200": (r) => r.status === 200 });
 
   const queryData = queryResponse.json();
-  const queryResult = queryData && queryData.queries && queryData.queries[0] && queryData.queries[0].result;
+  const queryResult =
+    queryData &&
+    queryData.queries &&
+    queryData.queries[0] &&
+    queryData.queries[0].result;
 
   check(queryResult, {
     "query result exists": (r) => r !== undefined,
     "has assessmentUuid": (r) => typeof r.assessmentUuid === "string",
     "has aggregateUuid": (r) => typeof r.aggregateUuid === "string",
-    "createdAt looks like a timestamp": (r) => /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(r.createdAt),
-    "collections exists and is array": (r) => ArrayOfCollections => Array.isArray(r.collections),
+    "createdAt looks like a timestamp": (r) =>
+      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(r.createdAt),
+    "collections exists and is array": (r) => (ArrayOfCollections) =>
+      Array.isArray(r.collections),
     "collaborators exists and is array": (r) => Array.isArray(r.collaborators),
   });
 
