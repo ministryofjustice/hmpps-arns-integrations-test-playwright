@@ -46,17 +46,17 @@ jobs:
           
   performance_smoke_test:
     name: Run smoke AAP performance test
-    runs-on: ubuntu-latest   
+    runs-on: ubuntu-latest
     
     container:
-      image: ghcr.io/grafana/xk6-dashboard:latest 
+      image: ghcr.io/grafana/xk6-dashboard:latest
       user: root
 
     needs: [test]
        
     steps:
       - name: checkout code
-        uses: actions/checkout@v4           
+        uses: actions/checkout@v4
       - name: Run performance smoke test and export dashboard
         run: k6 run --out 'dashboard=export=aap-perf-report.html&port=-1' performance/tests/aapApi.js     
       - name: Upload Dashboard Report
