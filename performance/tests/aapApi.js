@@ -73,8 +73,8 @@ export function setup() {
     throw new Error("Missing required environment variables for AAP token.");
   }
 
-  const paramsAap = 'grant_type=client_credentials'; 
-  const authHeader = 'Basic ' + Buffer.from(`${clientIdAap}:${clientSecretAap}`).toString('base64');
+  const paramsAap = 'grant_type=client_credentials';
+  const authHeader = 'Basic ' + btoa(`${clientIdAap}:${clientSecretAap}`);
 
   const respAap = http.post(tokenUrl, paramsAap, {
     headers: {
