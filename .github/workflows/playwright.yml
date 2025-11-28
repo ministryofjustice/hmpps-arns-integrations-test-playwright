@@ -1,13 +1,14 @@
+---
 name: Playwright Tests
 on:
   workflow_call:
     inputs:
       channel_id:
-        description: 'The slack channel ID to send a message on failure. If this is not provided then no message is sent.'
+        description: The slack channel ID to send a message on failure. If this is not
+          provided then no message is sent.
         required: false
-        default: 'NO_SLACK'
+        default: NO_SLACK
         type: string
-
 jobs:
   test:
     timeout-minutes: 60
@@ -37,39 +38,34 @@ jobs:
           SP_CLIENT_SECRET: ${{ secrets.SP_CLIENT_SECRET }}
           AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
           AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
-          # URLs
           DELIUS_URL: https://ndelius.test.probation.service.justice.gov.uk
           TOKEN_URL: ${{ secrets.TOKEN_URL }}
-          # Credentials
           DELIUS_USERNAME: ${{ secrets.E2E_DELIUS_USERNAME }}
           DELIUS_PASSWORD: ${{ secrets.E2E_DELIUS_PASSWORD }}
-          
   performance_smoke_test:
     name: Run smoke AAP performance test
     runs-on: ubuntu-latest
-    
     container:
       image: ghcr.io/grafana/xk6-dashboard:latest
       user: root
-
-    needs: [test]
-       
+    needs:
+      - test
     steps:
       - name: checkout code
         uses: actions/checkout@v4
       - name: Run performance smoke test and export dashboard
-        run: k6 run --out 'dashboard=export=aap-perf-report.html&port=-1' performance/tests/aapApi.js     
+        run: k6 run --out 'dashboard=export=aap-perf-report.html&port=-1'
+          performance/tests/aapApi.js
       - name: Upload Dashboard Report
         uses: actions/upload-artifact@v4
         with:
           name: k6-dashboard-report
           path: aap-perf-report.html
           retention-days: 1
-      
       - name: Slack notification
         if: failure() && inputs.channel_id != 'NO_SLACK'
         uses: ./.github/actions/slack_integration_notification
         with:
-          title: "Integration tests notification"
+          title: Integration tests notification
           channel_id: ${{ inputs.channel_id }}
           SLACK_BOT_TOKEN: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
