@@ -12,14 +12,17 @@ jobs:
   performance_smoke_test:
     name: Run k6 with Dashboard
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/grafana/xk6-dashboard:latest
-      user: root
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Run performance smoke test and export dashboard
-        run: k6 run --out 'dashboard=export=aap-perf-report.html&port=-1' performance/tests/aapApi.js
+      - name: Run k6 test as root and export dashboard
+        run: |
+          docker run --rm \
+            -u root:root \
+            -v ${{ github.workspace }}:/src \
+            ghcr.io/grafana/xk6-dashboard:latest \
+            run --out 'dashboard=export=aap-perf-report.html&port=-1' /src/performance/tests/aapApi.js
+            
       - name: Upload Dashboard Report
         uses: actions/upload-artifact@v4
         with:
