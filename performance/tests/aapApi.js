@@ -108,7 +108,7 @@ export default function () {
   const command = data.commands[0];
   const request = command.request;
   const result = command.result;
-  const assessmentUuid = result?.assessmentUuid;
+  const assessmentUuid = result && result.assessmentUuid;
 
   check(data, {
     "commands array exists": (d) => Array.isArray(d.commands),
