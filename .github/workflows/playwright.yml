@@ -52,14 +52,12 @@ jobs:
       - name: Build xk6 dashboard-enabled k6
         run: |
           go install go.k6.io/xk6/cmd/xk6@latest
-          xk6 build --with github.com/grafana/xk6-dashboard@latest
-          mv k6 ./k6-dashboard
-        
+          xk6 build --with github.com/grafana/xk6-dashboard@latest        
       ##- name: Install k6
       ##  uses: grafana/setup-k6-action@v1
 
-      - name: Run k6 performance test
-        run: k6 run performance/tests/aapApi.js --out web-dashboard=export=aap-perf-report.html
+      - name: Run k6 AAP smoke performance test
+        run: ./k6 run performance/tests/aapApi.js --out web-dashboard=export=aap-perf-report.html
 
       - name: Upload Dashboard Report
         uses: actions/upload-artifact@v4
