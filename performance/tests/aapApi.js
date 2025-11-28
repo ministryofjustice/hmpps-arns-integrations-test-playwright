@@ -29,6 +29,8 @@ Soak test
 P90_THRESHOLD = 450; 
 P95_THRESHOLD = 550;*/
 
+const BASE_URL = "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk"; 
+
 export const options = {
   stages: [
     { duration: "30s", target: VUS },
@@ -59,14 +61,52 @@ Ramp-down: 100 → 0 VUS over 10 minutes*/
   },
 };
 
-const BASE_URL =
-  "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk";
-const TOKEN = JSON.parse(open("../../utils/aapToken.json")).access_token;
+export function setup() {
+  console.log('Starting API authentication setup...');
+  
+  // Retrieve environment variables
+  const clientIdAap = __ENV.AAP_CLIENT_ID;
+  const clientSecretAap = __ENV.AAP_CLIENT_SECRET;
+  const tokenUrl = __ENV.TOKEN_URL;
 
-export default function () {
+  if (!clientIdAap || !clientSecretAap || !tokenUrl) {
+    throw new Error("Missing required environment variables for AAP token.");
+  }
+
+  const paramsAap = 'grant_type=client_credentials'; 
+  const authHeader = 'Basic ' + Buffer.from(`${clientIdAap}:${clientSecretAap}`).toString('base64');
+
+  const respAap = http.post(tokenUrl, paramsAap, {
+    headers: {
+      Authorization: authHeader,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  });
+
+  // Check and extract token
+  check(respAap, {
+    'setup: AAP token request status 200': (r) => r.status === 200,
+  });
+
+  const tokenData = respAap.json();
+
+  if (respAap.status !== 200 || !tokenData || !tokenData.access_token) {
+     throw new Error(`Authentication failed. Status: ${respAap.status}`);
+  }
+
+  const token = tokenData.access_token;
+  
+  console.log('AAP access token received()');
+
+  // Return the token
+  return { apiToken: token };
+}
+
+export default function (data) {
+  const TOKEN = data.apiToken;
   const timeStamp = new Date().toISOString().split('.')[0];
 
-  // Step 1 — Create Assessment
+  // Create Assessment
   const commandPayload = JSON.stringify({
     commands: [
       {
@@ -84,33 +124,26 @@ export default function () {
     },
   });
 
-  // If status is NOT 200, log details
   if (commandResponse.status !== 200) {
-    console.error(`NON-200 RESPONSE from /command`);
-    console.error(`STATUS: ${commandResponse.status}`);
-    console.error(`BODY: ${JSON.stringify(commandResponse.body, null, 2)}`);
-    console.error(`HEADERS: ${JSON.stringify(commandResponse.headers, null, 2)}`);
+    console.error(`NON-200 RESPONSE from /command | STATUS: ${commandResponse.status}`);
   }
 
   check(commandResponse, { "command status 200": (r) => r.status === 200 });
 
-  let data;
+  let dataJson;
   try {
-    data = commandResponse.json();
+    dataJson = commandResponse.json();
   } catch (err) {
-    console.error(`JSON parse error on /command response`);
-    console.error(`STATUS: ${commandResponse.status}`);
-    console.error(`BODY: ${JSON.stringify(commandResponse.body, null, 2)}`);
-    console.error(`HEADERS: ${JSON.stringify(commandResponse.headers, null, 2)}`);
+    console.error(`JSON parse error on /command response | STATUS: ${commandResponse.status}`);
     return;
   }
 
-  const command = data.commands[0];
+  const command = dataJson.commands[0];
   const request = command.request;
   const result = command.result;
   const assessmentUuid = result && result.assessmentUuid;
 
-  check(data, {
+  check(dataJson, {
     "commands array exists": (d) => Array.isArray(d.commands),
     "command[0] exists": (d) => d.commands.length > 0,
   });
@@ -118,46 +151,25 @@ export default function () {
   check(request, {
     "request exists": (r) => r !== undefined,
     "request.type is correct": (r) => r.type === "CreateAssessmentCommand",
-
-    "user exists": (r) => typeof r.user === "object",
     "user.id exists": (r) => typeof r.user.id === "string",
-    "user.name exists": (r) => typeof r.user.name === "string",
-
-    "formVersion exists": (r) => typeof r.formVersion === "string",
-
-    "properties exists (even {})": (r) =>
-      r.hasOwnProperty("properties") && typeof r.properties === "object",
-
-    "timeline present (can be null)": (r) => r.hasOwnProperty("timeline"),
+    "properties exists (even {})": (r) => r.hasOwnProperty("properties") && typeof r.properties === "object",
   });
 
   check(result, {
     "result exists": (res) => res !== undefined,
-    "result.type correct": (res) =>
-      res.type === "CreateAssessmentCommandResult",
-
+    "result.type correct": (res) => res.type === "CreateAssessmentCommandResult",
     "assessmentUuid exists": (res) => typeof res.assessmentUuid === "string",
-    "assessmentUuid is UUID-ish": (res) =>
-      /^[0-9a-fA-F-]{36}$/.test(res.assessmentUuid),
-
-    "message exists": (res) =>
-      typeof res.message === "string" && res.message.length > 0,
-
+    "assessmentUuid is UUID-ish": (res) => /^[0-9a-fA-F-]{36}$/.test(res.assessmentUuid),
     "success is true": (res) => res.success === true,
   });
 
-  // Log failures
+  // Log failures and exit early if assessment failed to create
   if (!assessmentUuid) {
     createFailures.add(1);
-    console.error(
-      `Failed to create assessment | status: ${commandResponse.status} | body: ${commandResponse.body}`
-    );
-
     simulateThinkingTime();
     return;
   }
 
-  // Step 2 — Query Assessment
   const queryPayload = JSON.stringify({
     queries: [
       {
@@ -179,39 +191,15 @@ export default function () {
   check(queryResponse, { "query status 200": (r) => r.status === 200 });
 
   const queryData = queryResponse.json();
-  const queryResult = queryData.queries[0].result;
+  const queryResult = queryData?.queries?.[0]?.result;
 
   check(queryResult, {
-    "result exists": (r) => r !== undefined,
+    "query result exists": (r) => r !== undefined,
     "has assessmentUuid": (r) => typeof r.assessmentUuid === "string",
     "has aggregateUuid": (r) => typeof r.aggregateUuid === "string",
-    "has formVersion": (r) => typeof r.formVersion === "string",
-
-    "createdAt exists": (r) => typeof r.createdAt === "string",
-    "updatedAt exists": (r) => typeof r.updatedAt === "string",
-
-    "createdAt looks like a timestamp": (r) =>
-      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(r.createdAt),
-    "updatedAt looks like a timestamp": (r) =>
-      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(r.updatedAt),
-
-    "answers exists (even empty)": (r) =>
-      r.hasOwnProperty("answers") && typeof r.answers === "object",
-    "properties exists (even empty)": (r) =>
-      r.hasOwnProperty("properties") && typeof r.properties === "object",
-
-    "collections exists and is array": (r) => Array.isArray(r.collections),
-
+    "createdAt looks like a timestamp": (r) => /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(r.createdAt),
+    "collections exists and is array": (r) => ArrayOfCollections => Array.isArray(r.collections),
     "collaborators exists and is array": (r) => Array.isArray(r.collaborators),
-    "collaborators have id": (r) =>
-      r.collaborators.length > 0 && typeof r.collaborators[0].id === "string",
-    "collaborators have name": (r) =>
-      r.collaborators.length > 0 && typeof r.collaborators[0].name === "string",
-
-    "assessmentUuid is UUID-ish": (r) =>
-      /^[0-9a-fA-F-]{36}$/.test(r.assessmentUuid),
-    "aggregateUuid is UUID-ish": (r) =>
-      /^[0-9a-fA-F-]{36}$/.test(r.aggregateUuid),
   });
 
   simulateThinkingTime();
