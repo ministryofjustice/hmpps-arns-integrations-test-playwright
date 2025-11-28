@@ -191,7 +191,7 @@ export default function (data) {
   check(queryResponse, { "query status 200": (r) => r.status === 200 });
 
   const queryData = queryResponse.json();
-  const queryResult = queryData?.queries?.[0]?.result;
+  const queryResult = queryData && queryData.queries && queryData.queries[0] && queryData.queries[0].result;
 
   check(queryResult, {
     "query result exists": (r) => r !== undefined,
