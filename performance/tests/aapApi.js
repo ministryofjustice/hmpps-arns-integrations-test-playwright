@@ -33,7 +33,7 @@ Soak test
 P90_THRESHOLD = 450; 
 P95_THRESHOLD = 550;*/
 
-const BASE_URL = "https://assemble.co.uk"; 
+const BASE_URL = "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk";
 
 export const options = {
   stages: [
