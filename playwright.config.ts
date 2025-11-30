@@ -1,8 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
 import dotenv from 'dotenv'
 
-// Load environment variables from .env
-dotenv.config()
+// Load environment variables from .env only if running locally
+if (!process.env.CI) {
+  require("dotenv").config();
+}
 
 /**
  * Read environment variables from file.
