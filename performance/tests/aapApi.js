@@ -75,7 +75,7 @@ function fetchNewToken() {
     throw new Error("Missing required environment variables: AAP_CLIENT_ID, AAP_CLIENT_SECRET, or TOKEN_URL");
   }
 
-  // Use K6 native encoding to avoid Buffer/btoa issues
+  // Use K6 native encoding to avoid issues
   const encodedCredentials = b64encode(`${clientId}:${clientSecret}`);
   
   const params = {
@@ -109,9 +109,8 @@ export function setup() {
   return { initialToken: token };
 }
 
-// --- VU STATE ---
-// These variables exist separately for EACH Virtual User
-// They persist across iterations of the default function
+// VU state
+// These variables exist separately for each Virtual User
 let cachedToken = null;
 let tokenExpiry = 0;
 
@@ -127,7 +126,7 @@ export default function (data) {
 
   // If token is expired or about to expire, refresh it
   if (now >= tokenExpiry) {
-    console.log(`🔄 VU ${__VU} refreshing expired token...`);
+    console.log(`VU ${__VU} refreshing expired token...`);
     try {
       cachedToken = fetchNewToken();
       tokenExpiry = now + TOKEN_REFRESH_WINDOW; // Reset timer for another 55 mins

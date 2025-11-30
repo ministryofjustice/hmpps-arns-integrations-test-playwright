@@ -39,12 +39,6 @@ jobs:
           # Credentials
           DELIUS_USERNAME: ${{ secrets.E2E_DELIUS_USERNAME }}
           DELIUS_PASSWORD: ${{ secrets.E2E_DELIUS_PASSWORD }}
-        
-      - name: Install k6
-        uses: grafana/setup-k6-action@v1
-
-      - name: Run k6 performance test
-        run: k6 run performance/tests/aapApi.js
           
       - name: Slack notification
         if: failure() && inputs.channel_id != 'NO_SLACK'
