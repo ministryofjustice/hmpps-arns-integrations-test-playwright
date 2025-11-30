@@ -1,12 +1,11 @@
 name: K6 Performance Smoke Test
 
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
   schedule:
     - cron: "0 21 * * 1-5"
+  workflow_dispatch:
 
 jobs:
   performance_smoke_test:
