@@ -5,7 +5,7 @@ import { b64encode } from "k6/encoding";
 
 // Note: adjust thinking time depending on scenario run. E.g. increase to 5-15 sec for Load test
 function simulateThinkingTime() {
-  sleep(1 + Math.random() * 4);
+  sleep(5 + Math.random() * 10);
 }
 
 // Track assessment creation failures
@@ -45,14 +45,13 @@ export const options = {
   /* Note: options will also be adjusted when running other scenarios locally: 
 Load:
 Ramp-up:   0 → 200 VUS over 10 minutes  
-Steady:    Hold 200 VUS for 30 minutes  
-Ramp-down: 600 → 0 VUS over 5 minutes
+Steady:    Hold 200 VUS for 10 minutes  
+Ramp-down: 200 → 0 VUS over 5 minutes
 
 Stress:
-Ramp-up:   0 → 200 VUS in 5 minutes  
-Ramp-up:   200 → 400 VUS in 10 minutes   
-Steady:    Hold 400 VUS for 10 minutes  
-Ramp-down: 400 → 0 in 5 minutes
+Ramp-up:   0 → 400 VUS in 3 minutes   
+Steady:    Hold 400 VUS for 5 minutes  
+Ramp-down: 400 → 0 in 2 minutes
 
 Soak:
 Ramp-up:   0 → 100 VUS over 10 minutes  
