@@ -50,12 +50,11 @@ NOTE: you may want to adjust the `duration` value in the Browser test to match w
 The tests also cover the AAP API.
 
 - AAP API tests
-`k6 run performance/tests/aapApi.js`
+a smoke test of these runs as an additional check when PRs are raised on the pipeline as a separate workflow. 
+dashboard and graph of various metrics report can be downloaded when they run.
+a load test is setup as another workflow that can be manually triggered.
 
-NOTE: at the moment all tokens are fetched from the run of the global-setup function, if the token has expired for now you can run this test feature to renew the token before running the performance test.
-`npx playwright test --project=chromium tests/19.AapRequests.spec.ts`
-
-future work will involve refactoring this test to include getting the AAP token in isolation from K6.
+Note: for these tests the AAP token is fetched in isolation withink the K6 tests.
 
 ## The report
 
