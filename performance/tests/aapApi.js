@@ -3,9 +3,9 @@ import { check, sleep } from "k6";
 import { Counter } from "k6/metrics";
 import { b64encode } from "k6/encoding";
 
-// Note: adjust thinking time depending on scenario run. E.g. increase to 5-15 sec for Load test
+// Note: default for smoke test. Adjust thinking time depending on scenario run. E.g. increase to 5-15 sec for Load test
 function simulateThinkingTime() {
-  sleep(5 + Math.random() * 10);
+  sleep(1 + Math.random() * 4);
 }
 
 // Track assessment creation failures
