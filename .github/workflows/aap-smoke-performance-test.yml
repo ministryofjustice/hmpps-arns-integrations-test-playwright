@@ -30,11 +30,11 @@ jobs:
           AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
           AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
           TOKEN_URL: ${{ secrets.TOKEN_URL }}
-        run: ./k6 run performance/tests/aapApi.js --out web-dashboard=export=aap-perf-report.html
+        run: ./k6 run performance/tests/aapApi.js --out web-dashboard=export=aap-smoke-report.html
 
-      - name: Upload Dashboard Report
+      - name: Upload Smoke Report
         uses: actions/upload-artifact@v4
         with:
-          name: k6-dashboard-report
-          path: aap-perf-report.html
+          name: k6-smoke-report
+          path: aap-smoke-report.html
           retention-days: 1

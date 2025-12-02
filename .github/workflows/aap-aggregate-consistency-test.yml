@@ -28,12 +28,10 @@ jobs:
 
       - name: Run k6 Aggregate Test
         env:
-          # --- AUTHENTICATION SECRETS ---
           AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
           AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
           TOKEN_URL: ${{ secrets.TOKEN_URL }}
           
-          # --- TEST CONFIGURATION ---
           VUS: "1"
           DURATION: "1m" 
           
