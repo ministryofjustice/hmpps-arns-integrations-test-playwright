@@ -43,4 +43,4 @@ jobs:
         with:
           name: k6-aggregate-report
           path: aap-aggregate-report.html
-          retention-days: 7
+          retention-days: 1
