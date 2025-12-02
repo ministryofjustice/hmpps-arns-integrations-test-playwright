@@ -8,6 +8,7 @@ jobs:
     name: Run k6 Soak Test
     runs-on:
       labels: moj-cloud-platform
+    timeout-minutes: 500
 
     steps:
       - name: Checkout code
