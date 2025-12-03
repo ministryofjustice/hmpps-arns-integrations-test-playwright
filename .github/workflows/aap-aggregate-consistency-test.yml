@@ -30,9 +30,12 @@ jobs:
           AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
           AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
           TOKEN_URL: ${{ secrets.TOKEN_URL }}
+
+          MIN_THINK_TIME: "1"
+          MAX_THINK_TIME: "5"
           
           VUS: "1"
-          DURATION: "1m" 
+          DURATION: "1m"
           
         run: ./k6 run performance/tests/aapAggregate.js --out web-dashboard=export=aap-aggregate-report.html
 
