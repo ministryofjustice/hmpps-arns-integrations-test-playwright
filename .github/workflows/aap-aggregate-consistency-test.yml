@@ -9,7 +9,7 @@ jobs:
   aggregate_logic_test:
     name: Run Aggregate Logic Test
     runs-on:
-      labels: cloud-platform
+      labels: moj-cloud-platform
 
     steps:
       - name: Checkout code
