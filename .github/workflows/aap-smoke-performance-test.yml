@@ -30,6 +30,13 @@ jobs:
           AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
           AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
           TOKEN_URL: ${{ secrets.TOKEN_URL }}
+
+          VUS: "5"
+          DURATION: "30s"
+
+          MIN_THINK_TIME: "1"
+          MAX_THINK_TIME: "5"
+
         run: ./k6 run performance/tests/aapApi.js --out web-dashboard=export=aap-smoke-report.html
 
       - name: Upload Smoke Report
