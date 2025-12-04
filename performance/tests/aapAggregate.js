@@ -238,6 +238,10 @@ export default function (data) {
 
   const pitAggUuid = pitResult.aggregateUuid;
 
+  console.log(`DEBUG: pitAggUuid: ${pitAggUuid}`);
+  console.log(`DEBUG: aggUuid_50 (Event 50): ${aggUuid_50}`);
+  console.log(`DEBUG: aggUuid_51 (Latest): ${aggUuid_51}`);
+
   check(pitAggUuid, {
     "PIT Aggregate matches old state (51,not latest)": (uuid) =>
       uuid !== aggUuid_51,
