@@ -3,23 +3,25 @@ import { check, sleep } from "k6";
 import { Counter } from "k6/metrics";
 import { b64encode } from "k6/encoding";
 
+const MIN_THINK = __ENV.MIN_THINK_TIME ? parseInt(__ENV.MIN_THINK_TIME) : 1;
+const MAX_THINK = __ENV.MAX_THINK_TIME ? parseInt(__ENV.MAX_THINK_TIME) : 5;
+
 function simulateThinkingTime() {
-  sleep(1 + Math.random() * 4);
+  const range = MAX_THINK - MIN_THINK;
+  sleep(MIN_THINK + Math.random() * range);
 }
 
 const updateFailures = new Counter("update_assessment_failures");
 
 // Default config
 const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 1;
-const DURATION = __ENV.DURATION || "2m";
+const DURATION = __ENV.DURATION || "1m";
 const BASE_URL =
   "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk";
 
 export const options = {
   stages: [
-    { duration: "30s", target: VUS },
-    //{ duration: DURATION, target: VUS }, // Uncomment for longer run
-    //{ duration: "30s", target: 0 },
+    { duration: DURATION, target: VUS }
   ],
   thresholds: {
     http_req_failed: ["rate<0.01"],

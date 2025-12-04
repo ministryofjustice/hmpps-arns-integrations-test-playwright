@@ -35,7 +35,7 @@ jobs:
           MAX_THINK_TIME: "5"
           
           VUS: "1"
-          DURATION: "1m"
+          DURATION: "5m"
           
         run: ./k6 run performance/tests/aapAggregate.js --out web-dashboard=export=aap-aggregate-report.html
 
