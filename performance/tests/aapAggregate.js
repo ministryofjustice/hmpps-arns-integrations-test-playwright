@@ -203,6 +203,8 @@ export default function (data) {
     data50.queries[0].result &&
     data50.queries[0].result.aggregateUuid;
 
+  console.log(`SERVER TIME FORMAT: ${data50.queries[0].result.updatedAt}`);
+
   // 6. Update Assessment (Event 51)
   const uuidEvent51 = performUpdate(
     TOKEN,
