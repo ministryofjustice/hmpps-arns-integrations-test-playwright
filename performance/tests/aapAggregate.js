@@ -170,7 +170,16 @@ export default function (data) {
   // 3. Capture current timestamp (State at 49 events)
   sleep(0.5);
 
-  const timestampVar = new Date().toISOString().slice(0, -1);;
+  function getMicrosecondTimestamp() {
+  const now = new Date();
+  const iso = now.toISOString(); 
+  const baseTime = iso.replace('T', ' ').slice(0, -1);
+  const microseconds = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+  return `${baseTime}${microseconds}+00`;
+}
+  sleep(0.5);
+
+  const timestampVar = getMicrosecondTimestamp();
   console.log(`Captured Point-In-Time Timestamp: ${timestampVar}`);
   sleep(0.5);
 
