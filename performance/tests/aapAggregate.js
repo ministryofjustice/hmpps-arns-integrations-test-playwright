@@ -92,7 +92,7 @@ function performUpdate(token, assessmentUuid) {
 
 // 3. Perform Query (Returns response object)
 function performQuery(token, assessmentUuid, timestamp = null) {
-  const effectiveTime = timestamp || new Date().toISOString().split(".")[0];
+  const effectiveTime = timestamp || new Date().toISOString().split('.')[0];
 
   const queryPayload = JSON.stringify({
     queries: [
@@ -169,7 +169,7 @@ export default function (data) {
 
   // 3. Capture current timestamp (State at 49 events)
   sleep(0.5);
-  const timestampVar = new Date().toISOString().split(".")[0];
+  const timestampVar = new Date().toISOString().split('.')[0];
   console.log(`Captured Point-In-Time Timestamp: ${timestampVar}`);
   sleep(0.5);
 
@@ -237,6 +237,10 @@ export default function (data) {
   });
 
   const pitAggUuid = pitResult.aggregateUuid;
+
+  console.log(`DEBUG: pitAggUuid: ${pitAggUuid}`);
+  console.log(`DEBUG: aggUuid_50 (Event 50): ${aggUuid_50}`);
+  console.log(`DEBUG: aggUuid_51 (Latest): ${aggUuid_51}`);
 
   check(pitAggUuid, {
     "PIT Aggregate matches old state (51,not latest)": (uuid) =>
