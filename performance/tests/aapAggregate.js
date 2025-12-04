@@ -92,7 +92,7 @@ function performUpdate(token, assessmentUuid) {
 
 // 3. Perform Query (Returns response object)
 function performQuery(token, assessmentUuid, timestamp = null) {
-  const effectiveTime = timestamp || new Date().toISOString().split(".")[0];
+  const effectiveTime = timestamp || new Date().toISOString().slice(0, -1);;
 
   const queryPayload = JSON.stringify({
     queries: [
@@ -169,7 +169,8 @@ export default function (data) {
 
   // 3. Capture current timestamp (State at 49 events)
   sleep(0.5);
-  const timestampVar = new Date().toISOString().split(".")[0];
+
+  const timestampVar = new Date().toISOString().slice(0, -1);;
   console.log(`Captured Point-In-Time Timestamp: ${timestampVar}`);
   sleep(0.5);
 
