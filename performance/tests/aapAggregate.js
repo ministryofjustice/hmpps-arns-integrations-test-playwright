@@ -172,16 +172,25 @@ export default function (data) {
 
   function getMicrosecondTimestamp() {
   const now = new Date();
-  const iso = now.toISOString(); // e.g., "2025-12-04T17:30:33.772Z"
+  
+  // 1. Get Base ISO String (e.g., "2025-12-04T22:27:11.276Z")
+  const iso = now.toISOString(); 
+  
+  // 2. Remove the 'Z' from the end
   const baseTime = iso.slice(0, -1);
+  
+  // 3. Generate 3 random digits for the extra microsecond precision
   const microseconds = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-  return `${baseTime}${microseconds}Z`;
+  
+  // 4. Combine them.
+  return `${baseTime}${microseconds}`;
 }
   sleep(0.5);
 
   const timestampVar = getMicrosecondTimestamp();
   console.log(`Captured Point-In-Time Timestamp: ${timestampVar}`);
-  sleep(1);
+  // Sleep to keep right ordering
+  sleep(5);
 
   // 4. Update Assessment (Event 50)
   const uuidEvent50 = performUpdate(
