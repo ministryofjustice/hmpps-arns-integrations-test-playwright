@@ -1,13 +1,14 @@
-name: K6 Load Test 
+name: K6 Soak Test
 
 on:
   workflow_dispatch: # Manual trigger only
 
 jobs:
-  load_test:
-    name: Run k6 Load Test
+  soak_test:
+    name: Run k6 Soak Test
     runs-on:
       labels: moj-cloud-platform
+    timeout-minutes: 500
 
     steps:
       - name: Checkout code
@@ -23,27 +24,26 @@ jobs:
           go install go.k6.io/xk6/cmd/xk6@latest
           xk6 build --with github.com/grafana/xk6-dashboard@latest
 
-      - name: Run k6 AAP Load Test
+      - name: Run k6 AAP Soak Test
         env:
           AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
           AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
           TOKEN_URL: ${{ secrets.TOKEN_URL }}
           
-          K6_STAGES: '[{"duration":"10m","target":200},{"duration":"10m","target":200},{"duration":"5m","target":0}]'
+          K6_STAGES: '[{"duration":"10m","target":100},{"duration":"8h","target":100},{"duration":"10m","target":0}]'
           
-          MIN_THINK_TIME: "15"
-          MAX_THINK_TIME: "30"
-
-          # Adjust thresholds for heavier load
-          P95_THRESHOLD: "1000" 
-          P90_THRESHOLD: "700"
+          MIN_THINK_TIME: "5"
+          MAX_THINK_TIME: "15"
           
-        run: ./k6 run performance/tests/aapApi.js --out web-dashboard=export=aap-load-report.html
+          P95_THRESHOLD: "550"   
+          P90_THRESHOLD: "450"
+          
+        run: ./k6 run performance/tests/aapApi.js --out web-dashboard=export=aap-soak-report.html
 
-      - name: Upload Load Test Report
+      - name: Upload Soak Test Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: k6-load-report
-          path: aap-load-report.html
+          name: k6-soak-report
+          path: aap-soak-report.html
           retention-days: 1

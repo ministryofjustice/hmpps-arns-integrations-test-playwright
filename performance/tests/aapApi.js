@@ -3,9 +3,15 @@ import { check, sleep } from "k6";
 import { Counter } from "k6/metrics";
 import { b64encode } from "k6/encoding";
 
-// Note: adjust thinking time depending on scenario run. E.g. increase to 5-15 sec for Load test
+// Default to 1s min and 5s max (Smoke Test settings)
+const MIN_THINK = __ENV.MIN_THINK_TIME ? parseInt(__ENV.MIN_THINK_TIME) : 1;
+const MAX_THINK = __ENV.MAX_THINK_TIME ? parseInt(__ENV.MAX_THINK_TIME) : 5;
+
 function simulateThinkingTime() {
-  sleep(5 + Math.random() * 10);
+  // Calculate the random range based on the config
+  // Example for Soak: Min 5, Max 15 -> sleep(5 + random * (15-5)) -> sleep(5 + random * 10)
+  const range = MAX_THINK - MIN_THINK;
+  sleep(MIN_THINK + Math.random() * range);
 }
 
 // Track assessment creation failures
@@ -36,11 +42,13 @@ P95_THRESHOLD = 550;*/
 const BASE_URL = "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk";
 
 export const options = {
-  stages: [
-    { duration: "30s", target: VUS },
-    { duration: DURATION, target: VUS },
-    { duration: "30s", target: 0 },
-  ],
+  // If we have stages (from Env var), use them.
+  // If NOT, fall back to simple VUs/Duration (Better for Smoke Tests)
+  stages: __ENV.K6_STAGES ? JSON.parse(__ENV.K6_STAGES) : undefined,
+  
+  // These apply if 'stages' is undefined
+  vus: VUS,          // Starts 5 VUs immediately
+  duration: DURATION, // Runs for 30s
 
   /* Note: options will also be adjusted when running other scenarios locally: 
 Load:

@@ -1,14 +1,12 @@
-name: K6 Performance Smoke Test
+name: K6 Stress Test 
 
 on:
-  schedule:
-    - cron: "0 21 * * 1"
-  workflow_dispatch:
+  workflow_dispatch: # Manual trigger only
 
 jobs:
-  performance_smoke_test:
-    name: Run k6 with Dashboard
-    runs-on: 
+  load_test:
+    name: Run k6 Stress Test
+    runs-on:
       labels: moj-cloud-platform
 
     steps:
@@ -25,23 +23,24 @@ jobs:
           go install go.k6.io/xk6/cmd/xk6@latest
           xk6 build --with github.com/grafana/xk6-dashboard@latest
 
-      - name: Run k6 AAP smoke performance test
+      - name: Run k6 AAP Stress Test
         env:
           AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
           AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
           TOKEN_URL: ${{ secrets.TOKEN_URL }}
+          
+          K6_STAGES: '[{"duration":"3m","target":300},{"duration":"5m","target":400},{"duration":"2m","target":0}]'
 
-          VUS: "5"
-          DURATION: "30s"
+          # Adjust thresholds for heavier load
+          P95_THRESHOLD: "1200" 
+          P90_THRESHOLD: "800"
+          
+        run: ./k6 run performance/tests/aapApi.js --out web-dashboard=export=aap-stress-report.html
 
-          MIN_THINK_TIME: "1"
-          MAX_THINK_TIME: "5"
-
-        run: ./k6 run performance/tests/aapApi.js --out web-dashboard=export=aap-smoke-report.html
-
-      - name: Upload Smoke Report
+      - name: Upload Stress Test Report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: k6-smoke-report
-          path: aap-smoke-report.html
+          name: k6-stress-report
+          path: aap-stress-report.html
           retention-days: 1
