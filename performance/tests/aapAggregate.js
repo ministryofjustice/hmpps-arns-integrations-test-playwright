@@ -181,7 +181,8 @@ export default function (data) {
 
   const timestampVar = getMicrosecondTimestamp();
   console.log(`Captured Point-In-Time Timestamp: ${timestampVar}`);
-  sleep(0.5);
+  console.log("Sleeping 5s to clear time discrepancy");
+  sleep(5);
 
   // 4. Update Assessment (Event 50)
   const uuidEvent50 = performUpdate(
