@@ -15,7 +15,7 @@ const updateFailures = new Counter("update_assessment_failures");
 
 // Default config
 const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 1;
-const DURATION = __ENV.DURATION || "1m";
+const DURATION = __ENV.DURATION || "5m";
 const BASE_URL =
   "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk";
 
