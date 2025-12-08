@@ -41,10 +41,12 @@ P95_THRESHOLD = 550;*/
 
 const BASE_URL = "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk";
 
+const testStages = __ENV.CUSTOM_STAGES ? JSON.parse(__ENV.CUSTOM_STAGES) : defaultStages;
+
 export const options = {
   // If we have stages (from Env var), use them.
   // If NOT, fall back to simple VUs/Duration (Better for Smoke Tests)
-  stages: __ENV.K6_STAGES ? JSON.parse(__ENV.K6_STAGES) : undefined,
+  stages: testStages,
   
   // These apply if 'stages' is undefined
   vus: VUS,          // Starts 5 VUs immediately
