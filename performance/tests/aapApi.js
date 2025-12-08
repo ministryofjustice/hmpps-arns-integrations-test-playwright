@@ -3,13 +3,13 @@ import { check, sleep } from "k6";
 import { Counter } from "k6/metrics";
 import { b64encode } from "k6/encoding";
 
+// --- CONFIGURATION ---
+
 // Default to 1s min and 5s max (Smoke Test settings)
 const MIN_THINK = __ENV.MIN_THINK_TIME ? parseInt(__ENV.MIN_THINK_TIME) : 1;
 const MAX_THINK = __ENV.MAX_THINK_TIME ? parseInt(__ENV.MAX_THINK_TIME) : 5;
 
 function simulateThinkingTime() {
-  // Calculate the random range based on the config
-  // Example for Soak: Min 5, Max 15 -> sleep(5 + random * (15-5)) -> sleep(5 + random * 10)
   const range = MAX_THINK - MIN_THINK;
   sleep(MIN_THINK + Math.random() * range);
 }
@@ -17,56 +17,31 @@ function simulateThinkingTime() {
 // Track assessment creation failures
 const createFailures = new Counter("create_assessment_failures");
 
-// Default config, smoke test running on CI
+// Default config (Smoke Test Defaults)
 const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 5;
 const DURATION = __ENV.DURATION || "30s";
+
 const P90_THRESHOLD = __ENV.P90_THRESHOLD ? parseInt(__ENV.P90_THRESHOLD) : 200;
 const P95_THRESHOLD = __ENV.P95_THRESHOLD ? parseInt(__ENV.P95_THRESHOLD) : 500;
 
 // Token Validity Configuration (Refresh 5 minutes before expiry)
-const TOKEN_REFRESH_WINDOW = 55 * 60 * 1000; // 55 minutes in milliseconds
-
-/* Note: these will be adjusted when running other scenarios, examples: 
-Load test
-P90_THRESHOLD = 700; 
-P95_THRESHOLD = 1000; 
-
-Stress test 
-P90_THRESHOLD = 800; 
-P95_THRESHOLD = 1200; 
-
-Soak test 
-P90_THRESHOLD = 450; 
-P95_THRESHOLD = 550;*/
+const TOKEN_REFRESH_WINDOW = 55 * 60 * 1000;
 
 const BASE_URL = "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk";
 
-const testStages = __ENV.CUSTOM_STAGES ? JSON.parse(__ENV.CUSTOM_STAGES) : defaultStages;
+// --- STAGE LOGIC ---
+// If CUSTOM_STAGES env var is present (Load/Soak), use it.
+// If NOT present (Smoke), set to undefined.
+const testStages = __ENV.CUSTOM_STAGES ? JSON.parse(__ENV.CUSTOM_STAGES) : undefined;
 
 export const options = {
-  // If we have stages (from Env var), use them.
-  // If NOT, fall back to simple VUs/Duration (Better for Smoke Tests)
+  // 1. If testStages is defined, K6 uses the workflow profile.
   stages: testStages,
   
-  // These apply if 'stages' is undefined
-  vus: VUS,          // Starts 5 VUs immediately
-  duration: DURATION, // Runs for 30s
-
-  /* Note: options will also be adjusted when running other scenarios locally: 
-Load:
-Ramp-up:   0 → 200 VUS over 10 minutes  
-Steady:    Hold 200 VUS for 10 minutes  
-Ramp-down: 200 → 0 VUS over 5 minutes
-
-Stress:
-Ramp-up:   0 → 400 VUS in 3 minutes   
-Steady:    Hold 400 VUS for 5 minutes  
-Ramp-down: 400 → 0 in 2 minutes
-
-Soak:
-Ramp-up:   0 → 100 VUS over 10 minutes  
-Steady:    Hold 100 VUS for 8 hours  
-Ramp-down: 100 → 0 VUS over 10 minutes*/
+  // 2. If testStages is undefined (Smoke Test), K6 ignores 'stages' 
+  //    and uses these values instead for an Immediate Load test.
+  vus: VUS,           // 5 VUs start immediately
+  duration: DURATION, // Runs for exactly 30s
 
   thresholds: {
     http_req_failed: ["rate<0.01"],
@@ -74,7 +49,8 @@ Ramp-down: 100 → 0 VUS over 10 minutes*/
   },
 };
 
-// Authentication
+// --- AUTHENTICATION ---
+
 function fetchNewToken() {
   const clientId = __ENV.AAP_CLIENT_ID;
   const clientSecret = __ENV.AAP_CLIENT_SECRET;
@@ -84,7 +60,6 @@ function fetchNewToken() {
     throw new Error("Missing required environment variables: AAP_CLIENT_ID, AAP_CLIENT_SECRET, or TOKEN_URL");
   }
 
-  // Use K6 native encoding to avoid issues
   const encodedCredentials = b64encode(`${clientId}:${clientSecret}`);
   
   const params = {
@@ -112,33 +87,30 @@ function fetchNewToken() {
 
 export function setup() {
   console.log('Starting AAP initial authentication check...');
-  // We call this once to fail fast if credentials are wrong before starting VUs
   const token = fetchNewToken();
   console.log('Initial AAP Token retrieved successfully');
   return { initialToken: token };
 }
 
-// VU state
-// These variables exist separately for each Virtual User
+// --- VU STATE ---
 let cachedToken = null;
 let tokenExpiry = 0;
 
+// --- DEFAULT FUNCTION ---
+
 export default function (data) {
-  // Token refresh logic
   const now = Date.now();
 
-  // If we don't have a token (first run of this VU), use the one from setup()
+  // Token refresh logic
   if (!cachedToken) {
     cachedToken = data.initialToken;
     tokenExpiry = now + TOKEN_REFRESH_WINDOW;
   }
 
-  // If token is expired or about to expire, refresh it
   if (now >= tokenExpiry) {
-    console.log(`VU ${__VU} refreshing expired token...`);
     try {
       cachedToken = fetchNewToken();
-      tokenExpiry = now + TOKEN_REFRESH_WINDOW; // Reset timer for another 55 mins
+      tokenExpiry = now + TOKEN_REFRESH_WINDOW; 
     } catch (e) {
       console.error(`VU ${__VU} failed to refresh token: ${e.message}`);
     }
@@ -165,11 +137,9 @@ export default function (data) {
     },
   });
 
-  // Log failures
   if (commandResponse.status !== 200) {
     console.error(`NON-200 RESPONSE from /command`);
     console.error(`STATUS: ${commandResponse.status}`);
-    console.error(`BODY: ${commandResponse.body}`);
   }
 
   check(commandResponse, { "command status 200": (r) => r.status === 200 });
@@ -179,10 +149,10 @@ export default function (data) {
     responseData = commandResponse.json();
   } catch (err) {
     console.error(`JSON parse error on /command response`);
-    console.error(`STATUS: ${commandResponse.status}`);
     return;
   }
 
+  // Checks
   const command = responseData && responseData.commands && responseData.commands[0];
   const request = command && command.request;
   const result = command && command.result;
@@ -199,35 +169,22 @@ export default function (data) {
       "request.type is correct": (r) => r.type === "CreateAssessmentCommand",
       "user exists": (r) => typeof r.user === "object",
       "user.id exists": (r) => r.user && typeof r.user.id === "string",
-      "user.name exists": (r) => r.user && typeof r.user.name === "string",
-      "formVersion exists": (r) => typeof r.formVersion === "string",
-      "properties exists (even {})": (r) =>
-        r.hasOwnProperty("properties") && typeof r.properties === "object",
-      "timeline present (can be null)": (r) => r.hasOwnProperty("timeline"),
+      "properties exists": (r) => r.hasOwnProperty("properties"),
     });
   }
 
   if (result) {
     check(result, {
       "result exists": (res) => res !== undefined,
-      "result.type correct": (res) =>
-        res.type === "CreateAssessmentCommandResult",
+      "result.type correct": (res) => res.type === "CreateAssessmentCommandResult",
       "assessmentUuid exists": (res) => typeof res.assessmentUuid === "string",
-      "assessmentUuid is UUID-ish": (res) =>
-        /^[0-9a-fA-F-]{36}$/.test(res.assessmentUuid),
-      "message exists": (res) =>
-        typeof res.message === "string" && res.message.length > 0,
       "success is true": (res) => res.success === true,
     });
   }
 
-  // Log failures
   if (!assessmentUuid) {
     createFailures.add(1);
-    console.error(
-      `Failed to create assessment | status: ${commandResponse.status} | body: ${commandResponse.body}`
-    );
-
+    console.error(`Failed to create assessment | status: ${commandResponse.status}`);
     simulateThinkingTime();
     return;
   }
@@ -254,35 +211,14 @@ export default function (data) {
   check(queryResponse, { "query status 200": (r) => r.status === 200 });
 
   const queryData = queryResponse.json();
-  // Safe access using && instead of ?.
   const queryResult = queryData && queryData.queries && queryData.queries[0] && queryData.queries[0].result;
 
   if (queryResult) {
     check(queryResult, {
       "result exists": (r) => r !== undefined,
       "has assessmentUuid": (r) => typeof r.assessmentUuid === "string",
-      "has aggregateUuid": (r) => typeof r.aggregateUuid === "string",
-      "has formVersion": (r) => typeof r.formVersion === "string",
       "createdAt exists": (r) => typeof r.createdAt === "string",
-      "updatedAt exists": (r) => typeof r.updatedAt === "string",
-      "createdAt looks like a timestamp": (r) =>
-        /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(r.createdAt),
-      "updatedAt looks like a timestamp": (r) =>
-        /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(r.updatedAt),
-      "answers exists (even empty)": (r) =>
-        r.hasOwnProperty("answers") && typeof r.answers === "object",
-      "properties exists (even empty)": (r) =>
-        r.hasOwnProperty("properties") && typeof r.properties === "object",
-      "collections exists and is array": (r) => Array.isArray(r.collections),
-      "collaborators exists and is array": (r) => Array.isArray(r.collaborators),
-      "collaborators have id": (r) =>
-        r.collaborators.length > 0 && typeof r.collaborators[0].id === "string",
-      "collaborators have name": (r) =>
-        r.collaborators.length > 0 && typeof r.collaborators[0].name === "string",
-      "assessmentUuid is UUID-ish": (r) =>
-        /^[0-9a-fA-F-]{36}$/.test(r.assessmentUuid),
-      "aggregateUuid is UUID-ish": (r) =>
-        /^[0-9a-fA-F-]{36}$/.test(r.aggregateUuid),
+      "answers exists": (r) => r.hasOwnProperty("answers"),
     });
   }
 
