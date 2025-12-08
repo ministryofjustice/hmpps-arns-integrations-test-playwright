@@ -76,13 +76,11 @@ export function setup() {
 // --- HELPER FUNCTIONS ---
 
 // 1. Perform Update
-// Added 'updateText' param to ensure data changes every time
 function performUpdate(token, assessmentUuid, updateText) {
   const updateAssessmentAnswersPayload = JSON.stringify({
     commands: [
       {
         type: "UpdateAssessmentAnswersCommand",
-        // Making the addition unique ensures a new version is created!
         added: { test_addition: [updateText] }, 
         removed: [],
         assessmentUuid: assessmentUuid,
@@ -107,8 +105,6 @@ function performUpdate(token, assessmentUuid, updateText) {
 // 2. Perform Query
 function performQuery(token, assessmentUuid, timestamp = null) {
   // If timestamp is null, generate one without 'Z' (Latest approximation)
-  // Or simpler: just pass null/undefined to API if it accepts it for "Latest"
-  // But per your existing code, we strip 'Z'.
   const effectiveTime = timestamp || new Date().toISOString().slice(0, -1);
 
   const queryPayload = JSON.stringify({
@@ -163,7 +159,6 @@ export default function (data) {
   const LOOP_COUNT = 48;
 
   for (let i = 0; i < LOOP_COUNT; i++) {
-    // Pass unique text to ensure version increments
     performUpdate(TOKEN, assessmentUuid, `Loop Iteration ${i + 1}`);
     simulateThinkingTime();
   }
@@ -174,7 +169,7 @@ export default function (data) {
   const timestampVar = getMicrosecondTimestamp();
   console.log(`Captured Point-In-Time Timestamp: ${timestampVar}`);
   
-  // Sleep to ensure strict ordering vs Server Clock
+  // Sleep to ensure ordering vs server clock
   console.log("Sleeping 5s to enforce time gap...");
   sleep(5);
 
@@ -189,7 +184,7 @@ export default function (data) {
   const data50 = queryRes50.json();
   const aggUuid_50 = data50 && data50.queries && data50.queries[0] && data50.queries[0].result && data50.queries[0].result.aggregateUuid;
 
-  // Log server time just in case we need to debug format again
+  // Log server time if need to debug format again
   if(data50 && data50.queries[0].result.updatedAt) {
       console.log(`SERVER TIME FORMAT: ${data50.queries[0].result.updatedAt}`);
   }
