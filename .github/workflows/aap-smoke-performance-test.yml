@@ -1,4 +1,4 @@
-name: K6 Performance Smoke Test
+name: K6 Smoke Test
 
 on:
   schedule:
