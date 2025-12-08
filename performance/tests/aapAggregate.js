@@ -166,11 +166,25 @@ export default function (data) {
   // 3. Capture current timestamp (State at 49 events)
   sleep(0.5);
   
-  const timestampVar = getMicrosecondTimestamp();
-  console.log(`Captured Point-In-Time Timestamp: ${timestampVar}`);
+  // A. Perform a query to get the server's exact time string
+  const queryRes49 = performQuery(TOKEN, assessmentUuid);
+  check(queryRes49, { "Query (Event 49) status 200": (r) => r.status === 200 });
   
-  // Sleep to ensure ordering vs server clock
-  console.log("Sleeping 5s to enforce time gap...");
+  const data49 = queryRes49.json();
+  
+  // B. Extract the 'updatedAt' string directly from the server response
+  const serverTimestamp = data49 && data49.queries[0] && data49.queries[0].result && data49.queries[0].result.updatedAt;
+  
+  if (!serverTimestamp) {
+      console.error("Failed to capture Server Timestamp from Event 49");
+      return;
+  }
+
+  const timestampVar = serverTimestamp;
+  console.log(`✅ Captured Perfect Server Timestamp: ${timestampVar}`);
+
+  // Sleep to ensure Event 50 happens strictly AFTER this timestamp
+  console.log("Sleeping 5s to ensure time gap...");
   sleep(5);
 
   // 4. Update Assessment (Event 50)
