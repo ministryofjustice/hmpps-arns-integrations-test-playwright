@@ -49,5 +49,5 @@ jobs:
           payload: |
             {
               "channel": "${{ inputs.channel_id }}",
-              "text": "Integration tests notification: Workflow failed for ${{ github.repository }}"
+              "text": "Playwright Integration tests notification: Workflow failed for ${{ github.repository }}"
             }
