@@ -5,7 +5,6 @@ import { b64encode } from "k6/encoding";
 
 // --- CONFIGURATION ---
 
-// Default to 1s min and 5s max (Smoke Test settings)
 const MIN_THINK = __ENV.MIN_THINK_TIME ? parseInt(__ENV.MIN_THINK_TIME) : 1;
 const MAX_THINK = __ENV.MAX_THINK_TIME ? parseInt(__ENV.MAX_THINK_TIME) : 5;
 
@@ -14,40 +13,41 @@ function simulateThinkingTime() {
   sleep(MIN_THINK + Math.random() * range);
 }
 
-// Track assessment creation failures
 const createFailures = new Counter("create_assessment_failures");
 
-// Default config (Smoke Test Defaults)
+// Default config
 const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 5;
 const DURATION = __ENV.DURATION || "30s";
-
 const P90_THRESHOLD = __ENV.P90_THRESHOLD ? parseInt(__ENV.P90_THRESHOLD) : 200;
 const P95_THRESHOLD = __ENV.P95_THRESHOLD ? parseInt(__ENV.P95_THRESHOLD) : 500;
 
-// Token Validity Configuration (Refresh 5 minutes before expiry)
 const TOKEN_REFRESH_WINDOW = 55 * 60 * 1000;
-
 const BASE_URL = "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk";
 
-// --- STAGE LOGIC ---
-// If CUSTOM_STAGES env var is present (Load/Soak), use it.
-// If NOT present (Smoke), set to undefined.
-const testStages = __ENV.CUSTOM_STAGES ? JSON.parse(__ENV.CUSTOM_STAGES) : undefined;
+// --- DYNAMIC OPTIONS LOGIC ---
 
-export const options = {
-  // 1. If testStages is defined, K6 uses the workflow profile.
-  stages: testStages,
-  
-  // 2. If testStages is undefined (Smoke Test), K6 ignores 'stages' 
-  //    and uses these values instead for an Immediate Load test.
-  vus: VUS,           // 5 VUs start immediately
-  duration: DURATION, // Runs for exactly 30s
-
+// 1. Define base options (Thresholds are always needed)
+let testOptions = {
   thresholds: {
     http_req_failed: ["rate<0.01"],
     http_req_duration: [`p(95)<${P95_THRESHOLD}`, `p(90)<${P90_THRESHOLD}`],
   },
 };
+
+if (__ENV.CUSTOM_STAGES) {
+  // SCENARIO A: Load / Soak / Stress
+  // We strictly use 'stages'. We DO NOT set 'vus' or 'duration'.
+  console.log("Running with Custom Stages profile");
+  testOptions.stages = JSON.parse(__ENV.CUSTOM_STAGES);
+} else {
+  // SCENARIO B: Default (Smoke Test)
+  // We strictly use 'vus' and 'duration'.
+  console.log("Running with Fixed Duration profile (Smoke)");
+  testOptions.vus = VUS;
+  testOptions.duration = DURATION;
+}
+
+export const options = testOptions;
 
 // --- AUTHENTICATION ---
 
@@ -69,8 +69,7 @@ function fetchNewToken() {
     },
   };
 
-  const payload = 'grant_type=client_credentials';
-  const res = http.post(tokenUrl, payload, params);
+  const res = http.post(tokenUrl, 'grant_type=client_credentials', params);
 
   if (res.status !== 200) {
     console.error(`Auth Refresh Failed! Status: ${res.status} Body: ${res.body}`);
@@ -101,7 +100,6 @@ let tokenExpiry = 0;
 export default function (data) {
   const now = Date.now();
 
-  // Token refresh logic
   if (!cachedToken) {
     cachedToken = data.initialToken;
     tokenExpiry = now + TOKEN_REFRESH_WINDOW;
@@ -117,8 +115,7 @@ export default function (data) {
   }
 
   const TOKEN = cachedToken; 
-  const timeStamp = new Date().toISOString().split('.')[0];
-
+  
   // Step 1 — Create Assessment
   const commandPayload = JSON.stringify({
     commands: [
@@ -152,7 +149,6 @@ export default function (data) {
     return;
   }
 
-  // Checks
   const command = responseData && responseData.commands && responseData.commands[0];
   const request = command && command.request;
   const result = command && command.result;
@@ -195,7 +191,7 @@ export default function (data) {
       {
         type: "AssessmentVersionQuery",
         user: { id: "test-user", name: "Test User" },
-        timeStamp,
+        timeStamp: new Date().toISOString().split('.')[0],
         assessmentUuid,
       },
     ],
