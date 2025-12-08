@@ -29,7 +29,7 @@ jobs:
           AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
           TOKEN_URL: ${{ secrets.TOKEN_URL }}
           
-          K6_STAGES: '[{"duration":"3m","target":300},{"duration":"5m","target":400},{"duration":"2m","target":0}]'
+          CUSTOM_STAGES: '[{"duration":"3m","target":300},{"duration":"5m","target":400},{"duration":"2m","target":0}]'
 
           # Adjust thresholds for heavier load
           P95_THRESHOLD: "1200" 

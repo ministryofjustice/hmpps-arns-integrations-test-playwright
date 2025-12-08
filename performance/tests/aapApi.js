@@ -3,13 +3,13 @@ import { check, sleep } from "k6";
 import { Counter } from "k6/metrics";
 import { b64encode } from "k6/encoding";
 
+// --- CONFIGURATION ---
+
 // Default to 1s min and 5s max (Smoke Test settings)
 const MIN_THINK = __ENV.MIN_THINK_TIME ? parseInt(__ENV.MIN_THINK_TIME) : 1;
 const MAX_THINK = __ENV.MAX_THINK_TIME ? parseInt(__ENV.MAX_THINK_TIME) : 5;
 
 function simulateThinkingTime() {
-  // Calculate the random range based on the config
-  // Example for Soak: Min 5, Max 15 -> sleep(5 + random * (15-5)) -> sleep(5 + random * 10)
   const range = MAX_THINK - MIN_THINK;
   sleep(MIN_THINK + Math.random() * range);
 }
@@ -26,53 +26,43 @@ const P95_THRESHOLD = __ENV.P95_THRESHOLD ? parseInt(__ENV.P95_THRESHOLD) : 500;
 // Token Validity Configuration (Refresh 5 minutes before expiry)
 const TOKEN_REFRESH_WINDOW = 55 * 60 * 1000; // 55 minutes in milliseconds
 
-/* Note: these will be adjusted when running other scenarios, examples: 
-Load test
-P90_THRESHOLD = 700; 
-P95_THRESHOLD = 1000; 
-
-Stress test 
-P90_THRESHOLD = 800; 
-P95_THRESHOLD = 1200; 
-
-Soak test 
-P90_THRESHOLD = 450; 
-P95_THRESHOLD = 550;*/
-
 const BASE_URL = "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk";
 
-export const options = {
-  // If we have stages (from Env var), use them.
-  // If NOT, fall back to simple VUs/Duration (Better for Smoke Tests)
-  stages: __ENV.K6_STAGES ? JSON.parse(__ENV.K6_STAGES) : undefined,
-  
-  // These apply if 'stages' is undefined
-  vus: VUS,          // Starts 5 VUs immediately
-  duration: DURATION, // Runs for 30s
+// --- DYNAMIC OPTIONS LOGIC
 
-  /* Note: options will also be adjusted when running other scenarios locally: 
-Load:
-Ramp-up:   0 → 200 VUS over 10 minutes  
-Steady:    Hold 200 VUS for 10 minutes  
-Ramp-down: 200 → 0 VUS over 5 minutes
-
-Stress:
-Ramp-up:   0 → 400 VUS in 3 minutes   
-Steady:    Hold 400 VUS for 5 minutes  
-Ramp-down: 400 → 0 in 2 minutes
-
-Soak:
-Ramp-up:   0 → 100 VUS over 10 minutes  
-Steady:    Hold 100 VUS for 8 hours  
-Ramp-down: 100 → 0 VUS over 10 minutes*/
-
+// 1. Define base options (Thresholds are always needed)
+let testOptions = {
   thresholds: {
     http_req_failed: ["rate<0.01"],
     http_req_duration: [`p(95)<${P95_THRESHOLD}`, `p(90)<${P90_THRESHOLD}`],
   },
 };
 
-// Authentication
+// 2. Determine Profile
+if (__ENV.CUSTOM_STAGES) {
+  // SCENARIO A: Load / Soak / Stress
+  // We strictly use 'stages'. We DO NOT set 'vus' or 'duration'.
+  console.log("Running with Custom Stages profile");
+  testOptions.stages = JSON.parse(__ENV.CUSTOM_STAGES);
+} else {
+  // SCENARIO B: Simple Profile (Smoke Test)
+  // We strictly use 'vus' and 'duration'.
+  console.log("Running with Fixed Duration profile (Smoke)");
+  testOptions.vus = VUS;
+  testOptions.duration = DURATION;
+}
+
+// 3. Export the dynamically built object
+export const options = testOptions;
+
+/* Note on Load Profiles:
+Load: Ramp-up 0->200 (10m), Steady 200 (10m), Ramp-down 200->0 (5m)
+Stress: Ramp-up 0->400 (3m), Steady 400 (5m), Ramp-down 400->0 (2m)
+Soak: Ramp-up 0->100 (10m), Steady 100 (8h), Ramp-down 100->0 (10m)
+*/
+
+// --- AUTHENTICATION ---
+
 function fetchNewToken() {
   const clientId = __ENV.AAP_CLIENT_ID;
   const clientSecret = __ENV.AAP_CLIENT_SECRET;
@@ -116,10 +106,11 @@ export function setup() {
   return { initialToken: token };
 }
 
-// VU state
-// These variables exist separately for each Virtual User
+// --- VU STATE ---
 let cachedToken = null;
 let tokenExpiry = 0;
+
+// --- DEFAULT FUNCTION ---
 
 export default function (data) {
   // Token refresh logic
@@ -136,7 +127,7 @@ export default function (data) {
     console.log(`VU ${__VU} refreshing expired token...`);
     try {
       cachedToken = fetchNewToken();
-      tokenExpiry = now + TOKEN_REFRESH_WINDOW; // Reset timer for another 55 mins
+      tokenExpiry = now + TOKEN_REFRESH_WINDOW; 
     } catch (e) {
       console.error(`VU ${__VU} failed to refresh token: ${e.message}`);
     }
@@ -252,7 +243,6 @@ export default function (data) {
   check(queryResponse, { "query status 200": (r) => r.status === 200 });
 
   const queryData = queryResponse.json();
-  // Safe access using && instead of ?.
   const queryResult = queryData && queryData.queries && queryData.queries[0] && queryData.queries[0].result;
 
   if (queryResult) {
