@@ -5,6 +5,7 @@ import { b64encode } from "k6/encoding";
 
 // --- CONFIGURATION ---
 
+// Default to 1s min and 5s max (Smoke Test settings)
 const MIN_THINK = __ENV.MIN_THINK_TIME ? parseInt(__ENV.MIN_THINK_TIME) : 1;
 const MAX_THINK = __ENV.MAX_THINK_TIME ? parseInt(__ENV.MAX_THINK_TIME) : 5;
 
@@ -13,18 +14,21 @@ function simulateThinkingTime() {
   sleep(MIN_THINK + Math.random() * range);
 }
 
+// Track assessment creation failures
 const createFailures = new Counter("create_assessment_failures");
 
-// Default config
+// Default config, smoke test running on CI
 const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 5;
 const DURATION = __ENV.DURATION || "30s";
 const P90_THRESHOLD = __ENV.P90_THRESHOLD ? parseInt(__ENV.P90_THRESHOLD) : 200;
 const P95_THRESHOLD = __ENV.P95_THRESHOLD ? parseInt(__ENV.P95_THRESHOLD) : 500;
 
-const TOKEN_REFRESH_WINDOW = 55 * 60 * 1000;
+// Token Validity Configuration (Refresh 5 minutes before expiry)
+const TOKEN_REFRESH_WINDOW = 55 * 60 * 1000; // 55 minutes in milliseconds
+
 const BASE_URL = "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk";
 
-// --- DYNAMIC OPTIONS LOGIC ---
+// --- DYNAMIC OPTIONS LOGIC
 
 // 1. Define base options (Thresholds are always needed)
 let testOptions = {
@@ -34,20 +38,28 @@ let testOptions = {
   },
 };
 
+// 2. Determine Profile
 if (__ENV.CUSTOM_STAGES) {
   // SCENARIO A: Load / Soak / Stress
   // We strictly use 'stages'. We DO NOT set 'vus' or 'duration'.
   console.log("Running with Custom Stages profile");
   testOptions.stages = JSON.parse(__ENV.CUSTOM_STAGES);
 } else {
-  // SCENARIO B: Default (Smoke Test)
+  // SCENARIO B: Simple Profile (Smoke Test)
   // We strictly use 'vus' and 'duration'.
   console.log("Running with Fixed Duration profile (Smoke)");
   testOptions.vus = VUS;
   testOptions.duration = DURATION;
 }
 
+// 3. Export the dynamically built object
 export const options = testOptions;
+
+/* Note on Load Profiles:
+Load: Ramp-up 0->200 (10m), Steady 200 (10m), Ramp-down 200->0 (5m)
+Stress: Ramp-up 0->400 (3m), Steady 400 (5m), Ramp-down 400->0 (2m)
+Soak: Ramp-up 0->100 (10m), Steady 100 (8h), Ramp-down 100->0 (10m)
+*/
 
 // --- AUTHENTICATION ---
 
@@ -60,6 +72,7 @@ function fetchNewToken() {
     throw new Error("Missing required environment variables: AAP_CLIENT_ID, AAP_CLIENT_SECRET, or TOKEN_URL");
   }
 
+  // Use K6 native encoding to avoid issues
   const encodedCredentials = b64encode(`${clientId}:${clientSecret}`);
   
   const params = {
@@ -69,7 +82,8 @@ function fetchNewToken() {
     },
   };
 
-  const res = http.post(tokenUrl, 'grant_type=client_credentials', params);
+  const payload = 'grant_type=client_credentials';
+  const res = http.post(tokenUrl, payload, params);
 
   if (res.status !== 200) {
     console.error(`Auth Refresh Failed! Status: ${res.status} Body: ${res.body}`);
@@ -86,6 +100,7 @@ function fetchNewToken() {
 
 export function setup() {
   console.log('Starting AAP initial authentication check...');
+  // We call this once to fail fast if credentials are wrong before starting VUs
   const token = fetchNewToken();
   console.log('Initial AAP Token retrieved successfully');
   return { initialToken: token };
@@ -98,14 +113,18 @@ let tokenExpiry = 0;
 // --- DEFAULT FUNCTION ---
 
 export default function (data) {
+  // Token refresh logic
   const now = Date.now();
 
+  // If we don't have a token (first run of this VU), use the one from setup()
   if (!cachedToken) {
     cachedToken = data.initialToken;
     tokenExpiry = now + TOKEN_REFRESH_WINDOW;
   }
 
+  // If token is expired or about to expire, refresh it
   if (now >= tokenExpiry) {
+    console.log(`VU ${__VU} refreshing expired token...`);
     try {
       cachedToken = fetchNewToken();
       tokenExpiry = now + TOKEN_REFRESH_WINDOW; 
@@ -115,7 +134,8 @@ export default function (data) {
   }
 
   const TOKEN = cachedToken; 
-  
+  const timeStamp = new Date().toISOString().split('.')[0];
+
   // Step 1 — Create Assessment
   const commandPayload = JSON.stringify({
     commands: [
@@ -134,9 +154,11 @@ export default function (data) {
     },
   });
 
+  // Log failures
   if (commandResponse.status !== 200) {
     console.error(`NON-200 RESPONSE from /command`);
     console.error(`STATUS: ${commandResponse.status}`);
+    console.error(`BODY: ${commandResponse.body}`);
   }
 
   check(commandResponse, { "command status 200": (r) => r.status === 200 });
@@ -146,6 +168,7 @@ export default function (data) {
     responseData = commandResponse.json();
   } catch (err) {
     console.error(`JSON parse error on /command response`);
+    console.error(`STATUS: ${commandResponse.status}`);
     return;
   }
 
@@ -165,22 +188,35 @@ export default function (data) {
       "request.type is correct": (r) => r.type === "CreateAssessmentCommand",
       "user exists": (r) => typeof r.user === "object",
       "user.id exists": (r) => r.user && typeof r.user.id === "string",
-      "properties exists": (r) => r.hasOwnProperty("properties"),
+      "user.name exists": (r) => r.user && typeof r.user.name === "string",
+      "formVersion exists": (r) => typeof r.formVersion === "string",
+      "properties exists (even {})": (r) =>
+        r.hasOwnProperty("properties") && typeof r.properties === "object",
+      "timeline present (can be null)": (r) => r.hasOwnProperty("timeline"),
     });
   }
 
   if (result) {
     check(result, {
       "result exists": (res) => res !== undefined,
-      "result.type correct": (res) => res.type === "CreateAssessmentCommandResult",
+      "result.type correct": (res) =>
+        res.type === "CreateAssessmentCommandResult",
       "assessmentUuid exists": (res) => typeof res.assessmentUuid === "string",
+      "assessmentUuid is UUID-ish": (res) =>
+        /^[0-9a-fA-F-]{36}$/.test(res.assessmentUuid),
+      "message exists": (res) =>
+        typeof res.message === "string" && res.message.length > 0,
       "success is true": (res) => res.success === true,
     });
   }
 
+  // Log failures
   if (!assessmentUuid) {
     createFailures.add(1);
-    console.error(`Failed to create assessment | status: ${commandResponse.status}`);
+    console.error(
+      `Failed to create assessment | status: ${commandResponse.status} | body: ${commandResponse.body}`
+    );
+
     simulateThinkingTime();
     return;
   }
@@ -191,7 +227,7 @@ export default function (data) {
       {
         type: "AssessmentVersionQuery",
         user: { id: "test-user", name: "Test User" },
-        timeStamp: new Date().toISOString().split('.')[0],
+        timeStamp,
         assessmentUuid,
       },
     ],
@@ -213,8 +249,28 @@ export default function (data) {
     check(queryResult, {
       "result exists": (r) => r !== undefined,
       "has assessmentUuid": (r) => typeof r.assessmentUuid === "string",
+      "has aggregateUuid": (r) => typeof r.aggregateUuid === "string",
+      "has formVersion": (r) => typeof r.formVersion === "string",
       "createdAt exists": (r) => typeof r.createdAt === "string",
-      "answers exists": (r) => r.hasOwnProperty("answers"),
+      "updatedAt exists": (r) => typeof r.updatedAt === "string",
+      "createdAt looks like a timestamp": (r) =>
+        /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(r.createdAt),
+      "updatedAt looks like a timestamp": (r) =>
+        /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(r.updatedAt),
+      "answers exists (even empty)": (r) =>
+        r.hasOwnProperty("answers") && typeof r.answers === "object",
+      "properties exists (even empty)": (r) =>
+        r.hasOwnProperty("properties") && typeof r.properties === "object",
+      "collections exists and is array": (r) => Array.isArray(r.collections),
+      "collaborators exists and is array": (r) => Array.isArray(r.collaborators),
+      "collaborators have id": (r) =>
+        r.collaborators.length > 0 && typeof r.collaborators[0].id === "string",
+      "collaborators have name": (r) =>
+        r.collaborators.length > 0 && typeof r.collaborators[0].name === "string",
+      "assessmentUuid is UUID-ish": (r) =>
+        /^[0-9a-fA-F-]{36}$/.test(r.assessmentUuid),
+      "aggregateUuid is UUID-ish": (r) =>
+        /^[0-9a-fA-F-]{36}$/.test(r.aggregateUuid),
     });
   }
 
