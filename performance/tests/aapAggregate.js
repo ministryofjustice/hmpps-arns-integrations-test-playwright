@@ -150,7 +150,7 @@ export default function (data) {
   const LOOP_COUNT = 48;
 
   for (let i = 0; i < LOOP_COUNT; i++) {
-    performUpdate(TOKEN, assessmentUuid, `Loop Iteration ${i + 2}`);
+    performUpdate(TOKEN, assessmentUuid, `Event ${i + 2}`);
     simulateThinkingTime();
   }
 
@@ -168,7 +168,7 @@ export default function (data) {
   const answer49 = data49 && data49.queries[0] && data49.queries[0].result && data49.queries[0].result.answers["test_addition"];
 
   check(answer49, {
-    "Aggregate 49 has the right update": (answer49) => (answer49) == "Loop Iteration 49", // Logic check: 48 loops starting at i+2 ends at 49
+    "Aggregate 49 has the right update": (answer49) => (answer49) == "Event 49",
   });
 
   if (!serverTimestamp) {
@@ -184,7 +184,7 @@ export default function (data) {
   sleep(5);
 
   // 4. Update Assessment (Event 50)
-  performUpdate(TOKEN, assessmentUuid, "Loop Iteration 50"); // Matched your string pattern
+  performUpdate(TOKEN, assessmentUuid, "Event 50");
   sleep(0.5);
 
   // 5. Query Latest -> Capture Aggregate UUID (State at Event 50)
@@ -196,7 +196,7 @@ export default function (data) {
   const answer50 = data50 && data50.queries[0] && data50.queries[0].result && data50.queries[0].result.answers["test_addition"];
   
   check(answer50, {
-    "Aggregate 50 has the right update": (answer50) => (answer50) == "Loop Iteration 50",
+    "Aggregate 50 has the right update": (answer50) => (answer50) == "Event 50",
   });
 
   // Log server time if need to debug format again
@@ -205,7 +205,7 @@ export default function (data) {
   }
 
   // 6. Update Assessment (Event 51)
-  performUpdate(TOKEN, assessmentUuid, "Loop Iteration 51");
+  performUpdate(TOKEN, assessmentUuid, "Event 51");
   sleep(0.5);
 
   // 7. Query Latest -> Compare (State at Event 51)
@@ -217,7 +217,7 @@ export default function (data) {
   const answer51 = data51 && data51.queries[0] && data51.queries[0].result && data51.queries[0].result.answers["test_addition"];
 
   check(answer51, {
-    "Aggregate 51 has the right update": (answer51) => (answer51) == "Loop Iteration 51",
+    "Aggregate 51 has the right update": (answer51) => (answer51) == "Event 51",
   });
 
   // Assertion: UUID should change between Event 50 and 51
@@ -238,6 +238,12 @@ export default function (data) {
   check(pitResult, {
     "PIT Query returned a valid result": (r) => r !== undefined,
     "PIT Aggregate UUID exists": (r) => typeof r.aggregateUuid === "string",
+  });
+
+  const pitResultAnswer = pitData && pitData.queries[0] && pitData.queries[0].result && pitData.queries[0].result.answers["test_addition"];
+
+  check(pitResultAnswer, {
+    "PIT Aggregate has the right update": (answerPit) => (answerPit) == "Event 49",
   });
 
   const pitAggUuid = pitResult.aggregateUuid;
