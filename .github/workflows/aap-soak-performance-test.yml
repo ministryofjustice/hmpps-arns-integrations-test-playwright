@@ -37,6 +37,8 @@ jobs:
           
           P95_THRESHOLD: "550"   
           P90_THRESHOLD: "450"
+
+          NO_CONNECTION_REUSE: "true"
           
         run: ./k6 run performance/tests/aapApi.js --out web-dashboard=export=aap-soak-report.html
 

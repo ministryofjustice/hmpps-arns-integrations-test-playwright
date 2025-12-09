@@ -52,7 +52,15 @@ if (__ENV.CUSTOM_STAGES) {
   testOptions.duration = DURATION;
 }
 
-// 3. Export the dynamically built object
+// Add noConnectionReuse for Soak test
+if (__ENV.NO_CONNECTION_REUSE === 'true') {
+    console.log("Connection reuse DISABLED (Soak Test)");
+    testOptions.noConnectionReuse = true;
+} else {
+    // Default behavior for Smoke/Load/Stress
+    testOptions.noConnectionReuse = false;
+}
+
 export const options = testOptions;
 
 /* Note on Load Profiles:
