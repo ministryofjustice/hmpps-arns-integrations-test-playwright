@@ -124,6 +124,7 @@ export default function (data) {
       {
         type: "CreateAssessmentCommand",
         formVersion: "1.0",
+        properties: {},
         user: { id: "test-user", name: "Test User" },
       },
     ],
