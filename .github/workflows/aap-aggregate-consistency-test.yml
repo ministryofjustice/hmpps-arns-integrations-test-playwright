@@ -3,7 +3,7 @@ name: K6 Aggregate Consistency Test
 on:
   workflow_dispatch:
   schedule:
-    - cron: "30 21 * * 1"
+    - cron: "30 19 * * 1,5"
 
 jobs:
   aggregate_logic_test:

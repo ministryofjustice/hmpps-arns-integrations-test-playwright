@@ -50,9 +50,9 @@ NOTE: you may want to adjust the `duration` value in the Browser test to match w
 The tests also cover the AAP API.
 
 - AAP API tests
-a smoke test of these runs as an additional check when PRs are raised on the pipeline as a separate workflow. 
-dashboard and graph of various metrics report can be downloaded when they run.
-a load test is setup as another workflow that can be manually triggered.
+Smoke and Aggregate consistency tests run on the pipeline as scheduled jobs. 
+Dashboards and graphs of various metrics report can be downloaded when they run.
+Other tests (load, stress, soak) are setup as separate workflows that can be manually triggered.
 
 Note: for these tests the AAP token is fetched in isolation withink the K6 tests.
 

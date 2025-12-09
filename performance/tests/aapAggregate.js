@@ -13,21 +13,6 @@ function simulateThinkingTime() {
   sleep(MIN_THINK + Math.random() * range);
 }
 
-// Helper to generate Server matching Timestamp (Microseconds, No Z)
-function getMicrosecondTimestamp() {
-  const now = new Date();
-  const iso = now.toISOString(); // e.g., "2025-12-04T22:27:11.276Z"
-  
-  // Remove the 'Z' from the end
-  const baseTime = iso.slice(0, -1);
-  
-  // Generate 3 random digits for extra microsecond precision
-  const microseconds = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-  
-  // Return format: 2025-12-04T22:27:11.276123
-  return `${baseTime}${microseconds}`;
-}
-
 const updateFailures = new Counter("update_assessment_failures");
 
 // Default config
@@ -81,7 +66,12 @@ function performUpdate(token, assessmentUuid, updateText) {
     commands: [
       {
         type: "UpdateAssessmentAnswersCommand",
-        added: { test_addition: [updateText] }, 
+        added: { 
+            test_addition: {
+                type: "Single", 
+                value: "updatedText" 
+            }
+        },
         removed: [],
         assessmentUuid: assessmentUuid,
         user: { id: "test-user", name: "Test User" },
@@ -163,7 +153,7 @@ export default function (data) {
     simulateThinkingTime();
   }
 
-  // 3. Capture current timestamp (State at 49 events)
+  // 3. Capture Server Timestamp (State at 49 events)
   sleep(0.5);
   
   // A. Perform a query to get the server's exact time string
@@ -172,12 +162,12 @@ export default function (data) {
   
   const data49 = queryRes49.json();
   
-  // B. Extract the 'updatedAt' string directly from the server response
+  // B. Extract the 'updatedAt' string from the server response
   const serverTimestamp = data49 && data49.queries[0] && data49.queries[0].result && data49.queries[0].result.updatedAt;
   const answer49 = data49 && data49.queries[0] && data49.queries[0].result && data49.queries[0].result.answers["test_addition"];
 
   check(answer49, {
-    "Aggregate 49 has the right update": (answer49) => (answer49) == "Loop Iteration 49",
+    "Aggregate 49 has the right update": (answer49) => (answer49) == "Loop Iteration 49", // Logic check: 48 loops starting at i+2 ends at 49
   });
 
   if (!serverTimestamp) {
@@ -193,7 +183,7 @@ export default function (data) {
   sleep(5);
 
   // 4. Update Assessment (Event 50)
-  performUpdate(TOKEN, assessmentUuid, "Event 50 - Post Timestamp");
+  performUpdate(TOKEN, assessmentUuid, "Loop Iteration 50"); // Matched your string pattern
   sleep(0.5);
 
   // 5. Query Latest -> Capture Aggregate UUID (State at Event 50)
@@ -214,7 +204,7 @@ export default function (data) {
   }
 
   // 6. Update Assessment (Event 51)
-  performUpdate(TOKEN, assessmentUuid, "Event 51 - Final Update");
+  performUpdate(TOKEN, assessmentUuid, "Loop Iteration 51");
   sleep(0.5);
 
   // 7. Query Latest -> Compare (State at Event 51)
@@ -235,6 +225,7 @@ export default function (data) {
   });
 
   // 8. Query for point in time = timestampVar
+  // Pass the exact string we captured from the server
   const pitQueryRes = performQuery(TOKEN, assessmentUuid, timestampVar);
   check(pitQueryRes, {
     "Point-In-Time Query status 200": (r) => r.status === 200,
