@@ -69,7 +69,7 @@ function performUpdate(token, assessmentUuid, updateText) {
         added: { 
             test_addition: {
                 type: "Single", 
-                value: "updatedText" 
+                value: updateText
             }
         },
         removed: [],
