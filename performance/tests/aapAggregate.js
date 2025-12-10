@@ -106,7 +106,7 @@ function performQuery(token, assessmentUuid, timestamp = null) {
       {
         type: "AssessmentVersionQuery",
         user: { id: "test-user", name: "Test User" },
-        timeStamp: effectiveTime,
+        timestamp: effectiveTime,
         assessmentUuid: assessmentUuid,
       },
     ],
