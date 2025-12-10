@@ -18,6 +18,9 @@ const updateFailures = new Counter("update_assessment_failures");
 // Default config
 const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 1;
 const DURATION = __ENV.DURATION || "5m";
+const P90_THRESHOLD = __ENV.P90_THRESHOLD ? parseInt(__ENV.P90_THRESHOLD) : 400;
+const P95_THRESHOLD = __ENV.P95_THRESHOLD ? parseInt(__ENV.P95_THRESHOLD) : 600;
+
 const BASE_URL = "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk";
 
 export const options = {
@@ -26,6 +29,7 @@ export const options = {
   ],
   thresholds: {
     http_req_failed: ["rate<0.01"],
+    http_req_duration: [`p(95)<${P95_THRESHOLD}`, `p(90)<${P90_THRESHOLD}`],
   },
 };
 
@@ -166,6 +170,7 @@ export default function (data) {
   // B. Extract the 'updatedAt' string from the server response
   const serverTimestamp = data49 && data49.queries[0] && data49.queries[0].result && data49.queries[0].result.updatedAt;
   const answer49 = data49 && data49.queries[0] && data49.queries[0].result && data49.queries[0].result.answers["test_addition"];
+  console.log(`DEBUG: Value of answer49 is: ${answer49}`); 
 
   check(answer49, {
     "Aggregate 49 has the right update": (answer49) => (answer49) == "Event 49",
@@ -194,7 +199,8 @@ export default function (data) {
   const data50 = queryRes50.json();
   const aggUuid_50 = data50 && data50.queries && data50.queries[0] && data50.queries[0].result && data50.queries[0].result.aggregateUuid;
   const answer50 = data50 && data50.queries[0] && data50.queries[0].result && data50.queries[0].result.answers["test_addition"];
-  
+  console.log(`DEBUG: Value of answer50 is: ${answer50}`);
+
   check(answer50, {
     "Aggregate 50 has the right update": (answer50) => (answer50) == "Event 50",
   });
@@ -215,6 +221,7 @@ export default function (data) {
   const data51 = queryRes51.json();
   const aggUuid_51 = data51 && data51.queries && data51.queries[0] && data51.queries[0].result && data51.queries[0].result.aggregateUuid;
   const answer51 = data51 && data51.queries[0] && data51.queries[0].result && data51.queries[0].result.answers["test_addition"];
+  console.log(`DEBUG: Value of answer51 is: ${answer51}`);
 
   check(answer51, {
     "Aggregate 51 has the right update": (answer51) => (answer51) == "Event 51",
