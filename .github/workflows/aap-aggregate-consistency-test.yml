@@ -3,11 +3,11 @@ name: K6 Aggregate Consistency Test
 on:
   workflow_dispatch:
   schedule:
-    - cron: "30 21 * * 1"
+    - cron: "30 19 * * 1,5"
 
 jobs:
   aggregate_logic_test:
-    name: Run Aggregate Logic Test
+    name: Run Aggregate Test
     runs-on:
       labels: moj-cloud-platform
 
@@ -36,6 +36,9 @@ jobs:
           
           VUS: "1"
           DURATION: "5m"
+
+          P95_THRESHOLD: "600" 
+          P90_THRESHOLD: "400"
           
         run: ./k6 run performance/tests/aapAggregate.js --out web-dashboard=export=aap-aggregate-report.html
 

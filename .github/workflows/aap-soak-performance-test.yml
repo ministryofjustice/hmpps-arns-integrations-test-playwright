@@ -30,13 +30,15 @@ jobs:
           AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
           TOKEN_URL: ${{ secrets.TOKEN_URL }}
           
-          CUSTOM_STAGES: '[{"duration":"10m","target":100},{"duration":"8h","target":100},{"duration":"10m","target":0}]'
+          CUSTOM_STAGES: '[{"duration":"10m","target":100},{"duration":"4h","target":100},{"duration":"10m","target":0}]'
           
           MIN_THINK_TIME: "5"
           MAX_THINK_TIME: "15"
           
           P95_THRESHOLD: "550"   
           P90_THRESHOLD: "450"
+
+          NO_CONNECTION_REUSE: "true"
           
         run: ./k6 run performance/tests/aapApi.js --out web-dashboard=export=aap-soak-report.html
 

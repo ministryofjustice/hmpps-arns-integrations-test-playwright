@@ -39,11 +39,15 @@ jobs:
           # Credentials
           DELIUS_USERNAME: ${{ secrets.E2E_DELIUS_USERNAME }}
           DELIUS_PASSWORD: ${{ secrets.E2E_DELIUS_PASSWORD }}
-          
+      
       - name: Slack notification
         if: failure() && inputs.channel_id != 'NO_SLACK'
-        uses: ./.github/actions/slack_integration_notification
+        uses: slackapi/slack-github-action@v2.1.1
         with:
-          title: "Integration tests notification"
-          channel_id: ${{ inputs.channel_id }}
-          SLACK_BOT_TOKEN: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
+          method: chat.postMessage
+          token: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
+          payload: |
+            {
+              "channel": "${{ inputs.channel_id }}",
+              "text": "Playwright Integration tests notification: Workflow failed for ${{ github.repository }}"
+            }
