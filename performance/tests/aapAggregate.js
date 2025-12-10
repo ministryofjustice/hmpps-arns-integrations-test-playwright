@@ -170,7 +170,6 @@ export default function (data) {
   // B. Extract the 'updatedAt' string from the server response
   const serverTimestamp = data49 && data49.queries[0] && data49.queries[0].result && data49.queries[0].result.updatedAt;
   const answer49 = data49 && data49.queries[0] && data49.queries[0].result && data49.queries[0].result.answers["test_addition"].value;
-  console.log(`DEBUG: answer49: ${JSON.stringify(answer49, null, 2)}`);
 
   check(answer49, {
     "Aggregate 49 has the right update": (answer49) => (answer49) == "Event 49",
@@ -199,7 +198,6 @@ export default function (data) {
   const data50 = queryRes50.json();
   const aggUuid_50 = data50 && data50.queries && data50.queries[0] && data50.queries[0].result && data50.queries[0].result.aggregateUuid;
   const answer50 = data50 && data50.queries[0] && data50.queries[0].result && data50.queries[0].result.answers["test_addition"].value;
-  console.log(`DEBUG: answer50: ${JSON.stringify(answer50, null, 2)}`);
 
   check(answer50, {
     "Aggregate 50 has the right update": (answer50) => (answer50) == "Event 50",
@@ -221,7 +219,6 @@ export default function (data) {
   const data51 = queryRes51.json();
   const aggUuid_51 = data51 && data51.queries && data51.queries[0] && data51.queries[0].result && data51.queries[0].result.aggregateUuid;
   const answer51 = data51 && data51.queries[0] && data51.queries[0].result && data51.queries[0].result.answers["test_addition"].value;
-  console.log(`DEBUG: answer51: ${JSON.stringify(answer51, null, 2)}`);
 
   check(answer51, {
     "Aggregate 51 has the right update": (answer51) => (answer51) == "Event 51",
@@ -247,7 +244,7 @@ export default function (data) {
     "PIT Aggregate UUID exists": (r) => typeof r.aggregateUuid === "string",
   });
 
-  const pitResultAnswer = pitData && pitData.queries[0] && pitData.queries[0].result && pitData.queries[0].result.answers["test_addition"];
+  const pitResultAnswer = pitData && pitData.queries[0] && pitData.queries[0].result && pitData.queries[0].result.answers["test_addition"].value;
 
   check(pitResultAnswer, {
     "PIT Aggregate has the right update": (answerPit) => (answerPit) == "Event 49",
