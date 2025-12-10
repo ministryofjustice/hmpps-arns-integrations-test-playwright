@@ -245,7 +245,8 @@ export default function (data) {
   });
 
   const pitResultAnswer = pitData && pitData.queries[0] && pitData.queries[0].result && pitData.queries[0].result.answers["test_addition"].value;
-
+  console.log(pitResultAnswer);
+  
   check(pitResultAnswer, {
     "PIT Aggregate has the right update": (answerPit) => (answerPit) == "Event 49",
   });
