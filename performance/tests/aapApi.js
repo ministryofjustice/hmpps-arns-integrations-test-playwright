@@ -142,7 +142,7 @@ export default function (data) {
   }
 
   const TOKEN = cachedToken; 
-  const timeStamp = new Date().toISOString().split('.')[0];
+  const timestamp = new Date().toISOString().split('.')[0];
 
   // Step 1 — Create Assessment
   const commandPayload = JSON.stringify({
@@ -150,6 +150,7 @@ export default function (data) {
       {
         type: "CreateAssessmentCommand",
         formVersion: "1.0",
+        properties: {},
         user: { id: "test-user", name: "Test User" },
       },
     ],
@@ -235,7 +236,7 @@ export default function (data) {
       {
         type: "AssessmentVersionQuery",
         user: { id: "test-user", name: "Test User" },
-        timeStamp,
+        timestamp,
         assessmentUuid,
       },
     ],
