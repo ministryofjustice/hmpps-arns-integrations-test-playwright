@@ -23,8 +23,7 @@ const DURATION = __ENV.DURATION || "30s";
 const P90_THRESHOLD = __ENV.P90_THRESHOLD ? parseInt(__ENV.P90_THRESHOLD) : 200;
 const P95_THRESHOLD = __ENV.P95_THRESHOLD ? parseInt(__ENV.P95_THRESHOLD) : 500;
 
-// Token Validity Configuration (Refresh 5 minutes before expiry)
-const TOKEN_REFRESH_WINDOW = 55 * 60 * 1000; // 55 minutes in milliseconds
+const TOKEN_REFRESH_WINDOW = 20 * 60 * 1000 // 20 minutes in milliseconds
 
 const BASE_URL = "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk";
 
@@ -121,23 +120,32 @@ let tokenExpiry = 0;
 // --- DEFAULT FUNCTION ---
 
 export default function (data) {
-  // Token refresh logic
   const now = Date.now();
 
-  // If we don't have a token (first run of this VU), use the one from setup()
+  // 1. Initialize Token on First Run
   if (!cachedToken) {
     cachedToken = data.initialToken;
     tokenExpiry = now + TOKEN_REFRESH_WINDOW;
   }
 
-  // If token is expired or about to expire, refresh it
+  // 2. Refresh token
   if (now >= tokenExpiry) {
-    console.log(`VU ${__VU} refreshing expired token...`);
+    console.log(`VU ${__VU} token expired. Refreshing...`);
+    
     try {
-      cachedToken = fetchNewToken();
+      const newToken = fetchNewToken();
+      
+      // Update state if successful
+      cachedToken = newToken;
       tokenExpiry = now + TOKEN_REFRESH_WINDOW; 
+      console.log(`VU ${__VU} token refreshed successfully.`);
+      
     } catch (e) {
-      console.error(`VU ${__VU} failed to refresh token: ${e.message}`);
+      // Stop here if auth fails
+      console.error(`VU ${__VU} failed to refresh token. Aborting iteration. Error: ${e.message}`);
+      createFailures.add(1);
+      sleep(5); // Wait before retrying
+      return;
     }
   }
 
