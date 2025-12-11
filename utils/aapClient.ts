@@ -68,7 +68,7 @@ export async function queryAssessment(assessmentUuid: string) {
     const token = JSON.parse(
         fs.readFileSync('utils/aapToken.json', 'utf8')
     ).access_token;
-    const timeStamp = new Date().toISOString().split('.')[0];
+    const timestamp = new Date().toISOString().split('.')[0];
 
     const response = await fetch(`${BASE_URL}/query`, {
         method: 'POST',
@@ -81,7 +81,7 @@ export async function queryAssessment(assessmentUuid: string) {
                 {
                     type: 'AssessmentVersionQuery',
                     user: { id: 'test-user', name: 'Test User' },
-                    timeStamp,
+                    timestamp,
                     assessmentUuid,
                 },
             ],
