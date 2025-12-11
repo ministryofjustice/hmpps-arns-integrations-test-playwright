@@ -17,7 +17,7 @@ function simulateThinkingTime() {
 // Track assessment creation failures
 const createFailures = new Counter("create_assessment_failures");
 
-// Default config, smoke test running on CI
+// Default config
 const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 5;
 const DURATION = __ENV.DURATION || "30s";
 const P90_THRESHOLD = __ENV.P90_THRESHOLD ? parseInt(__ENV.P90_THRESHOLD) : 200;
@@ -25,8 +25,7 @@ const P95_THRESHOLD = __ENV.P95_THRESHOLD ? parseInt(__ENV.P95_THRESHOLD) : 500;
 
 const TOKEN_REFRESH_WINDOW = 20 * 60 * 1000; // 20 minutes in milliseconds
 
-const BASE_URL =
-  "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk";
+const BASE_URL = "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk";
 
 // --- DYNAMIC OPTIONS LOGIC
 
@@ -41,12 +40,10 @@ let testOptions = {
 // 2. Determine Profile
 if (__ENV.CUSTOM_STAGES) {
   // SCENARIO A: Load / Soak / Stress
-  // We strictly use 'stages'. We DO NOT set 'vus' or 'duration'.
   console.log("Running with Custom Stages profile");
   testOptions.stages = JSON.parse(__ENV.CUSTOM_STAGES);
 } else {
   // SCENARIO B: Simple Profile (Smoke Test)
-  // We strictly use 'vus' and 'duration'.
   console.log("Running with Fixed Duration profile (Smoke)");
   testOptions.vus = VUS;
   testOptions.duration = DURATION;
@@ -57,17 +54,10 @@ if (__ENV.NO_CONNECTION_REUSE === "true") {
   console.log("Connection reuse DISABLED (Soak Test)");
   testOptions.noConnectionReuse = true;
 } else {
-  // Default behavior for Smoke/Load/Stress
   testOptions.noConnectionReuse = false;
 }
 
 export const options = testOptions;
-
-/* Note on Load Profiles:
-Load: Ramp-up 0->200 (10m), Steady 200 (10m), Ramp-down 200->0 (5m)
-Stress: Ramp-up 0->400 (3m), Steady 400 (5m), Ramp-down 400->0 (2m)
-Soak: Ramp-up 0->100 (10m), Steady 100 (8h), Ramp-down 100->0 (10m)
-*/
 
 // --- AUTHENTICATION ---
 
@@ -82,7 +72,6 @@ function fetchNewToken() {
     );
   }
 
-  // Use K6 native encoding to avoid issues
   const encodedCredentials = b64encode(`${clientId}:${clientSecret}`);
 
   const params = {
@@ -112,7 +101,6 @@ function fetchNewToken() {
 
 export function setup() {
   console.log("Starting AAP initial authentication check...");
-  // We call this once to fail fast if credentials are wrong before starting VUs
   const token = fetchNewToken();
   console.log("Initial AAP Token retrieved successfully");
   return { initialToken: token };
@@ -139,18 +127,15 @@ export default function (data) {
 
     try {
       const newToken = fetchNewToken();
-
-      // Update state if successful
       cachedToken = newToken;
       tokenExpiry = now + TOKEN_REFRESH_WINDOW;
       console.log(`VU ${__VU} token refreshed successfully.`);
     } catch (e) {
-      // Stop here if auth fails
       console.error(
         `VU ${__VU} failed to refresh token. Aborting iteration. Error: ${e.message}`
       );
       createFailures.add(1);
-      sleep(5); // Wait before retrying
+      sleep(5);
       return;
     }
   }
@@ -176,7 +161,6 @@ export default function (data) {
     },
   });
 
-  // Log failures
   if (commandResponse.status !== 200) {
     console.error(`NON-200 RESPONSE from /command`);
     console.error(`STATUS: ${commandResponse.status}`);
@@ -190,7 +174,6 @@ export default function (data) {
     responseData = commandResponse.json();
   } catch (err) {
     console.error(`JSON parse error on /command response`);
-    console.error(`STATUS: ${commandResponse.status}`);
     return;
   }
 
@@ -262,7 +245,6 @@ export default function (data) {
     },
   });
 
-  // Log failures
   if (queryResponse.status !== 200) {
     console.error(`NON-200 RESPONSE from /command`);
     console.error(`STATUS: ${queryResponse.status}`);
