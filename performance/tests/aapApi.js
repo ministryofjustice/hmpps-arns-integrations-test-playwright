@@ -245,7 +245,7 @@ export default function (data) {
     },
   });
 
-  sleep(0.5);
+  sleep(2);
 
   if (queryResponse.status !== 200) {
     console.error(`NON-200 RESPONSE from /command`);
