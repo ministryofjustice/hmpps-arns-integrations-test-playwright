@@ -149,7 +149,7 @@ export default function (data) {
     }
   }
 
-  const TOKEN = cachedToken; 
+  const TOKEN = cachedToken;
   const timestamp = new Date().toISOString().split('.')[0];
 
   // Step 1 — Create Assessment
