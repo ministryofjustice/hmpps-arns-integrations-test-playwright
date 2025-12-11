@@ -227,7 +227,7 @@ export default function (data) {
     return;
   }
 
-  sleep(2);
+  sleep(0.5);
 
   // Step 2 — Query Assessment
   const queryPayload = JSON.stringify({
