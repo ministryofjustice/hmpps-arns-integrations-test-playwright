@@ -227,6 +227,8 @@ export default function (data) {
     return;
   }
 
+  sleep(2);
+
   // Step 2 — Query Assessment
   const queryPayload = JSON.stringify({
     queries: [
@@ -244,8 +246,6 @@ export default function (data) {
       "Content-Type": "application/json",
     },
   });
-
-  sleep(2);
 
   if (queryResponse.status !== 200) {
     console.error(`NON-200 RESPONSE from /command`);
