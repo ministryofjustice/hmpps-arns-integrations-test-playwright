@@ -23,9 +23,10 @@ const DURATION = __ENV.DURATION || "30s";
 const P90_THRESHOLD = __ENV.P90_THRESHOLD ? parseInt(__ENV.P90_THRESHOLD) : 200;
 const P95_THRESHOLD = __ENV.P95_THRESHOLD ? parseInt(__ENV.P95_THRESHOLD) : 500;
 
-const TOKEN_REFRESH_WINDOW = 20 * 60 * 1000 // 20 minutes in milliseconds
+const TOKEN_REFRESH_WINDOW = 20 * 60 * 1000; // 20 minutes in milliseconds
 
-const BASE_URL = "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk";
+const BASE_URL =
+  "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk";
 
 // --- DYNAMIC OPTIONS LOGIC
 
@@ -52,12 +53,12 @@ if (__ENV.CUSTOM_STAGES) {
 }
 
 // Add noConnectionReuse for Soak test
-if (__ENV.NO_CONNECTION_REUSE === 'true') {
-    console.log("Connection reuse DISABLED (Soak Test)");
-    testOptions.noConnectionReuse = true;
+if (__ENV.NO_CONNECTION_REUSE === "true") {
+  console.log("Connection reuse DISABLED (Soak Test)");
+  testOptions.noConnectionReuse = true;
 } else {
-    // Default behavior for Smoke/Load/Stress
-    testOptions.noConnectionReuse = false;
+  // Default behavior for Smoke/Load/Stress
+  testOptions.noConnectionReuse = false;
 }
 
 export const options = testOptions;
@@ -76,24 +77,28 @@ function fetchNewToken() {
   const tokenUrl = __ENV.TOKEN_URL;
 
   if (!clientId || !clientSecret || !tokenUrl) {
-    throw new Error("Missing required environment variables: AAP_CLIENT_ID, AAP_CLIENT_SECRET, or TOKEN_URL");
+    throw new Error(
+      "Missing required environment variables: AAP_CLIENT_ID, AAP_CLIENT_SECRET, or TOKEN_URL"
+    );
   }
 
   // Use K6 native encoding to avoid issues
   const encodedCredentials = b64encode(`${clientId}:${clientSecret}`);
-  
+
   const params = {
     headers: {
-      'Authorization': `Basic ${encodedCredentials}`,
-      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Basic ${encodedCredentials}`,
+      "Content-Type": "application/x-www-form-urlencoded",
     },
   };
 
-  const payload = 'grant_type=client_credentials';
+  const payload = "grant_type=client_credentials";
   const res = http.post(tokenUrl, payload, params);
 
   if (res.status !== 200) {
-    console.error(`Auth Refresh Failed! Status: ${res.status} Body: ${res.body}`);
+    console.error(
+      `Auth Refresh Failed! Status: ${res.status} Body: ${res.body}`
+    );
     throw new Error(`Authentication failed with status ${res.status}`);
   }
 
@@ -106,10 +111,10 @@ function fetchNewToken() {
 }
 
 export function setup() {
-  console.log('Starting AAP initial authentication check...');
+  console.log("Starting AAP initial authentication check...");
   // We call this once to fail fast if credentials are wrong before starting VUs
   const token = fetchNewToken();
-  console.log('Initial AAP Token retrieved successfully');
+  console.log("Initial AAP Token retrieved successfully");
   return { initialToken: token };
 }
 
@@ -131,18 +136,19 @@ export default function (data) {
   // 2. Refresh token
   if (now >= tokenExpiry) {
     console.log(`VU ${__VU} token expired. Refreshing...`);
-    
+
     try {
       const newToken = fetchNewToken();
-      
+
       // Update state if successful
       cachedToken = newToken;
-      tokenExpiry = now + TOKEN_REFRESH_WINDOW; 
+      tokenExpiry = now + TOKEN_REFRESH_WINDOW;
       console.log(`VU ${__VU} token refreshed successfully.`);
-      
     } catch (e) {
       // Stop here if auth fails
-      console.error(`VU ${__VU} failed to refresh token. Aborting iteration. Error: ${e.message}`);
+      console.error(
+        `VU ${__VU} failed to refresh token. Aborting iteration. Error: ${e.message}`
+      );
       createFailures.add(1);
       sleep(5); // Wait before retrying
       return;
@@ -188,7 +194,8 @@ export default function (data) {
     return;
   }
 
-  const command = responseData && responseData.commands && responseData.commands[0];
+  const command =
+    responseData && responseData.commands && responseData.commands[0];
   const request = command && command.request;
   const result = command && command.result;
   const assessmentUuid = result && result.assessmentUuid;
@@ -255,10 +262,21 @@ export default function (data) {
     },
   });
 
+  // Log failures
+  if (queryResponse.status !== 200) {
+    console.error(`NON-200 RESPONSE from /command`);
+    console.error(`STATUS: ${queryResponse.status}`);
+    console.error(`BODY: ${queryResponse.body}`);
+  }
+
   check(queryResponse, { "query status 200": (r) => r.status === 200 });
 
   const queryData = queryResponse.json();
-  const queryResult = queryData && queryData.queries && queryData.queries[0] && queryData.queries[0].result;
+  const queryResult =
+    queryData &&
+    queryData.queries &&
+    queryData.queries[0] &&
+    queryData.queries[0].result;
 
   if (queryResult) {
     check(queryResult, {
@@ -277,11 +295,13 @@ export default function (data) {
       "properties exists (even empty)": (r) =>
         r.hasOwnProperty("properties") && typeof r.properties === "object",
       "collections exists and is array": (r) => Array.isArray(r.collections),
-      "collaborators exists and is array": (r) => Array.isArray(r.collaborators),
+      "collaborators exists and is array": (r) =>
+        Array.isArray(r.collaborators),
       "collaborators have id": (r) =>
         r.collaborators.length > 0 && typeof r.collaborators[0].id === "string",
       "collaborators have name": (r) =>
-        r.collaborators.length > 0 && typeof r.collaborators[0].name === "string",
+        r.collaborators.length > 0 &&
+        typeof r.collaborators[0].name === "string",
       "assessmentUuid is UUID-ish": (r) =>
         /^[0-9a-fA-F-]{36}$/.test(r.assessmentUuid),
       "aggregateUuid is UUID-ish": (r) =>
