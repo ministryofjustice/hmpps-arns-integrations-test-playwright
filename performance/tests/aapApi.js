@@ -188,33 +188,29 @@ export default function (data) {
     "command[0] exists": (d) => d && d.commands.length > 0,
   });
 
-  if (request) {
-    check(request, {
-      "request exists": (r) => r !== undefined,
-      "request.type is correct": (r) => r.type === "CreateAssessmentCommand",
-      "user exists": (r) => typeof r.user === "object",
-      "user.id exists": (r) => r.user && typeof r.user.id === "string",
-      "user.name exists": (r) => r.user && typeof r.user.name === "string",
-      "formVersion exists": (r) => typeof r.formVersion === "string",
-      "properties exists (even {})": (r) =>
-        r.hasOwnProperty("properties") && typeof r.properties === "object",
-      "timeline present (can be null)": (r) => r.hasOwnProperty("timeline"),
-    });
-  }
+  check(request, {
+    "request exists": (r) => r !== undefined,
+    "request.type is correct": (r) => r.type === "CreateAssessmentCommand",
+    "user exists": (r) => typeof r.user === "object",
+    "user.id exists": (r) => r.user && typeof r.user.id === "string",
+    "user.name exists": (r) => r.user && typeof r.user.name === "string",
+    "formVersion exists": (r) => typeof r.formVersion === "string",
+    "properties exists (even {})": (r) =>
+      r.hasOwnProperty("properties") && typeof r.properties === "object",
+    "timeline present (can be null)": (r) => r.hasOwnProperty("timeline"),
+  });
 
-  if (result) {
-    check(result, {
-      "result exists": (res) => res !== undefined,
-      "result.type correct": (res) =>
-        res.type === "CreateAssessmentCommandResult",
-      "assessmentUuid exists": (res) => typeof res.assessmentUuid === "string",
-      "assessmentUuid is UUID-ish": (res) =>
-        /^[0-9a-fA-F-]{36}$/.test(res.assessmentUuid),
-      "message exists": (res) =>
-        typeof res.message === "string" && res.message.length > 0,
-      "success is true": (res) => res.success === true,
-    });
-  }
+  check(result, {
+    "result exists": (res) => res !== undefined,
+    "result.type correct": (res) =>
+      res.type === "CreateAssessmentCommandResult",
+    "assessmentUuid exists": (res) => typeof res.assessmentUuid === "string",
+    "assessmentUuid is UUID-ish": (res) =>
+      /^[0-9a-fA-F-]{36}$/.test(res.assessmentUuid),
+    "message exists": (res) =>
+      typeof res.message === "string" && res.message.length > 0,
+    "success is true": (res) => res.success === true,
+  });
 
   // Log failures
   if (!assessmentUuid) {
@@ -262,36 +258,32 @@ export default function (data) {
     queryData.queries[0] &&
     queryData.queries[0].result;
 
-  if (queryResult) {
-    check(queryResult, {
-      "result exists": (r) => r !== undefined,
-      "has assessmentUuid": (r) => typeof r.assessmentUuid === "string",
-      "has aggregateUuid": (r) => typeof r.aggregateUuid === "string",
-      "has formVersion": (r) => typeof r.formVersion === "string",
-      "createdAt exists": (r) => typeof r.createdAt === "string",
-      "updatedAt exists": (r) => typeof r.updatedAt === "string",
-      "createdAt looks like a timestamp": (r) =>
-        /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(r.createdAt),
-      "updatedAt looks like a timestamp": (r) =>
-        /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(r.updatedAt),
-      "answers exists (even empty)": (r) =>
-        r.hasOwnProperty("answers") && typeof r.answers === "object",
-      "properties exists (even empty)": (r) =>
-        r.hasOwnProperty("properties") && typeof r.properties === "object",
-      "collections exists and is array": (r) => Array.isArray(r.collections),
-      "collaborators exists and is array": (r) =>
-        Array.isArray(r.collaborators),
-      "collaborators have id": (r) =>
-        r.collaborators.length > 0 && typeof r.collaborators[0].id === "string",
-      "collaborators have name": (r) =>
-        r.collaborators.length > 0 &&
-        typeof r.collaborators[0].name === "string",
-      "assessmentUuid is UUID-ish": (r) =>
-        /^[0-9a-fA-F-]{36}$/.test(r.assessmentUuid),
-      "aggregateUuid is UUID-ish": (r) =>
-        /^[0-9a-fA-F-]{36}$/.test(r.aggregateUuid),
-    });
-  }
+  check(queryResult, {
+    "result exists": (r) => r !== undefined,
+    "has assessmentUuid": (r) => typeof r.assessmentUuid === "string",
+    "has aggregateUuid": (r) => typeof r.aggregateUuid === "string",
+    "has formVersion": (r) => typeof r.formVersion === "string",
+    "createdAt exists": (r) => typeof r.createdAt === "string",
+    "updatedAt exists": (r) => typeof r.updatedAt === "string",
+    "createdAt looks like a timestamp": (r) =>
+      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(r.createdAt),
+    "updatedAt looks like a timestamp": (r) =>
+      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(r.updatedAt),
+    "answers exists (even empty)": (r) =>
+      r.hasOwnProperty("answers") && typeof r.answers === "object",
+    "properties exists (even empty)": (r) =>
+      r.hasOwnProperty("properties") && typeof r.properties === "object",
+    "collections exists and is array": (r) => Array.isArray(r.collections),
+    "collaborators exists and is array": (r) => Array.isArray(r.collaborators),
+    "collaborators have id": (r) =>
+      r.collaborators.length > 0 && typeof r.collaborators[0].id === "string",
+    "collaborators have name": (r) =>
+      r.collaborators.length > 0 && typeof r.collaborators[0].name === "string",
+    "assessmentUuid is UUID-ish": (r) =>
+      /^[0-9a-fA-F-]{36}$/.test(r.assessmentUuid),
+    "aggregateUuid is UUID-ish": (r) =>
+      /^[0-9a-fA-F-]{36}$/.test(r.aggregateUuid),
+  });
 
   simulateThinkingTime();
 }
