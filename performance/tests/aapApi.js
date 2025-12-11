@@ -244,8 +244,8 @@ export default function (data) {
       {
         type: "AssessmentVersionQuery",
         user: { id: "test-user", name: "Test User" },
-        timeStamp,
-        assessmentUuid,
+        timeStamp: timeStamp,
+        assessmentUuid: assessmentUuid,
       },
     ],
   });
