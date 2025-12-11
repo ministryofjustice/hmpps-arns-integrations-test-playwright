@@ -107,7 +107,7 @@ function performQuery(token, assessmentUuid, timestamp = null) {
         type: "AssessmentVersionQuery",
         user: { id: "test-user", name: "Test User" },
         timestamp: effectiveTime,
-        assessmentUuid: assessmentUuid,
+        assessmentIdentifier: { type: 'UUID', uuid: assessmentUuid },
       },
     ],
   });
@@ -127,6 +127,7 @@ export default function (data) {
     commands: [
       {
         type: "CreateAssessmentCommand",
+        assessmentType: 'TEST',
         formVersion: "1.0",
         properties: {},
         user: { id: "test-user", name: "Test User" },

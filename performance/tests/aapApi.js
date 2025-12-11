@@ -147,6 +147,7 @@ export default function (data) {
     commands: [
       {
         type: "CreateAssessmentCommand",
+        assessmentType: 'TEST',
         formVersion: "1.0",
         properties: {},
         user: { id: "test-user", name: "Test User" },
@@ -231,7 +232,7 @@ export default function (data) {
       {
         type: "AssessmentVersionQuery",
         user: { id: "test-user", name: "Test User" },
-        assessmentUuid: assessmentUuid,
+        assessmentIdentifier: { type: 'UUID', uuid: assessmentUuid },
       },
     ],
   });
