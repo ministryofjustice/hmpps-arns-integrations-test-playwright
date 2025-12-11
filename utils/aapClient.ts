@@ -41,6 +41,7 @@ export async function createAssessment(): Promise<CreateAssessmentResult> {
             commands: [
                 {
                     type: 'CreateAssessmentCommand',
+                    assessmentType: 'TEST',
                     formVersion: '1.0',
                     properties: {},
                     user: { id: 'test-user', name: 'Test User' },
@@ -80,7 +81,7 @@ export async function queryAssessment(assessmentUuid: string) {
                 {
                     type: 'AssessmentVersionQuery',
                     user: { id: 'test-user', name: 'Test User' },
-                    assessmentUuid,
+                    assessmentIdentifier: { type: 'UUID', uuid: assessmentUuid },
                 },
             ],
         }),
