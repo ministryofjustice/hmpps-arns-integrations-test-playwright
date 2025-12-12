@@ -1,4 +1,4 @@
-name: K6 Soak Test
+name: K6 AAP Soak Test
 
 on:
   workflow_dispatch: # Manual trigger only

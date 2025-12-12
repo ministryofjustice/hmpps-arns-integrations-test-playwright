@@ -1,4 +1,4 @@
-name: K6 Aggregate Consistency Test
+name: K6 AAP Aggregate Test
 
 on:
   workflow_dispatch:
@@ -34,7 +34,7 @@ jobs:
           MIN_THINK_TIME: "1"
           MAX_THINK_TIME: "5"
           
-          VUS: "1"
+          VUS: "10"
           DURATION: "5m"
 
           P95_THRESHOLD: "600" 

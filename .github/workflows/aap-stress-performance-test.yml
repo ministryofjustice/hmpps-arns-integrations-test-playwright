@@ -1,4 +1,4 @@
-name: K6 Stress Test 
+name: K6 AAP Stress Test 
 
 on:
   workflow_dispatch: # Manual trigger only

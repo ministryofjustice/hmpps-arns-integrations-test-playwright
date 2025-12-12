@@ -6,14 +6,22 @@ interface AssessmentQueryResponse {
     request: {
       type: 'AssessmentVersionQuery';
       user: { id: string; name: string };
-      assessmentUuid: string;
+      assessmentIdentifier: { type: string; uuid: string;};
       timestamp: string | null;
     };
     result: {
       type: 'AssessmentVersionQueryResult';
+      assessmentUuid: string;
+      aggregateUuid: string;
+      assessmentType: string;
       formVersion: string;
+      createdAt: string;
+      updatedAt: string;
       answers: Record<string, any>;
+      properties: string;
+      collections: any[];
       collaborators: { id: string; name: string }[];
+      identifiers: string;
     };
   }[];
 }
@@ -55,14 +63,22 @@ test('create and query AAP assessment', async () => {
   const query = queryResponse.queries[0];
   expect(query).toBeTruthy();
   expect(query.request.type).toBe('AssessmentVersionQuery');
-  expect(query.request.assessmentUuid).toBe(assessmentUuid);
+  expect(query.request.assessmentIdentifier.type).toBe('UUID');
+  expect(query.request.assessmentIdentifier.uuid).toBe(assessmentUuid);
 
   const queryResult = query.result;
   expect(queryResult.type).toBe('AssessmentVersionQueryResult');
   expect(queryResult).toHaveProperty('formVersion');
   expect(queryResult.formVersion).toBeDefined();
+  expect(queryResult.createdAt).toBeDefined();
+  expect(queryResult.updatedAt).toBeDefined();
+  expect(queryResult.collections).toBeDefined();
+  expect(queryResult.properties).toBeDefined();
+  expect(queryResult.identifiers).toBeDefined();
   expect(queryResult).toHaveProperty('answers');
   expect(queryResult).toHaveProperty('collaborators');
+  expect(queryResult.assessmentUuid).toBe(assessmentUuid);
+  expect(queryResult.aggregateUuid).toBeDefined();
   expect(Array.isArray(queryResult.collaborators)).toBe(true);
 
   console.log('Queried AAP assessment successfully');
