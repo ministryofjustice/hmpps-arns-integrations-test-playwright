@@ -40,7 +40,7 @@ jobs:
         run: ./k6 run performance/tests/aapApi.js --out web-dashboard=export=aap-smoke-report.html
 
       - name: Upload Smoke Report
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: k6-smoke-report
           path: aap-smoke-report.html
