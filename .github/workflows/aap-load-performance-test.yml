@@ -1,4 +1,4 @@
-name: K6 Load Test 
+name: K6 AAP Load Test 
 
 on:
   workflow_dispatch: # Manual trigger only
