@@ -28,7 +28,7 @@ export class StubHomePage {
   ) { }
 
   async goto() {
-    await this.page.goto('wert/');
+    await this.page.goto('/');
   }
 
   async checkPageTitle() {

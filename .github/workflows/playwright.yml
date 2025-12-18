@@ -44,7 +44,7 @@ jobs:
         if: failure()
         uses: slackapi/slack-github-action@v2.1.1
         env:
-          SLACK_CHANNEL: ${{ (inputs.channel_id == '' || inputs.channel_id == 'NO_SLACK') && 'C06745ZSYPN' || inputs.channel_id }}
+          SLACK_CHANNEL: ${{ inputs.channel_id }}
           REPO_NAME: ${{ github.repository }}
           SLACK_BOT_TOKEN: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
         with:
@@ -53,5 +53,10 @@ jobs:
           payload: |
             {
               "channel": "${{ env.SLACK_CHANNEL }}",
-              "text": ":x: *Playwright Integration tests notification*\nWorkflow failed for ${{ env.REPO_NAME }}"
+              "attachments": [
+               {
+                 "color": "#FF0000",
+                 "text": ":x: *Playwright Integration tests notification*\nWorkflow failed for ${{ env.REPO_NAME }}"
+                }
+              ]
             }
