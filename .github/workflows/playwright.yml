@@ -44,7 +44,7 @@ jobs:
         if: failure()
         uses: slackapi/slack-github-action@v2.1.1
         env:
-          SLACK_CHANNEL: ${{ inputs.channel_id || 'C06745ZSYPN' }} 
+          SLACK_CHANNEL: ${{ (inputs.channel_id == '' || inputs.channel_id == 'NO_SLACK') && 'C06745ZSYPN' || inputs.channel_id }}
           REPO_NAME: ${{ github.repository }}
           SLACK_BOT_TOKEN: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
         with:
