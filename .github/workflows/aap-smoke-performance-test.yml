@@ -45,3 +45,24 @@ jobs:
           name: k6-smoke-report
           path: aap-smoke-report.html
           retention-days: 1
+
+      - name: Slack notification
+        if: failure()
+        uses: slackapi/slack-github-action@v2.1.1
+        env:
+          SLACK_CHANNEL: ${{ inputs.channel_id }}
+          REPO_NAME: ${{ github.repository }}
+          SLACK_BOT_TOKEN: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
+        with:
+          method: chat.postMessage
+          token: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
+          payload: |
+            {
+              "channel": "${{ env.SLACK_CHANNEL }}",
+              "attachments": [
+               {
+                 "color": "#FF0000",
+                 "text": ":x: *AAP API Smoke Performance test notification*\nWorkflow failed for ${{ env.REPO_NAME }}"
+                }
+              ]
+            }
