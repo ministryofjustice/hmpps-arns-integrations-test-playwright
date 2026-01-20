@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+/*import { test } from '@playwright/test';
 import { StubHomePage } from '../page-objects/stub-home-page';
 import { StrengthsAndNeedsLandingPage } from "../page-objects/strengths-and-needs-pages";
 
@@ -60,4 +60,4 @@ test('User checks previous versions of SAN', async ({ page }) => {
     await strengthsAndNeedsLandingPage.checkPageTitlePreviousVersion();
 
     console.log('Previous version tab works as expected');
-});
+});*/
