@@ -69,23 +69,6 @@ export class StrengthsAndNeedsLandingPage {
     }
 
     // Accomodation
-    async verifyBannerIsVisible() {
-        await expect(newTabGlobal!.locator('.govuk-notification-banner__heading')).toContainText('You will need to finish both parts to mark the section as complete');
-    }
-
-    async clickOnAssessmentLink() {
-        await newTabGlobal!
-            .locator("div.govuk-grid-column-three-quarters li >> nth=0")
-            .locator("a")
-            .first()
-            .click();
-    }
-
-    async clickContinueToPractitionerAnalysisButton() {
-        await newTabGlobal!
-            .locator("//a[normalize-space()='Continue to practitioner analysis']")
-            .click();
-    }
 
     async clickAccomodationLeftNavLink() {
         await newTabGlobal!.getByRole('link', { name: 'Accomodation' }).click();
@@ -131,6 +114,9 @@ export class StrengthsAndNeedsLandingPage {
         await newTabGlobal!.getByRole('button', { name: 'Go to practitioner analysis' }).click();
     }
 
+    async clickPracticionerAnalysisTab() {
+        await newTabGlobal!.locator('#tab_practitioner-analysis').click();
+    }
 
     async clickSummaryTab() {
         await newTabGlobal!.locator('#tab_summary').click();
