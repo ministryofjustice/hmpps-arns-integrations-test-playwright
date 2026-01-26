@@ -44,11 +44,11 @@ export class SentencePlanfromSanPage {
         //wait for Load 
         await latestPage.waitForLoadState();
         newTabGlobal = latestPage;
-        await expect(latestPage).toHaveTitle('Remember to close any other applications  before starting an appointment - Sentence plan');
+        await expect(latestPage).toHaveTitle('Remember to close any other applications  before starting an appointment - Assess and Plan');
     }
 
     async checkPageTitleSentencePlanAfterDataPrivacyScreen() {
-        await expect(newTabGlobal).toHaveTitle('Plan - Sentence plan');
+        await expect(newTabGlobal).toHaveTitle('Plan - Assess and Plan');
     }
 
     async tickConfirmBox() {

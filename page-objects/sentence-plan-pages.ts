@@ -24,7 +24,7 @@ export class SentencePlanPage {
         //wait for Load 
         await newTab.waitForLoadState();
         newTabGlobal = newTab;
-        await expect(newTab).toHaveTitle('Plan - Sentence plan');
+        await expect(newTab).toHaveTitle('Plan - Assess and Plan');
     }
 
     async checkPageTitleDataPrivacyScreen() {
@@ -41,7 +41,7 @@ export class SentencePlanPage {
     }
 
     async checkPageTitleSentencePlanAfterDataPrivacyScreen() {
-        await expect(newTabGlobal).toHaveTitle('Plan - Sentence plan');
+        await expect(newTabGlobal).toHaveTitle('Plan - Assess and Plan');
     }
 
     async clickConfirmButtonOnDataPrivacyScreen() {
@@ -156,7 +156,7 @@ export class SentencePlanPage {
     }
 
     async checkAddSTepsToGoalPageTitle() {
-        await expect(newTabGlobal!).toHaveTitle('Add or change steps - Sentence plan');
+        await expect(newTabGlobal!).toHaveTitle('Add or change steps - Assess and Plan');
     }
 
     async selectProbationPracticioner() {
@@ -194,15 +194,15 @@ export class SentencePlanPage {
     }
 
     async checkChangeGoalPageTitle() {
-        await expect(newTabGlobal!).toHaveTitle('Change goal - Sentence plan');
+        await expect(newTabGlobal!).toHaveTitle('Change goal - Assess and Plan');
     }
 
     async checkUpdateStepsPageTitle() {
-        await expect(newTabGlobal!).toHaveTitle('Update goal and steps - Sentence plan');
+        await expect(newTabGlobal!).toHaveTitle('Update goal and steps - Assess and Plan');
     }
 
     async checkAddStepsToGoalPageTitle() {
-        await expect(newTabGlobal!).toHaveTitle('Add or change steps - Sentence plan');
+        await expect(newTabGlobal!).toHaveTitle('Add or change steps - Assess and Plan');
     }
 
     async fillInNewGoalTitle() {
@@ -268,7 +268,7 @@ export class SentencePlanPage {
     }
 
     async checkDoTheyAgreeToThisPLanPageTitle() {
-        await expect(newTabGlobal!).toHaveTitle('Do they agree to this plan? - Sentence plan');
+        await expect(newTabGlobal!).toHaveTitle('Do they agree to this plan? - Assess and Plan');
     }
 
     async tickYesIAgreeToThisPlan() {
@@ -303,11 +303,11 @@ export class SentencePlanPage {
     }
 
     async checkUserIsBAckOnSentencePlanLandingPage() {
-        await expect(newTabGlobal!).toHaveTitle('Plan - Sentence plan');
+        await expect(newTabGlobal!).toHaveTitle('Plan - Assess and Plan');
     }
 
     async checkCreateAGoalPageTitle() {
-        await expect(newTabGlobal!).toHaveTitle('Create a goal - Sentence plan');
+        await expect(newTabGlobal!).toHaveTitle('Create a goal - Assess and Plan');
     }
 
     async clickSaveWithoutStepsButton() {
@@ -402,7 +402,7 @@ export class SentencePlanPage {
     }
 
     async checkAboutPageTitle() {
-        await expect(newTabGlobal!).toHaveTitle('About - Sentence plan');
+        await expect(newTabGlobal!).toHaveTitle('About - Assess and Plan');
     }
 
     async checkBannerDisplaysForIncompleteAssessment() {
@@ -553,7 +553,7 @@ export class SentencePlanPage {
     }
 
     async checkUpdateAgreePlanPageTitle() {
-        await expect(newTabGlobal!).toHaveTitle('Do they agree? - Sentence plan')
+        await expect(newTabGlobal!).toHaveTitle('Do they agree? - Assess and Plan')
     }
 
     async clickBackLinkOnUpdateAgreePlanPage() {
@@ -590,7 +590,7 @@ export class SentencePlanPage {
     }
 
     async checkPlanHistoryPageTitle() {
-        await expect(newTabGlobal!).toHaveTitle('Plan history - Sentence plan')
+        await expect(newTabGlobal!).toHaveTitle('Plan history - Assess and Plan')
     }
 
     async checkUpdateButtonAppears() {
