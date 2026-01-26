@@ -33,11 +33,11 @@ export class SentencePlanPage {
         //wait for Load 
         await newTab.waitForLoadState();
         newTabGlobal = newTab;
-        await expect(newTab).toHaveTitle('Remember to close any other applications before starting an appointment - Sentence plan');
+        await expect(newTab).toHaveTitle('Remember to close any other applications before starting an appointment - Assess and Plan');
     }
 
     async checkPageTitleDataPrivacyScreenAfterNavigatingToSP() {
-        await expect(newTabGlobal).toHaveTitle('Remember to close any other applications before starting an appointment - Sentence plan');
+        await expect(newTabGlobal).toHaveTitle('Remember to close any other applications before starting an appointment - Assess and Plan');
     }
 
     async checkPageTitleSentencePlanAfterDataPrivacyScreen() {
