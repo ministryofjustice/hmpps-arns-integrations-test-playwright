@@ -10,6 +10,10 @@
   "automergeType": "pr",
   "packageRules": [
     {
+      "matchPackagePatterns": ["^@playwright/", "^playwright$"],
+      "groupName": "playwright updates"
+    },
+    {
       "matchManagers": [
         "npm"
       ],
