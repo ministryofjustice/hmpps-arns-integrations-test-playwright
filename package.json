@@ -8,8 +8,8 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@ministryofjustice/hmpps-probation-integration-e2e-tests": "^1.111.0",
-    "@playwright/test": "^1.52.0",
+    "@ministryofjustice/hmpps-probation-integration-e2e-tests": "^1.120.0",
+    "@playwright/test": "^1.56.1",
     "@types/node": "^22.15.21",
     "@types/oracledb": "^6.6.0",
     "audit-ci": "^7.1.0",
