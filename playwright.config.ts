@@ -6,9 +6,6 @@ if (!process.env.CI) {
   require("dotenv").config();
 }
 
-console.log('DEBUG: Playwright Config Loaded from:', __filename);
-console.trace('Who is calling me?');
-
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
