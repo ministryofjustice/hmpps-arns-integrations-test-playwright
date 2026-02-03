@@ -2,7 +2,9 @@
   "name": "hmpps-sentence-plan-ui-acceptance-tests",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test:ci": "playwright test --project=chromium"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
