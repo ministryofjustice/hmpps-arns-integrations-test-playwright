@@ -39,6 +39,12 @@ jobs:
           # Credentials
           DELIUS_USERNAME: ${{ secrets.E2E_DELIUS_USERNAME }}
           DELIUS_PASSWORD: ${{ secrets.E2E_DELIUS_PASSWORD }}
+
+      - name: Publish test summary
+        uses: ctrf-io/github-test-summary@v1
+        with:
+          report-file: ctrf/ctrf-report.json
+        if: always()
       
       - name: Slack notification
         if: failure()

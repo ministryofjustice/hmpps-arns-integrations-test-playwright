@@ -16,6 +16,7 @@
     "@types/oracledb": "^6.10.1",
     "audit-ci": "^7.1.0",
     "dotenv": "^17.2.3",
+    "playwright-ctrf-json-reporter": "^0.0.27",
     "tsx": "^4.21.0"
   },
   "dependencies": {
