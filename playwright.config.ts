@@ -38,10 +38,13 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: [
+    ['list'],
+    ['playwright-ctrf-json-reporter', { outputDir: 'ctrf' }]
+  ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    permissions: ['clipboard-read','clipboard-write'],
+    permissions: ['clipboard-read', 'clipboard-write'],
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: 'https://arns-oastub-dev.hmpps.service.justice.gov.uk/',
 
