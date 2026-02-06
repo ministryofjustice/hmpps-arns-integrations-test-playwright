@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test:ci": "playwright test --project=chromium"
+    "test:ci": "playwright test --project=chromium",
+    "test:ui": "playwright test --project=chromium --ui",
+    "test:noauth:ui": "playwright test --project=chromium --ui --config=playwright-noauth.config.ts"
   },
   "keywords": [],
   "author": "",

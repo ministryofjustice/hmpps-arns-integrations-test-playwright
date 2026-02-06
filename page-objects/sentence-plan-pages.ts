@@ -11,12 +11,13 @@ const getTodayDateFormatted = (): string => {
     });
 }
 
-let newTabGlobal: Page | null = null;
+export let newTabGlobal: Page | null = null;
 
 export class SentencePlanPage {
     constructor(
         private page: Page,
-    ) { }
+    ) {
+    }
 
     async checkPageTitle() {
         const newTabPromise = this.page.waitForEvent('popup');
@@ -25,6 +26,7 @@ export class SentencePlanPage {
         await newTab.waitForLoadState();
         newTabGlobal = newTab;
         await expect(newTab).toHaveTitle('Plan - Sentence plan');
+        return newTab
     }
 
     async checkPageTitleDataPrivacyScreen() {
@@ -34,6 +36,7 @@ export class SentencePlanPage {
         await newTab.waitForLoadState();
         newTabGlobal = newTab;
         await expect(newTab).toHaveTitle('Remember to close any other applications before starting an appointment - Sentence plan');
+        return newTab;
     }
 
     async checkPageTitleDataPrivacyScreenAfterNavigatingToSP() {
