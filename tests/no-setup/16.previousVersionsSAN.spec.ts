@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
-import { StubHomePage } from '../page-objects/stub-home-page';
-import { StrengthsAndNeedsLandingPage } from "../page-objects/strengths-and-needs-pages";
+import { StubHomePage } from '../../page-objects/stub-home-page';
+import { StrengthsAndNeedsLandingPage } from "../../page-objects/strengths-and-needs-pages";
 
 test('User checks previous versions of SAN', async ({ page }) => {
 
