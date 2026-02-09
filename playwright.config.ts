@@ -1,9 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 
 // Load environment variables from .env only if running locally
 if (!process.env.CI) {
-  require("dotenv").config();
+  require('dotenv').config();
 }
 
 /**
@@ -27,7 +27,7 @@ export default defineConfig({
      * Maximum time expect() should wait for the condition to be met.
      * For example in `await expect(locator).toHaveText();`
      */
-    timeout: process.env.CI ? 30000 : 10000
+    timeout: process.env.CI ? 30000 : 10000,
   },
   /* Run tests in files in parallel */
   fullyParallel: false,
@@ -38,10 +38,7 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [
-    ['list'],
-    ['playwright-ctrf-json-reporter', { outputDir: 'ctrf' }]
-  ],
+  reporter: [['list'], ['playwright-ctrf-json-reporter', { outputDir: 'ctrf' }]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     permissions: ['clipboard-read', 'clipboard-write'],

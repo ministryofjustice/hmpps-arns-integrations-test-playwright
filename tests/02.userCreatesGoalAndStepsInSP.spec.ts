@@ -3,12 +3,13 @@ import { StubHomePage } from '../page-objects/stub-home-page';
 import { SentencePlanPage } from '../page-objects/sentence-plan-pages';
 import { Accessibility } from '../page-objects/accessibility';
 
-test('user creates and updates a goal, adds, updates and removes steps and agrees plan in sentence plan', async ({ page }) => {
-  
+test('user creates and updates a goal, adds, updates and removes steps and agrees plan in sentence plan', async ({
+  page,
+}) => {
   const stubHomePage = new StubHomePage(page);
   const sentencePlanPage = new SentencePlanPage(page);
   const accessibility = new Accessibility(page);
-  
+
   // Navigate to the stub home page
   await stubHomePage.goto();
 
@@ -19,7 +20,7 @@ test('user creates and updates a goal, adds, updates and removes steps and agree
   await stubHomePage.selectSentencePlan();
 
   // Click create handover button
-  await stubHomePage.clickCreateHandoverButton(); 
+  await stubHomePage.clickCreateHandoverButton();
 
   // Click open button
   await stubHomePage.clickOpenButton();
@@ -153,7 +154,7 @@ test('user creates and updates a goal, adds, updates and removes steps and agree
 
   // Check page has no accessiblity violations
   await accessibility.shouldHaveNoAccessibilityViolations();
-  
+
   console.log('Goals without steps created');
 
   // Create future goal

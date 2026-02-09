@@ -3,10 +3,9 @@ import { StubHomePage } from '../page-objects/stub-home-page';
 import { SentencePlanPage } from '../page-objects/sentence-plan-pages';
 
 test('User views assessment info when creating a goal - Null answers', async ({ page }) => {
-  
   const stubHomePage = new StubHomePage(page);
   const sentencePlanPage = new SentencePlanPage(page);
-  
+
   // Navigate to the stub home page
   await stubHomePage.goto();
 
@@ -23,7 +22,7 @@ test('User views assessment info when creating a goal - Null answers', async ({ 
   await stubHomePage.selectSentencePlan();
 
   // Click create handover button
-  await stubHomePage.clickCreateHandoverButton(); 
+  await stubHomePage.clickCreateHandoverButton();
 
   // Click open button
   await stubHomePage.clickOpenButton();
@@ -36,7 +35,7 @@ test('User views assessment info when creating a goal - Null answers', async ({ 
   await sentencePlanPage.clickConfirmButtonOnDataPrivacyScreen();
 
   // Check page title
-  await sentencePlanPage.checkPageTitleSentencePlanAfterDataPrivacyScreen()
+  await sentencePlanPage.checkPageTitleSentencePlanAfterDataPrivacyScreen();
 
   // Check information from accomodation assessment from create a goal page
   await sentencePlanPage.clickCreateGoalButton();

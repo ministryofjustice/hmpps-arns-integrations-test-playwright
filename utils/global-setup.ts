@@ -51,7 +51,7 @@ async function globalSetup() {
     fs.writeFileSync(TOKEN_PATH, JSON.stringify(tokenData, null, 2), 'utf-8');
 
     // Fetch AAP token
-    
+
     if (process.env.CI) {
       clientIdAap = process.env.AAP_CLIENT_ID!;
       clientSecretAap = process.env.AAP_CLIENT_SECRET!;

@@ -4,8 +4,8 @@ import {
   PK_WITH_COMPLETED_SAN,
   PK_FOR_ACCESS_MODE,
   PK_VIEW_ONLY_SAN,
-  PK_WITH_PREVIOUS_ANSWERS
-} from './pages-common'
+  PK_WITH_PREVIOUS_ANSWERS,
+} from './pages-common';
 
 export class StubHomePage {
   constructor(
@@ -15,8 +15,8 @@ export class StubHomePage {
     private pasteConfigurationButton: Locator = page.getByRole('button', { name: 'Paste configuration' }),
     private openbutton: Locator = page.getByRole('button', { name: 'Open' }),
     private criminogenicNeedsTab: Locator = page.locator('#tab_criminogenicNeeds'),
-    private practionerDetailsTab: Locator = page.locator ('#tab_practioner-details'),
-    private accessModeDropdown: Locator = page.locator ('#access-mode'),
+    private practionerDetailsTab: Locator = page.locator('#tab_practioner-details'),
+    private accessModeDropdown: Locator = page.locator('#access-mode'),
     private accLinkedToHarmDropdown: Locator = page.locator('#accLinkedToHarm'),
     private accLinkedToReoffending: Locator = page.locator('#accLinkedToReoffending'),
     private accStrengths: Locator = page.locator('#accStrengths'),
@@ -25,7 +25,7 @@ export class StubHomePage {
     private pkField: Locator = page.locator('#oasys-assessment-pk'),
     private practionerDetailsLocationDropdown: Locator = page.locator('#staff-location'),
     private defaultLocationInPractionerDetailsTab: Locator = page.locator('#staff-location option:checked')
-  ) { }
+  ) {}
 
   async goto() {
     await this.page.goto('/');

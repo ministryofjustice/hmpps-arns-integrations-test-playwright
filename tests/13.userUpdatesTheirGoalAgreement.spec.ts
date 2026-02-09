@@ -4,7 +4,6 @@ import { SentencePlanPage } from '../page-objects/sentence-plan-pages';
 import { Accessibility } from '../page-objects/accessibility';
 
 test('user updates their goal agreement', async ({ page }) => {
-
   const stubHomePage = new StubHomePage(page);
   const sentencePlanPage = new SentencePlanPage(page);
   const accessibility = new Accessibility(page);
@@ -32,7 +31,7 @@ test('user updates their goal agreement', async ({ page }) => {
   await sentencePlanPage.clickConfirmButtonOnDataPrivacyScreen();
 
   // Check page title
-  await sentencePlanPage.checkPageTitleSentencePlanAfterDataPrivacyScreen()
+  await sentencePlanPage.checkPageTitleSentencePlanAfterDataPrivacyScreen();
 
   // Check page has no accessiblity violations
   await accessibility.shouldHaveNoAccessibilityViolations();
@@ -90,11 +89,11 @@ test('user updates their goal agreement', async ({ page }) => {
   await sentencePlanPage.fillInIDoNotAgreeDetails();
   await sentencePlanPage.clickSaveOnUpdateAgreePlanPage();
   await sentencePlanPage.checkUserIsBAckOnSentencePlanLandingPage();
-  console.log('Agreement update saved')
+  console.log('Agreement update saved');
 
   // Check plan history is updated correctly
   await sentencePlanPage.clickPlanHistoryTopNavLink();
   await sentencePlanPage.checkPlanHistoryPageTitle();
   await sentencePlanPage.checkAgreementDataCorrectlyDisplaysInPlanHistory();
-  console.log('Plan history data following agreement update verified')
+  console.log('Plan history data following agreement update verified');
 });

@@ -37,3 +37,13 @@ NOTE: a .env file is required to run certain test features locally. This file is
 
 ## Generating reports
 To open last HTML report run: npx playwright show-report
+
+## Contributing to playwright-api-test-demo
+
+### Linting
+
+We use a mix of [Husky](https://github.com/typicode/husky), [ESLint](https://eslint.org/) and [Prettier](https://prettier.io/) within our repository to help enforce consistent coding practices. Husky is a tool that will install a pre-commit hook to run the linter any time before you attempt to make a commit. This replaces the old pre-commit hook that was used before. to install the pre-commit hook you will need to run
+
+```bash
+npm run prepare
+```

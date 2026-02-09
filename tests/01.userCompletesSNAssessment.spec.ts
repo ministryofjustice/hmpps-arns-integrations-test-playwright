@@ -4,7 +4,6 @@ import { StrengthsAndNeedsLandingPage } from '../page-objects/strengths-and-need
 import { Accessibility } from '../page-objects/accessibility';
 
 test('user completes a strengths and needs assessments', async ({ page }) => {
-
   const stubHomePage = new StubHomePage(page);
   const strengthsAndNeedsLandingPage = new StrengthsAndNeedsLandingPage(page);
   const accessibility = new Accessibility(page);
@@ -61,7 +60,7 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
   await strengthsAndNeedsLandingPage.tickAccomodationChanges();
   await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
 
-  // Fill in practicioner analysis 
+  // Fill in practicioner analysis
   await strengthsAndNeedsLandingPage.clickPracticionerAnalysisTab();
   await strengthsAndNeedsLandingPage.tickNoAccomodationFactors();
   await strengthsAndNeedsLandingPage.tickNoRiskOfHarm();
@@ -87,7 +86,7 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
   await strengthsAndNeedsLandingPage.tickIHaveAlreadyMadeChanges();
   await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
 
-  // Fill in practicioner analysis 
+  // Fill in practicioner analysis
   await strengthsAndNeedsLandingPage.clickPracticionerAnalysisTab();
   await strengthsAndNeedsLandingPage.tickEmploymentFactors();
   await strengthsAndNeedsLandingPage.tickEmploymentRiskOfHarm();
@@ -107,7 +106,7 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
   await strengthsAndNeedsLandingPage.tickFinanceIHaveAlreadyMadechanges();
   await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
 
-  // Fill in practicioner analysis 
+  // Fill in practicioner analysis
   await strengthsAndNeedsLandingPage.clickPracticionerAnalysisTab();
   await strengthsAndNeedsLandingPage.tickFinanceFactors();
   await strengthsAndNeedsLandingPage.tickFinanceRiskOfHarm();
@@ -135,7 +134,7 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
   await strengthsAndNeedsLandingPage.tickWantToMakeChangesDrugUseNotApplicable();
   await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
 
-  // Fill in practicioner analysis 
+  // Fill in practicioner analysis
   await strengthsAndNeedsLandingPage.clickPracticionerAnalysisTab();
   await strengthsAndNeedsLandingPage.tickDrugFactors();
   await strengthsAndNeedsLandingPage.tickDrugRiskOfHarm();
@@ -152,7 +151,7 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
   await strengthsAndNeedsLandingPage.tickNoAlcoholUse();
   await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
 
-  // Fill in practicioner analysis 
+  // Fill in practicioner analysis
   await strengthsAndNeedsLandingPage.clickPracticionerAnalysisTab();
   await strengthsAndNeedsLandingPage.tickAlcoholFactors();
   await strengthsAndNeedsLandingPage.tickAlcoholRiskOfHarm();
@@ -179,7 +178,7 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
   await strengthsAndNeedsLandingPage.tickHealthAlreadyMakingChanges();
   await strengthsAndNeedsLandingPage.clickSaveAndContinueButton();
 
-  // Fill in practicioner analysis 
+  // Fill in practicioner analysis
   await strengthsAndNeedsLandingPage.clickPracticionerAnalysisTab();
   await strengthsAndNeedsLandingPage.tickHealthFactors();
   await strengthsAndNeedsLandingPage.tickHealthRiskOfHarm();
@@ -281,5 +280,4 @@ test('user completes a strengths and needs assessments', async ({ page }) => {
 
   // Ensure user is on ofeence analysis summary page
   await strengthsAndNeedsLandingPage.confirmUserIsOnOffenceAnalysisPage();
-
 });

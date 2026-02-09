@@ -1,9 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 
 // Load environment variables from .env only if running locally
 if (!process.env.CI) {
-  require("dotenv").config();
+  require('dotenv').config();
 }
 
 /**
@@ -26,7 +26,7 @@ export default defineConfig({
      * Maximum time expect() should wait for the condition to be met.
      * For example in `await expect(locator).toHaveText();`
      */
-    timeout: process.env.CI ? 30000 : 10000
+    timeout: process.env.CI ? 30000 : 10000,
   },
   /* Run tests in files in parallel */
   fullyParallel: false,
@@ -40,7 +40,7 @@ export default defineConfig({
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    permissions: ['clipboard-read','clipboard-write'],
+    permissions: ['clipboard-read', 'clipboard-write'],
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: 'https://arns-oastub-dev.hmpps.service.justice.gov.uk/',
 
