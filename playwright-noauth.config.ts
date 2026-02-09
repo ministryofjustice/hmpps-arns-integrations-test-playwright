@@ -18,7 +18,7 @@ if (!process.env.CI) {
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  testDir: './tests/no-auth',
+  testDir: './tests/no-setup',
   /* Maximum time one test can run for. */
   timeout: 300 * 1000,
   expect: {
@@ -52,7 +52,7 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Edge'] },
     },
 
     {

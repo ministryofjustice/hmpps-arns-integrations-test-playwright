@@ -1,4 +1,4 @@
-import { expect, Locator, Page } from '@playwright/test';
+import { BrowserContext, Locator, Page } from '@playwright/test';
 
 export class SentencePlanV2Page {
     readonly page: Page;
@@ -11,9 +11,7 @@ export class SentencePlanV2Page {
     readonly saveGoalAndSteps: Locator;
     readonly viewPlan: Locator;
 
-    constructor(
-        page: Page,
-    ) {
+    constructor( page: Page ) {
         this.page = page;
         this.viewPreviousVersions = this.page.getByRole('link', { name: 'View previous versions' });
         this.previousVersionsHeading = this.page.getByRole('heading', { name: 'Previous versions' });
@@ -23,5 +21,11 @@ export class SentencePlanV2Page {
         this.saveGoal = this.page.getByRole('button', { name: 'Save goal' });
         this.saveGoalAndSteps = this.page.getByRole('button', { name: 'Save goal and steps' });
         this.viewPlan = this.page.getByRole('link', { name: 'View   plan' }).first();
-     }
+    }
+
+    async viewPreviousVersion (context: BrowserContext): Promise<Page> {
+        const previousVersionsPage = context.waitForEvent('page');
+        await this.viewPlan.click();
+        return await previousVersionsPage;
+    }
 }
