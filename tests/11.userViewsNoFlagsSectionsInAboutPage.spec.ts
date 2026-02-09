@@ -6,7 +6,6 @@ import * as fs from 'fs'; // import file system module
 /* Note: this test feature will fail if the test data is wiped. 
 It relies on pre-existing PK with a completed SAN assessment. */
 test('User views their no flags sections and their info in About page', async ({ page }) => {
-
   const stubHomePage = new StubHomePage(page);
   const sentencePlanPage = new SentencePlanPage(page);
 
@@ -23,12 +22,14 @@ test('User views their no flags sections and their info in About page', async ({
   await stubHomePage.clickCriminogenicNeedsTab();
 
   // Read json file and convert to string
-  const filePath = './data/noFlagData.json'
+  const filePath = './data/noFlagData.json';
   const jsonData = fs.readFileSync(filePath, 'utf-8');
 
   // Copy json data to clipboard
-  await page.evaluate(async (text) => { await navigator.clipboard.writeText(text);}, jsonData);
-  console.log('no flag data JSON file copied to clipboard')
+  await page.evaluate(async (text) => {
+    await navigator.clipboard.writeText(text);
+  }, jsonData);
+  console.log('no flag data JSON file copied to clipboard');
 
   // Paste configuration using UI
   await stubHomePage.clickPasteConfigurationButton();
@@ -47,7 +48,7 @@ test('User views their no flags sections and their info in About page', async ({
   await sentencePlanPage.clickConfirmButtonOnDataPrivacyScreen();
 
   // Check page title
-  await sentencePlanPage.checkPageTitleSentencePlanAfterDataPrivacyScreen()
+  await sentencePlanPage.checkPageTitleSentencePlanAfterDataPrivacyScreen();
 
   // Access About section
   await sentencePlanPage.clickAboutTopNavLink();

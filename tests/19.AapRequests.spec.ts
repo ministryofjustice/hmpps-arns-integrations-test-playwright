@@ -6,7 +6,7 @@ interface AssessmentQueryResponse {
     request: {
       type: 'AssessmentVersionQuery';
       user: { id: string; name: string };
-      assessmentIdentifier: { type: string; uuid: string;};
+      assessmentIdentifier: { type: string; uuid: string };
       timestamp: string | null;
     };
     result: {
@@ -53,9 +53,7 @@ test('create and query AAP assessment', async () => {
   console.log('Created AAP assessment:', assessmentUuid);
 
   // Query the created assessment
-  const queryResponse = (await queryAssessment(
-    assessmentUuid
-  )) as AssessmentQueryResponse;
+  const queryResponse = (await queryAssessment(assessmentUuid)) as AssessmentQueryResponse;
 
   expect(queryResponse).toBeTruthy();
   expect(queryResponse.queries?.length).toBeGreaterThan(0);

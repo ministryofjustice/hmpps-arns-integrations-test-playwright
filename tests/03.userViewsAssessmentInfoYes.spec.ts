@@ -4,11 +4,10 @@ import { SentencePlanPage } from '../page-objects/sentence-plan-pages';
 import { Accessibility } from '../page-objects/accessibility';
 
 test('User views assessment info when creating a goal - Yes answers', async ({ page }) => {
-  
   const stubHomePage = new StubHomePage(page);
   const sentencePlanPage = new SentencePlanPage(page);
   const accessibility = new Accessibility(page);
-  
+
   // Navigate to the stub home page
   await stubHomePage.goto();
 
@@ -25,7 +24,7 @@ test('User views assessment info when creating a goal - Yes answers', async ({ p
   await stubHomePage.selectSentencePlan();
 
   // Click create handover button
-  await stubHomePage.clickCreateHandoverButton(); 
+  await stubHomePage.clickCreateHandoverButton();
 
   // Click open button
   await stubHomePage.clickOpenButton();

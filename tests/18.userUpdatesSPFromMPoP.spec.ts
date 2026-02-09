@@ -1,9 +1,8 @@
-import {test} from '@playwright/test';
+import { test } from '@playwright/test';
 import { MpopPages } from '../page-objects/mpop-pages';
 import { SentencePlanPage } from '../page-objects/sentence-plan-pages';
 
 test('user updates a sentence plan from mpop', async ({ page }) => {
-
   const mpopPages = new MpopPages(page);
   const sentencePlanPage = new SentencePlanPage(page);
 
@@ -33,7 +32,7 @@ test('user updates a sentence plan from mpop', async ({ page }) => {
   await sentencePlanPage.clickConfirmButtonOnDataPrivacyScreen();
 
   // assert user is taken to sentence plan
-  await sentencePlanPage.checkPageTitleSentencePlanAfterDataPrivacyScreen
+  await sentencePlanPage.checkPageTitleSentencePlanAfterDataPrivacyScreen();
 
   // Change step status and add notes
   await sentencePlanPage.clickUpdateLink();
@@ -59,4 +58,4 @@ test('user updates a sentence plan from mpop', async ({ page }) => {
   // Check return to Oasys button is not displayed on plan history page
   await sentencePlanPage.clickPlanHistoryTopNavLink();
   await sentencePlanPage.checkReturnToAsysButtonIsNotDisplayedWhenInMpop();
-  });
+});

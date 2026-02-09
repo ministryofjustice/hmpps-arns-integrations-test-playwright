@@ -6,7 +6,6 @@ import { Accessibility } from '../page-objects/accessibility';
 /* Note: this test feature will fail if the test data is wiped. 
 It relies on pre-existing PK with a completed SAN assessment. */
 test('User views about page when they have completed SAN assessment', async ({ page }) => {
-
   const stubHomePage = new StubHomePage(page);
   const sentencePlanPage = new SentencePlanPage(page);
   const accessibility = new Accessibility(page);
@@ -18,7 +17,7 @@ test('User views about page when they have completed SAN assessment', async ({ p
   await stubHomePage.checkPageTitle();
 
   // Paste PK of existing user
-  await stubHomePage.fillInPkNumberOfCompletedAssessment()
+  await stubHomePage.fillInPkNumberOfCompletedAssessment();
 
   // Select sentence plan
   await stubHomePage.selectSentencePlan();
@@ -37,7 +36,7 @@ test('User views about page when they have completed SAN assessment', async ({ p
   await sentencePlanPage.clickConfirmButtonOnDataPrivacyScreen();
 
   // Check page title
-  await sentencePlanPage.checkPageTitleSentencePlanAfterDataPrivacyScreen()
+  await sentencePlanPage.checkPageTitleSentencePlanAfterDataPrivacyScreen();
 
   // Access About section
   await sentencePlanPage.clickAboutTopNavLink();

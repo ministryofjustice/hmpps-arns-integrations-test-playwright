@@ -5,7 +5,6 @@ import { SentencePlanPage } from '../page-objects/sentence-plan-pages';
 /* Note: this test feature will fail if the test data is wiped. 
 It relies on pre-existing PK with a completed SAN assessment. */
 test('User views assessment info when they have completed SAN assessment', async ({ page }) => {
-
   const stubHomePage = new StubHomePage(page);
   const sentencePlanPage = new SentencePlanPage(page);
 
@@ -16,7 +15,7 @@ test('User views assessment info when they have completed SAN assessment', async
   await stubHomePage.checkPageTitle();
 
   // Paste PK of existing user
-  await stubHomePage.fillInPkNumberOfCompletedAssessment()
+  await stubHomePage.fillInPkNumberOfCompletedAssessment();
 
   // Select sentence plan
   await stubHomePage.selectSentencePlan();
@@ -35,7 +34,7 @@ test('User views assessment info when they have completed SAN assessment', async
   await sentencePlanPage.clickConfirmButtonOnDataPrivacyScreen();
 
   // Check page title
-  await sentencePlanPage.checkPageTitleSentencePlanAfterDataPrivacyScreen()
+  await sentencePlanPage.checkPageTitleSentencePlanAfterDataPrivacyScreen();
 
   // Check information from accomodation assessment from create a goal page
   await sentencePlanPage.clickCreateGoalButton();

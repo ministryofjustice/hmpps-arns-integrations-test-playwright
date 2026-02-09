@@ -5,21 +5,33 @@
   "scripts": {
     "test:ci": "playwright test --project=chromium",
     "test:ui": "playwright test --project=chromium --ui",
-    "test:noauth:ui": "playwright test --project=chromium --ui --config=playwright-noauth.config.ts"
+    "test:noauth:ui": "playwright test --project=chromium --ui --config=playwright-noauth.config.ts",
+    "lint": "eslint tests/** page-objects/**",
+    "lint:fix": "eslint tests/** page-objects/** utils/** --fix",
+    "prettier": "prettier . --check",
+    "prettier:fix": "prettier . --write",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "@ministryofjustice/hmpps-probation-integration-e2e-tests": "^1.157.0",
     "@playwright/test": "^1.58.0",
+    "@types/eslint__js": "^8.42.3",
     "@types/node": "^22.19.7",
     "@types/oracledb": "^6.10.1",
     "audit-ci": "^7.1.0",
     "dotenv": "^17.2.3",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
     "playwright-ctrf-json-reporter": "^0.0.27",
-    "tsx": "^4.21.0"
+    "prettier": "3.8.1",
+    "tsx": "^4.21.0",
+    "typescript-eslint": "^8.54.0",
+    "husky": "^8.0.0"
   },
   "dependencies": {
     "@axe-core/playwright": "^4.11.0",

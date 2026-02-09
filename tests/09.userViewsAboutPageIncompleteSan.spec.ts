@@ -3,7 +3,6 @@ import { StubHomePage } from '../page-objects/stub-home-page';
 import { SentencePlanPage } from '../page-objects/sentence-plan-pages';
 
 test('User views about page when they have not completed SAN assessment', async ({ page }) => {
-
   const stubHomePage = new StubHomePage(page);
   const sentencePlanPage = new SentencePlanPage(page);
 
@@ -38,7 +37,7 @@ test('User views about page when they have not completed SAN assessment', async 
   await sentencePlanPage.clickConfirmButtonOnDataPrivacyScreen();
 
   // Check page title
-  await sentencePlanPage.checkPageTitleSentencePlanAfterDataPrivacyScreen()
+  await sentencePlanPage.checkPageTitleSentencePlanAfterDataPrivacyScreen();
 
   // Access About section
   await sentencePlanPage.clickAboutTopNavLink();
