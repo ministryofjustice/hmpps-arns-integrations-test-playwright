@@ -20,7 +20,7 @@
     "@eslint/js": "^9.39.2",
     "@ministryofjustice/hmpps-probation-integration-e2e-tests": "^1.161.0",
     "@playwright/test": "^1.58.1",
-    "@types/eslint__js": "^8.42.3",
+    "@types/eslint__js": "^9.14.0",
     "@types/node": "^22.19.8",
     "@types/oracledb": "^6.10.1",
     "audit-ci": "^7.1.0",
