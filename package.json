@@ -1,7 +1,6 @@
 {
   "name": "hmpps-sentence-plan-ui-acceptance-tests",
   "version": "1.0.0",
-  "type": "module",
   "main": "index.js",
   "scripts": {
     "test:ci": "playwright test --project=chromium",
@@ -25,7 +24,7 @@
     "@types/node": "^22.19.7",
     "@types/oracledb": "^6.10.1",
     "audit-ci": "^7.1.0",
-    "dotenv": "^17.2.3",
+    "dotenv": "^16.4.5",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "playwright-ctrf-json-reporter": "^0.0.27",
