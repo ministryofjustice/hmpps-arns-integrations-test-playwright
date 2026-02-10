@@ -18,10 +18,10 @@
   "description": "",
   "devDependencies": {
     "@eslint/js": "^9.39.2",
-    "@ministryofjustice/hmpps-probation-integration-e2e-tests": "^1.157.0",
-    "@playwright/test": "^1.58.0",
+    "@ministryofjustice/hmpps-probation-integration-e2e-tests": "^1.161.0",
+    "@playwright/test": "^1.58.1",
     "@types/eslint__js": "^8.42.3",
-    "@types/node": "^22.19.7",
+    "@types/node": "^22.19.8",
     "@types/oracledb": "^6.10.1",
     "audit-ci": "^7.1.0",
     "dotenv": "^17.2.3",
@@ -34,7 +34,7 @@
     "husky": "^9.1.7"
   },
   "dependencies": {
-    "@axe-core/playwright": "^4.11.0",
+    "@axe-core/playwright": "^4.11.1",
     "oracledb": "^6.10.0",
     "ts-node": "^10.9.2"
   }
