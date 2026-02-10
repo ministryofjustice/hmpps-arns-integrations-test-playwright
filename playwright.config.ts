@@ -1,5 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
-import dotenv from 'dotenv';
+import 'dotenv/config';
 
 // Load environment variables from .env only if running locally
 if (!process.env.CI) {
