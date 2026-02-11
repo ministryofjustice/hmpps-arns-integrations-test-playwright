@@ -20,8 +20,8 @@
     "@eslint/js": "^10.0.1",
     "@ministryofjustice/hmpps-probation-integration-e2e-tests": "^1.161.0",
     "@playwright/test": "^1.58.1",
-    "@types/eslint__js": "^8.42.3",
-    "@types/node": "^22.19.8",
+    "@types/eslint__js": "^9.14.0",
+    "@types/node": "^22.19.9",
     "@types/oracledb": "^6.10.1",
     "audit-ci": "^7.1.0",
     "dotenv": "^17.2.3",
@@ -31,7 +31,7 @@
     "prettier": "3.8.1",
     "tsx": "^4.21.0",
     "typescript-eslint": "^8.54.0",
-    "husky": "^8.0.3"
+    "husky": "^9.1.7"
   },
   "dependencies": {
     "@axe-core/playwright": "^4.11.1",
