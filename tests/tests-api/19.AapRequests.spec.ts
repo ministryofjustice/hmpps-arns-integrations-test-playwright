@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { createAssessment, queryAssessment } from '../../utils/aapClient';
+import { test, expect, APIRequestContext } from '@playwright/test';
+import { BASE_URL, createAssessment, getToken, queryAssessment } from '../../utils/aapClient';
 
 interface AssessmentQueryResponse {
   queries: {
@@ -26,9 +26,27 @@ interface AssessmentQueryResponse {
   }[];
 }
 
-test('create and query AAP assessment', async ({ request }) => {
+// Request context is reused by all tests in the file.
+let apiContext: APIRequestContext;
+
+test.beforeAll(async ({ playwright }) => {
+  apiContext = await playwright.request.newContext({
+    baseURL: BASE_URL,
+    extraHTTPHeaders: {
+      Authorization: `Bearer ${getToken()}`,
+      'Content-Type': 'application/json',
+    },
+  });
+});
+
+test.afterAll(async () => {
+  // Dispose all responses.
+  await apiContext.dispose();
+});
+
+test('create and query AAP assessment', async () => {
   const assessmentUuid = await test.step('Assert created AAP assessment', async () => {
-    const createResponse = await createAssessment(request);
+    const createResponse = await createAssessment(apiContext);
     expect(createResponse).toBeTruthy();
     expect(createResponse.commands?.length).toBeGreaterThan(0);
 
@@ -50,7 +68,7 @@ test('create and query AAP assessment', async ({ request }) => {
   });
 
   await test.step('Query the created assessment', async () => {
-    const queryResponse = (await queryAssessment(request, assessmentUuid)) as AssessmentQueryResponse;
+    const queryResponse = (await queryAssessment(apiContext, assessmentUuid)) as AssessmentQueryResponse;
 
     expect(queryResponse).toBeTruthy();
     expect(queryResponse.queries?.length).toBeGreaterThan(0);
