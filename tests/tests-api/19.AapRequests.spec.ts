@@ -26,7 +26,6 @@ interface AssessmentQueryResponse {
   }[];
 }
 
-// Request context is reused by all tests in the file.
 let apiContext: APIRequestContext;
 
 test.beforeAll(async ({ playwright }) => {
@@ -40,7 +39,6 @@ test.beforeAll(async ({ playwright }) => {
 });
 
 test.afterAll(async () => {
-  // Dispose all responses.
   await apiContext.dispose();
 });
 
