@@ -1,0 +1,32 @@
+name: Playwright Tests
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on:
+      labels: moj-cloud-platform
+    steps:
+      - uses: actions/checkout@v6
+      - name: Build docker images
+        run: docker build -t hmpps-arns-integrations-test-playwright .
+      - name: Run Playwright tests
+        id: playwright-tests
+        run: | 
+          docker run hmpps-arns-integrations-test-playwright --net=host
+          -e ORACLE_DB_USER=${{ secrets.ORACLE_DB_USER }}
+          -e ORACLE_DB_USER=${{ secrets.ORACLE_DB_USER }}
+          -e ORACLE_DB_PASSWORD=${{ secrets.ORACLE_DB_PASSWORD }}
+          -e ORACLE_DB_CONNECT_STRING=${{ secrets.ORACLE_DB_CONNECT_STRING }}
+          -e SP_CLIENT_ID=${{ secrets.SP_CLIENT_ID }}
+          -e SP_CLIENT_SECRET=${{ secrets.SP_CLIENT_SECRET }}
+          -e AAP_CLIENT_ID=${{ secrets.AAP_CLIENT_ID }}
+          -e AAP_CLIENT_SECRET=${{ secrets.AAP_CLIENT_SECRET }}
+          -e DELIUS_URL=https://ndelius.test.probation.service.justice.gov.uk
+          -e TOKEN_URL=${{ secrets.TOKEN_URL }}
+          -e DELIUS_USERNAME=${{ secrets.E2E_DELIUS_USERNAME }}
+          -e DELIUS_PASSWORD=${{ secrets.E2E_DELIUS_PASSWORD }}
+      # - name: Publish Test Summary
+      #   uses: ctrf-io/github-test-reporter@v1
+      #   with:
+      #     report-path: 'ctrf/ctrf-report.json'
+      #   if: always()

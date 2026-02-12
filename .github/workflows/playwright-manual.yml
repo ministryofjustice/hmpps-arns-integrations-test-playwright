@@ -1,0 +1,9 @@
+name: Playwright Tests PR
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Docker Integration tests
+    uses: ./.github/workflows/playwright-docker.yml
+    secrets: inherit
