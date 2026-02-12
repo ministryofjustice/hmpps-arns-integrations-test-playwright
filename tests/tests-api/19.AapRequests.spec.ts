@@ -1,30 +1,5 @@
 import { test, expect, APIRequestContext } from '@playwright/test';
-import { BASE_URL, createAssessment, getToken, queryAssessment } from '../../utils/aapClient';
-
-interface AssessmentQueryResponse {
-  queries: {
-    request: {
-      type: 'AssessmentVersionQuery';
-      user: { id: string; name: string };
-      assessmentIdentifier: { type: string; uuid: string };
-      timestamp: string | null;
-    };
-    result: {
-      type: 'AssessmentVersionQueryResult';
-      assessmentUuid: string;
-      aggregateUuid: string;
-      assessmentType: string;
-      formVersion: string;
-      createdAt: string;
-      updatedAt: string;
-      answers: Record<string, any>;
-      properties: string;
-      collections: any[];
-      collaborators: { id: string; name: string }[];
-      identifiers: string;
-    };
-  }[];
-}
+import { AssessmentQueryResponse, BASE_URL, createAssessment, getToken, queryAssessment } from '../../utils/aapClient';
 
 let apiContext: APIRequestContext;
 
