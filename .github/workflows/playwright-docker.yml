@@ -1,5 +1,8 @@
 name: Playwright Tests Docker
 
+on:
+   pull_request:
+
 jobs:
   test:
     timeout-minutes: 60
