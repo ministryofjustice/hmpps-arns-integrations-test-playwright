@@ -13,14 +13,14 @@ export class SentencePlanV2Page {
 
   constructor(page: Page) {
     this.page = page;
-    this.viewPreviousVersions = this.page.getByRole('link', { name: 'View previous versions' });
-    this.previousVersionsHeading = this.page.getByRole('heading', { name: 'Previous versions' });
-    this.update = this.page.getByRole('link', { name: 'Update' });
-    this.changeGoalDetails = this.page.getByRole('link', { name: 'Change goal details' });
-    this.goalInput = this.page.getByRole('textbox', { name: 'What goal should' });
-    this.saveGoal = this.page.getByRole('button', { name: 'Save goal' });
-    this.saveGoalAndSteps = this.page.getByRole('button', { name: 'Save goal and steps' });
-    this.viewPlan = this.page.getByRole('link', { name: 'View   plan' }).first();
+    this.viewPreviousVersions = page.getByRole('link', { name: 'View previous versions' });
+    this.previousVersionsHeading = page.getByRole('heading', { name: 'Previous versions' });
+    this.update = page.getByRole('link', { name: 'Update' });
+    this.changeGoalDetails = page.getByRole('link', { name: 'Change goal details' });
+    this.goalInput = page.getByRole('textbox', { name: 'What goal should' });
+    this.saveGoal = page.getByRole('button', { name: 'Save goal' });
+    this.saveGoalAndSteps = page.getByRole('button', { name: 'Save goal and steps' });
+    this.viewPlan = page.getByRole('link', { name: 'View   plan' }).first();
   }
 
   async viewPreviousVersion(context: BrowserContext): Promise<Page> {
