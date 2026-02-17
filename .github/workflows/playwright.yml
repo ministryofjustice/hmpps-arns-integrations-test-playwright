@@ -59,6 +59,7 @@ jobs:
           payload: |
             {
               "channel": "${{ env.SLACK_CHANNEL }}",
+              "text": "🚨 Integration Playwright Tests Failed",
               "attachments": [
                {
                  "color": "#FF0000",
