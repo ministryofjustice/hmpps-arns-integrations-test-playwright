@@ -8,8 +8,7 @@ on:
 jobs:
   aggregate_logic_test:
     name: Run Aggregate Test
-    runs-on:
-      labels: moj-cloud-platform
+    runs-on: [ self-hosted, hmpps-github-actions-runner ]
 
     steps:
       - name: Checkout code
