@@ -7,3 +7,4 @@ node_modules/
 .env
 token.json
 aapToken.json
+ctrf/ctrf-report.json

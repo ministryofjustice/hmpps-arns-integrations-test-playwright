@@ -6,8 +6,7 @@ on:
 jobs:
   load_test:
     name: Run k6 Load Test
-    runs-on:
-      labels: moj-cloud-platform
+    runs-on: [ self-hosted, hmpps-github-actions-runner ]
 
     steps:
       - name: Checkout code
