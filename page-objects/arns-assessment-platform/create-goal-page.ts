@@ -8,6 +8,8 @@ export class CreateGoalPage {
   readonly startWorkingOnThisGoalYes: Locator;
   readonly whenAimToAchieveGoal: Locator;
   readonly addSteps: Locator;
+  readonly viewInformation: Locator;
+  readonly employmentAndEducation: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -17,5 +19,7 @@ export class CreateGoalPage {
     this.startWorkingOnThisGoalYes = page.getByRole('group', { name: 'start working on this goal' }).getByLabel('Yes');
     this.whenAimToAchieveGoal = page.getByRole('radio', { name: 'In 3 months' });
     this.addSteps = page.getByRole('button', { name: 'Add Steps' });
+    this.viewInformation = page.locator('summary').filter({ hasText: 'View information' });
+    this.employmentAndEducation = page.getByRole('link', { name: 'Employment and education' });
   }
 }
