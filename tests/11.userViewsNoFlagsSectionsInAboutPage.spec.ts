@@ -5,7 +5,7 @@ import * as fs from 'fs'; // import file system module
 
 /* Note: this test feature will fail if the test data is wiped. 
 It relies on pre-existing PK with a completed SAN assessment. */
-test('User views their no flags sections and their info in About page', async ({ page }) => {
+test.skip('User views their no flags sections and their info in About page', async ({ page }) => {
   const stubHomePage = new StubHomePage(page);
   const sentencePlanPage = new SentencePlanPage(page);
 

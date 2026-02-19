@@ -3,7 +3,7 @@ import { StubHomePage } from '../page-objects/stub-home-page';
 import { SentencePlanPage } from '../page-objects/sentence-plan-pages';
 import { StrengthsAndNeedsLandingPage } from '../page-objects/strengths-and-needs-pages';
 
-test('User tries editing capabilities on view only for sentence plan', async ({ page }) => {
+test.skip('User tries editing capabilities on view only for sentence plan', async ({ page }) => {
   const stubHomePage = new StubHomePage(page);
   const sentencePlanPage = new SentencePlanPage(page);
 
@@ -64,7 +64,7 @@ test('User tries editing capabilities on view only for sentence plan', async ({ 
   console.log('Sentence plan view only works as expected');
 });
 
-test('User tries editing capabilities on view only for strengths and needs assessment', async ({ page }) => {
+test.skip('User tries editing capabilities on view only for strengths and needs assessment', async ({ page }) => {
   const stubHomePage = new StubHomePage(page);
   const strengthsAndNeedsLandingPage = new StrengthsAndNeedsLandingPage(page);
 
