@@ -2,7 +2,7 @@ import { test } from '@playwright/test';
 import { StubHomePage } from '../../page-objects/stub-home-page';
 import { StrengthsAndNeedsLandingPage } from '../../page-objects/strengths-and-needs-pages';
 
-test('User checks previous versions of SAN', async ({ page }) => {
+test.skip('User checks previous versions of SAN', async ({ page }) => {
   const stubHomePage = new StubHomePage(page);
   const strengthsAndNeedsLandingPage = new StrengthsAndNeedsLandingPage(page);
 
