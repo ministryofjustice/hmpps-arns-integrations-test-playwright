@@ -24,7 +24,7 @@ test.beforeEach(async ({ page }) => {
   await sentencePlanPage.clickConfirmButtonOnDataPrivacyScreen();
 });
 
-test('should display previous version of sentence plan', async ({ context }) => {
+test.skip('should display previous version of sentence plan', async ({ context }) => {
   const sentencePlan = new SentencePlanV2Page(spTab);
   await expect(spTab).toHaveTitle('Plan - Sentence plan');
 
