@@ -1,16 +1,20 @@
+interface Timeline {
+  type: string;
+  data: Record<string, any>;
+}
+
+interface User {
+  id: string;
+  name: string;
+}
+
 export interface CreateAssessmentResult {
   commands: {
     request: {
       type: 'CreateAssessmentCommand';
       formVersion: string;
-      timeline?: {
-        type: string;
-        data: Record<string, any>;
-      };
-      user: {
-        id: string;
-        name: string;
-      };
+      timeline?: Timeline;
+      user: User;
     };
     result: {
       type: 'CreateAssessmentCommandResult';
@@ -21,11 +25,45 @@ export interface CreateAssessmentResult {
   }[];
 }
 
+export interface CreateCollectionResult {
+  commands: {
+    request: {
+      type: 'CreateCollectionCommand';
+      formVersion: string;
+      timeline?: Timeline;
+      user: User;
+    };
+    result: {
+      type: 'CreateCollectionCommandResult';
+      collectionUuid: string;
+      message: string;
+      success: boolean;
+    };
+  }[];
+}
+
+export interface AddCollectionItemCommandResult {
+  commands: {
+    request: {
+      type: 'AddCollectionItemCommand';
+      formVersion: string;
+      timeline?: Timeline;
+      user: User;
+    };
+    result: {
+      type: 'AddCollectionItemCommandResult';
+      collectionItemUuid: string;
+      message: string;
+      success: boolean;
+    };
+  }[];
+}
+
 export interface AssessmentQueryResponse {
   queries: {
     request: {
       type: 'AssessmentVersionQuery';
-      user: { id: string; name: string };
+      user: User;
       assessmentIdentifier: { type: string; uuid: string };
       timestamp: string | null;
     };
