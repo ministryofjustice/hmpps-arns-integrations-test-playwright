@@ -1,24 +1,22 @@
 import { APIRequestContext, APIResponse } from '@playwright/test';
-import fs from 'fs';
-import { CreateAssessmentResult } from './aap/assessmentTypes';
-
-export const BASE_URL = 'https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk';
+import { CreateAssessmentResult } from './assessmentTypes';
 
 export const crn = Math.random().toString().substring(2, 7);
 
-export const getToken = () => {
-  return JSON.parse(fs.readFileSync('utils/aapToken.json', 'utf8')).access_token;
-};
-
-export async function createAssessment(request: APIRequestContext): Promise<CreateAssessmentResult> {
+export async function createAssessmentSP(request: APIRequestContext): Promise<CreateAssessmentResult> {
   const response: APIResponse = await request.post('/command', {
     data: {
       commands: [
         {
           type: 'CreateAssessmentCommand',
-          assessmentType: 'TEST',
+          assessmentType: 'SENTENCE_PLAN',
           formVersion: '1.0',
-          properties: {},
+          properties: {
+            AGREEMENT_STATUS: { type: 'Single', value: 'DRAFT' },
+            AGREEMENT_DATE: { type: 'Single', value: '' },
+            AGREEMENT_NOTES: { type: 'Single', value: '' },
+            PLAN_TYPE: { type: 'Single', value: 'INITIAL' },
+          },
           user: { id: 'test-user', name: 'Test User' },
           identifiers: {
             CRN: crn,
@@ -42,22 +40,25 @@ export async function createAssessment(request: APIRequestContext): Promise<Crea
   return body; // Return full API response
 }
 
-export async function queryAssessment(request: APIRequestContext, assessmentUuid: string) {
-  const response = await request.post('/query', {
+export async function createGoalsCollection(request: APIRequestContext, assessmentUuid: string) {
+  const response: APIResponse = await request.post('/command', {
     data: {
-      queries: [
+      commands: [
         {
-          type: 'AssessmentVersionQuery',
+          type: 'CreateCollectionCommand',
+          name: 'GOALS',
+          assessmentUuid: assessmentUuid,
           user: { id: 'test-user', name: 'Test User' },
-          assessmentIdentifier: { type: 'UUID', uuid: assessmentUuid },
+          identifiers: {
+            CRN: crn,
+          },
+          flags: ['SAN_BETA'],
         },
       ],
     },
   });
 
   if (!response.ok()) {
-    throw new Error(`QueryAssessment failed: ${response.status()} ${response.statusText()}`);
+    throw new Error(`CreateAssessment failed: ${response.status()} ${response.statusText()}`);
   }
-
-  return response.json();
 }
