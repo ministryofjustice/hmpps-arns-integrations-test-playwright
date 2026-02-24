@@ -7,3 +7,5 @@ jobs:
     name: Integration tests
     uses: ./.github/workflows/playwright.yml
     secrets: inherit
+    with:
+      environment: test

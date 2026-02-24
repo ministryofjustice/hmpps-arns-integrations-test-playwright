@@ -1,9 +1,10 @@
-import { expect, test } from '@playwright/test';
-import { TrainingLauncherPage } from '../../page-objects/arns-assessment-platform/training-launcher-page';
-import { PrivacyPage } from '../../page-objects/arns-assessment-platform/privacy-page';
-import { SentencePlanPage } from '../../page-objects/arns-assessment-platform/sentence-plan-page';
-import { CreateGoalPage } from '../../page-objects/arns-assessment-platform/create-goal-page';
-import { AddStepsPage } from '../../page-objects/arns-assessment-platform/add-steps-page';
+import { APIRequestContext, expect, test } from '@playwright/test';
+import { TrainingLauncherPage } from '../../../page-objects/arns-assessment-platform/training-launcher-page';
+import { PrivacyPage } from '../../../page-objects/arns-assessment-platform/privacy-page';
+import { SentencePlanPage } from '../../../page-objects/arns-assessment-platform/sentence-plan-page';
+import { CreateGoalPage } from '../../../page-objects/arns-assessment-platform/create-goal-page';
+import { AddStepsPage } from '../../../page-objects/arns-assessment-platform/add-steps-page';
+import { getBaseUrl, getToken, queryAssessment } from '../../../utils/aapClient';
 
 test.describe('National rollout', () => {
   test.beforeEach(async ({ page }) => {
@@ -40,6 +41,22 @@ test.describe('National rollout', () => {
   });
 });
 
+let apiContext: APIRequestContext;
+
+test.beforeAll(async ({ playwright, baseURL }) => {
+  apiContext = await playwright.request.newContext({
+    baseURL: getBaseUrl(baseURL),
+    extraHTTPHeaders: {
+      Authorization: `Bearer ${getToken()}`,
+      'Content-Type': 'application/json',
+    },
+  });
+});
+
+test.afterAll(async () => {
+  await apiContext.dispose();
+});
+
 test.describe('Private beta', () => {
   test.beforeEach(async ({ page }) => {
     const trainingLauncher = new TrainingLauncherPage(page);
@@ -51,6 +68,9 @@ test.describe('Private beta', () => {
     await privacy.confirmPrivacy.click();
     await privacy.confirm.click();
     await expect(page).toHaveTitle('Plan - Sentence plan');
+    const info = await page.locator('pre').textContent();
+    const assessmentId = info.substring(info.lastIndexOf('Assessment ID:'), info.indexOf('OASys PK:')).substring(14);
+    await queryAssessment(apiContext, assessmentId);
   });
 
   test('should create goal and steps as private beta user', async ({ page }) => {

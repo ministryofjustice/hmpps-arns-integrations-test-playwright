@@ -1,13 +1,12 @@
 import { test, expect, APIRequestContext } from '@playwright/test';
-import { BASE_URL, getToken, queryAssessment } from '../../utils/aapClient';
-import { createAssessmentSP, createGoalsCollection } from '../../utils/aap/sentencePlanCommands';
-import { AssessmentQueryResponse } from '../../utils/aap/assessmentTypes';
+import { createAssessment, getBaseUrl, getToken, queryAssessment } from '../../../../utils/aapClient';
+import { AssessmentQueryResponse } from '../../../../utils/aap/assessmentTypes';
 
 let apiContext: APIRequestContext;
 
-test.beforeAll(async ({ playwright }) => {
+test.beforeAll(async ({ playwright, baseURL }) => {
   apiContext = await playwright.request.newContext({
-    baseURL: BASE_URL,
+    baseURL: getBaseUrl(baseURL),
     extraHTTPHeaders: {
       Authorization: `Bearer ${getToken()}`,
       'Content-Type': 'application/json',
@@ -19,9 +18,9 @@ test.afterAll(async () => {
   await apiContext.dispose();
 });
 
-test('create and query AAP sentence plan', async () => {
-  const spAssessmentUuid = await test.step('Assert created AAP sentence plan', async () => {
-    const createResponse = await createAssessmentSP(apiContext);
+test('create and query AAP assessment', async () => {
+  const assessmentUuid = await test.step('Assert created AAP assessment', async () => {
+    const createResponse = await createAssessment(apiContext);
     expect(createResponse).toBeTruthy();
     expect(createResponse.commands?.length).toBeGreaterThan(0);
 
@@ -42,12 +41,8 @@ test('create and query AAP sentence plan', async () => {
     return result.assessmentUuid;
   });
 
-  await test.step('Create goals', async () => {
-    await createGoalsCollection(apiContext, spAssessmentUuid);
-  });
-
-  await test.step('Query the created sentence plan', async () => {
-    const queryResponse = (await queryAssessment(apiContext, spAssessmentUuid)) as AssessmentQueryResponse;
+  await test.step('Query the created assessment', async () => {
+    const queryResponse = (await queryAssessment(apiContext, assessmentUuid)) as AssessmentQueryResponse;
 
     expect(queryResponse).toBeTruthy();
     expect(queryResponse.queries?.length).toBeGreaterThan(0);
@@ -56,7 +51,7 @@ test('create and query AAP sentence plan', async () => {
     expect(query).toBeTruthy();
     expect(query.request.type).toBe('AssessmentVersionQuery');
     expect(query.request.assessmentIdentifier.type).toBe('UUID');
-    expect(query.request.assessmentIdentifier.uuid).toBe(spAssessmentUuid);
+    expect(query.request.assessmentIdentifier.uuid).toBe(assessmentUuid);
 
     const queryResult = query.result;
     expect(queryResult.type).toBe('AssessmentVersionQueryResult');
@@ -66,15 +61,11 @@ test('create and query AAP sentence plan', async () => {
     expect(queryResult.updatedAt).toBeDefined();
     expect(queryResult.collections).toBeDefined();
     expect(queryResult.properties).toBeDefined();
-    expect(queryResult.properties).toEqual(
-      expect.objectContaining({
-        PLAN_TYPE: {
-          type: 'Single',
-          value: 'INITIAL',
-        },
-      })
-    );
     expect(queryResult.identifiers).toBeDefined();
-    expect(queryResult.assessmentUuid).toBe(spAssessmentUuid);
+    expect(queryResult).toHaveProperty('answers');
+    expect(queryResult).toHaveProperty('collaborators');
+    expect(queryResult.assessmentUuid).toBe(assessmentUuid);
+    expect(queryResult.aggregateUuid).toBeDefined();
+    expect(Array.isArray(queryResult.collaborators)).toBe(true);
   });
 });

@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
-import { StubHomePage } from '../../page-objects/stub-home-page';
-import { StrengthsAndNeedsLandingPage } from '../../page-objects/strengths-and-needs-pages';
+import { StubHomePage } from '../../../page-objects/oastub-archive/stub-home-page';
+import { StrengthsAndNeedsLandingPage } from '../../../page-objects/oastub-archive/strengths-and-needs-pages';
 
 test.skip('User checks previous versions of SAN', async ({ page }) => {
   const stubHomePage = new StubHomePage(page);
