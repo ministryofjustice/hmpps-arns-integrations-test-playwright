@@ -7,7 +7,7 @@
     "dev:ci": "playwright test --project=chromium",
     "dev:ui": "playwright test --project=chromium --ui",
     "test:ui": "playwright test --config=playwright.test.config.ts --project=chromium --ui",
-    "test:ci": "playwright test --config=playwright.test.config.ts",
+    "test:ci": "playwright test --config=playwright.test.config.ts --project=chromium",
     "lint": "eslint tests/** page-objects/**",
     "lint:fix": "eslint tests/** page-objects/** utils/** --fix",
     "prettier": "prettier . --check",
