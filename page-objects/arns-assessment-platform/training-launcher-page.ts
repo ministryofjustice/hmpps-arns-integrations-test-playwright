@@ -13,6 +13,7 @@ export class TrainingLauncherPage {
   readonly customise: Locator;
   readonly createSession: Locator;
   readonly privateBeta: Locator;
+  readonly targetService: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -27,6 +28,7 @@ export class TrainingLauncherPage {
     this.customise = page.getByRole('button', { name: 'Customize scenario' });
     this.createSession = page.getByRole('button', { name: 'Create session' });
     this.privateBeta = page.getByRole('checkbox', { name: 'SAN Private Beta' });
+    this.targetService = page.locator('[name="targetApplication"]');
   }
 
   goto = async (scenario: string = 'default') => {
@@ -60,5 +62,12 @@ export class TrainingLauncherPage {
     await this.randomOASysPk.click();
     await this.oasysPk.fill(oasysPk);
     await this.createSession.click();
+  };
+
+  startPrivateBetaSAN = async () => {
+    await this.goto('sp-private-beta');
+    await this.startSession.click();
+    await this.targetService.selectOption('strengths-and-needs');
+    await this.generateLink.click();
   };
 }
