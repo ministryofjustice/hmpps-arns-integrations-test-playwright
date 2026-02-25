@@ -18,7 +18,7 @@ test.describe('Private beta', () => {
     await expect(page).toHaveTitle('Accommodation - Strengths and needs');
   });
 
-  test('user completes a strengths and needs assessments', async ({ page }) => {
+  test('complete a strengths and needs assessment', async ({ page }) => {
     const strengthsAndNeedsPage = new StrengthsAndNeedsPage(page);
 
     await strengthsAndNeedsPage.completeAccomodation();
