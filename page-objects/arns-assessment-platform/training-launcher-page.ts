@@ -1,7 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test';
 
 export class TrainingLauncherPage {
-  readonly baseUrl: string = 'https://arns-assessment-platform-test.hmpps.service.justice.gov.uk';
   readonly page: Page;
   readonly startSession: Locator;
   readonly generateLink: Locator;
@@ -31,7 +30,7 @@ export class TrainingLauncherPage {
   }
 
   goto = async (scenario: string = 'default') => {
-    await this.page.goto(`${this.baseUrl}/training-session-launcher/browse?scenario=${scenario}`);
+    await this.page.goto(`/training-session-launcher/browse?scenario=${scenario}`);
     await expect(this.page).toHaveTitle('Assess and plan');
     await expect(this.page.getByRole('heading', { name: 'Select a scenario' })).toBeVisible();
   };

@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
-import { StubHomePage } from '../page-objects/stub-home-page';
-import { SentencePlanPage } from '../page-objects/sentence-plan-pages';
+import { StubHomePage } from '../../page-objects/oastub-archive/stub-home-page';
+import { SentencePlanPage } from '../../page-objects/oastub-archive/sentence-plan-pages';
 import * as fs from 'fs'; // import file system module
 
 /* Use API to setup SAN assessment */

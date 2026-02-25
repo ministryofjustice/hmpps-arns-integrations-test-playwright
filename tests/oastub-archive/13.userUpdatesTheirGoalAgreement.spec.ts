@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
-import { StubHomePage } from '../page-objects/stub-home-page';
-import { SentencePlanPage } from '../page-objects/sentence-plan-pages';
-import { Accessibility } from '../page-objects/accessibility';
+import { StubHomePage } from '../../page-objects/oastub-archive/stub-home-page';
+import { SentencePlanPage } from '../../page-objects/oastub-archive/sentence-plan-pages';
+import { Accessibility } from '../../page-objects/oastub-archive/accessibility';
 
 test('user updates their goal agreement', async ({ page }) => {
   const stubHomePage = new StubHomePage(page);

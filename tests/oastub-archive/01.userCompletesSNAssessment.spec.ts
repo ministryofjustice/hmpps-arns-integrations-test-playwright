@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
-import { StubHomePage } from '../page-objects/stub-home-page';
-import { StrengthsAndNeedsLandingPage } from '../page-objects/strengths-and-needs-pages';
-import { Accessibility } from '../page-objects/accessibility';
+import { StubHomePage } from '../../page-objects/oastub-archive/stub-home-page';
+import { StrengthsAndNeedsLandingPage } from '../../page-objects/oastub-archive/strengths-and-needs-pages';
+import { Accessibility } from '../../page-objects/oastub-archive/accessibility';
 
 test('user completes a strengths and needs assessments', async ({ page }) => {
   const stubHomePage = new StubHomePage(page);
