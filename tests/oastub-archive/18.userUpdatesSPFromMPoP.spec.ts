@@ -1,8 +1,9 @@
 import { test } from '@playwright/test';
-import { MpopPages } from '../page-objects/mpop-pages';
-import { SentencePlanPage } from '../page-objects/sentence-plan-pages';
+import { MpopPages } from '../../page-objects/oastub-archive/mpop-pages';
+import { SentencePlanPage } from '../../page-objects/oastub-archive/sentence-plan-pages';
 
-test.skip('user updates a sentence plan from mpop', async ({ page }) => {
+// CRN: X961096
+test('user updates a sentence plan from mpop', async ({ page }) => {
   const mpopPages = new MpopPages(page);
   const sentencePlanPage = new SentencePlanPage(page);
 

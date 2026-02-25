@@ -7,6 +7,11 @@ on:
         required: false
         default: 'NO_SLACK'
         type: string
+      environment:
+        description: 'Environment to run tests'
+        required: false
+        default: 'dev'
+        type: string
 
 jobs:
   test:
@@ -23,7 +28,7 @@ jobs:
         run: npx playwright install
       - name: Run Playwright tests
         id: playwright-tests
-        run: npm run test:ci
+        run: npm run ${{ inputs.environment }}:ci
         env:
           ORACLE_DB_USER: ${{ secrets.ORACLE_DB_USER }}
           ORACLE_DB_PASSWORD: ${{ secrets.ORACLE_DB_PASSWORD }}

@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
-import { TrainingLauncherPage } from '../../page-objects/arns-assessment-platform/training-launcher-page';
-import { PrivacyPage } from '../../page-objects/arns-assessment-platform/privacy-page';
-import { SentencePlanPage } from '../../page-objects/arns-assessment-platform/sentence-plan-page';
-import { CreateGoalPage } from '../../page-objects/arns-assessment-platform/create-goal-page';
+import { TrainingLauncherPage } from '../../../page-objects/arns-assessment-platform/training-launcher-page';
+import { PrivacyPage } from '../../../page-objects/arns-assessment-platform/privacy-page';
+import { SentencePlanPage } from '../../../page-objects/arns-assessment-platform/sentence-plan-page';
+import { CreateGoalPage } from '../../../page-objects/arns-assessment-platform/create-goal-page';
 
 test.beforeEach(async ({ page }) => {
   const trainingLauncher = new TrainingLauncherPage(page);

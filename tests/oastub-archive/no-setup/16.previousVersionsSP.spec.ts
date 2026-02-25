@@ -1,7 +1,7 @@
 import { expect, Page, test } from '@playwright/test';
-import { StubHomePage } from '../../page-objects/stub-home-page';
-import { SentencePlanPage } from '../../page-objects/sentence-plan-pages';
-import { SentencePlanV2Page } from '../../page-objects/sentence-plan-pages.v2';
+import { StubHomePage } from '../../../page-objects/oastub-archive/stub-home-page';
+import { SentencePlanPage } from '../../../page-objects/oastub-archive/sentence-plan-pages';
+import { SentencePlanV2Page } from '../../../page-objects/oastub-archive/sentence-plan-pages.v2';
 
 let spTab: Page;
 
