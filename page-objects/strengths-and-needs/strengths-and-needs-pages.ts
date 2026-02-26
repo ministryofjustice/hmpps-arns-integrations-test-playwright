@@ -58,7 +58,7 @@ export class StrengthsAndNeedsPage {
     await this.homeowner.check();
     await this.saveAndContinue.click();
     await this.livingWith.check();
-    await this.suitableHousing.check();
+    await this.suitableHousingLocation.check();
     await this.suitableHousing.check();
     await this.accommodationChanges.check();
     await this.saveAndContinue.click();
