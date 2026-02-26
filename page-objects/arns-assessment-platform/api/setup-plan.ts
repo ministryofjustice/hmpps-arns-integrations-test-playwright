@@ -8,7 +8,11 @@ import {
 
 export const createGoalAndStep = async (page: Page, apiContext: APIRequestContext): Promise<string> => {
   const info = await page.locator('pre').textContent();
-  const assessmentId = info.substring(info.lastIndexOf('Assessment ID:'), info.indexOf('OASys PK:')).substring(14);
+  const assessmentId = info
+    .substring(info.lastIndexOf('Assessment ID:'), info.indexOf('OASys PK:'))
+    .substring(14)
+    .replace('/n', '')
+    .trim();
 
   const goalsCollectionUuid = await createGoalsCollection(apiContext, assessmentId);
   const goalUuid = await createGoal(apiContext, assessmentId, goalsCollectionUuid);
