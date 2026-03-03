@@ -33,7 +33,7 @@ jobs:
           MIN_THINK_TIME: "1"
           MAX_THINK_TIME: "5"
           
-          VUS: "10"
+          VUS: "1000"
           DURATION: "5m"
 
           P95_THRESHOLD: "600" 
