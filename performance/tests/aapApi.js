@@ -9,7 +9,7 @@ import { b64encode } from "k6/encoding";
 const MIN_THINK = __ENV.MIN_THINK_TIME ? parseInt(__ENV.MIN_THINK_TIME) : 1;
 const MAX_THINK = __ENV.MAX_THINK_TIME ? parseInt(__ENV.MAX_THINK_TIME) : 5;
 
-function simulateThinkingTime() {
+export function simulateThinkingTime() {
   const range = MAX_THINK - MIN_THINK;
   sleep(MIN_THINK + Math.random() * range);
 }
@@ -99,7 +99,7 @@ function fetchNewToken() {
   return body.access_token;
 }
 
-export function setup() {
+export function apiSetup() {
   console.log("Starting AAP initial authentication check...");
   const token = fetchNewToken();
   console.log("Initial AAP Token retrieved successfully");
@@ -112,7 +112,7 @@ let tokenExpiry = 0;
 
 // --- DEFAULT FUNCTION ---
 
-export default function (data) {
+export function apiJourney (data) {
   const now = Date.now();
 
   // 1. Initialize Token on First Run
