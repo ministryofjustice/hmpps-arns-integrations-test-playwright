@@ -33,7 +33,8 @@ jobs:
           K6_BROWSER_EXECUTABLE_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           K6_BROWSER_ENABLED: "true"
           K6_BROWSER_HEADLESS: "true"
-          UI_DURATION: "18m"
+          K6_BROWSER_ARGS: "no-sandbox,disable-setuid-sandbox,disable-dev-shm-usage,disable-gpu"
+          UI_DURATION: "20m"
           
           AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
           AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}

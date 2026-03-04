@@ -1,5 +1,4 @@
 import { browser } from 'k6/browser';
-import { sleep } from 'k6';
 import { apiJourney, apiSetup, simulateThinkingTime } from './aapApi.js';
 
 export function setup() {
@@ -8,8 +7,8 @@ export function setup() {
 
 const P90_THRESHOLD = __ENV.P90_THRESHOLD ? parseInt(__ENV.P90_THRESHOLD) : 200;
 const P95_THRESHOLD = __ENV.P95_THRESHOLD ? parseInt(__ENV.P95_THRESHOLD) : 500;
-const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 5;
-const DURATION = __ENV.DURATION || "30s";
+const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 400;
+const DURATION = __ENV.DURATION || "20m";
 
 export const options = {
   thresholds: {
