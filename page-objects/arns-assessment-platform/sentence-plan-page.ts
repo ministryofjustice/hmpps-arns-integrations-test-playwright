@@ -14,9 +14,9 @@ export class SentencePlanPage {
   constructor(page: Page) {
     this.page = page;
     this.createGoal = page.getByRole('button', { name: 'Create goal' });
-    this.goalTitle = page.locator('[data-qa="goal-title"]');
+    this.goalTitle = page.locator('[data-qa="goal-title"]').first();
     this.header = page.locator('[data-qa="plan-header"]');
-    this.goalSummary = page.locator('[data-qa="goal-summary-card"]');
+    this.goalSummary = page.locator('[data-qa="goal-summary-card"]').first();
     this.agreePlan = page.getByRole('button', { name: 'Agree plan' });
     this.yesIAgree = page.getByRole('radio', { name: 'Yes, I agree' });
     this.save = page.getByRole('button', { name: 'Save' });
