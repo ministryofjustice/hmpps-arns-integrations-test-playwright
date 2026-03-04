@@ -1,6 +1,6 @@
 import { browser } from 'k6/browser';
 import { sleep } from 'k6';
-import { apiJourney, apiSetup } from './aapApi.js';
+import { apiJourney, apiSetup, simulateThinkingTime } from './aapApi.js';
 
 export function setup() {
   return apiSetup();
@@ -58,8 +58,8 @@ export async function runUi() {
     // todo
     // e.g., await page.locator('#login').click();
     
-    sleep(2); // Think time for UI
   } finally {
+    simulateThinkingTime();
     page.close();
   }
 }

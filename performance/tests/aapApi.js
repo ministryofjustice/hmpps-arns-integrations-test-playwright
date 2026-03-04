@@ -9,7 +9,7 @@ import { b64encode } from "k6/encoding";
 const MIN_THINK = __ENV.MIN_THINK_TIME ? parseInt(__ENV.MIN_THINK_TIME) : 1;
 const MAX_THINK = __ENV.MAX_THINK_TIME ? parseInt(__ENV.MAX_THINK_TIME) : 5;
 
-function simulateThinkingTime() {
+export function simulateThinkingTime() {
   const range = MAX_THINK - MIN_THINK;
   sleep(MIN_THINK + Math.random() * range);
 }

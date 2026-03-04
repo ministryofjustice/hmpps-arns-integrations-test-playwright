@@ -1,4 +1,4 @@
-name: K6 AAP Load Test 
+name: K6 AAP Hybrid Load Test 
 
 on:
   workflow_dispatch: # Manual trigger only
@@ -23,14 +23,14 @@ jobs:
           xk6 build --with github.com/grafana/xk6-dashboard@latest
 
       - name: Setup Chrome for k6
-        K6_BROWSER_EXECUTABLE_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         id: setup-chrome
         uses: browser-actions/setup-chrome@v1
         with:
           chrome-version: stable
 
-      - name: Run k6 AAP Load Test
+      - name: Run k6 AAP Hybrid Load Test
         env:
+          K6_BROWSER_EXECUTABLE_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           K6_BROWSER_ENABLED: "true"
           K6_BROWSER_HEADLESS: "true"
           UI_DURATION: "18m"
@@ -42,13 +42,12 @@ jobs:
           CUSTOM_STAGES: '[{"duration":"3m","target":300},{"duration":"10m","target":400},{"duration":"5m","target":0}]'
           
           MIN_THINK_TIME: "5"
-          MAX_THINK_TIME: "15"
+          MAX_THINK_TIME: "10"
 
           # Adjust thresholds for heavier load
           P95_THRESHOLD: "1000" 
           P90_THRESHOLD: "700"
           
-        # Pointing to the new hybrid test file
         run: ./k6 run performance/tests/aap-hybrid-load-performance-test.js --out web-dashboard=export=aap-load-report.html
 
       - name: Upload Load Test Report
