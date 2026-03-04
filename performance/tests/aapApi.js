@@ -99,7 +99,7 @@ function fetchNewToken() {
   return body.access_token;
 }
 
-export function setup() {
+export function apiSetup() {
   console.log("Starting AAP initial authentication check...");
   const token = fetchNewToken();
   console.log("Initial AAP Token retrieved successfully");
@@ -112,7 +112,7 @@ let tokenExpiry = 0;
 
 // --- DEFAULT FUNCTION ---
 
-export default function (data) {
+export function apiJourney (data) {
   const now = Date.now();
 
   // 1. Initialize Token on First Run
