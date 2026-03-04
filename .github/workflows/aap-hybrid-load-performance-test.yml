@@ -48,7 +48,7 @@ jobs:
           P95_THRESHOLD: "1000" 
           P90_THRESHOLD: "700"
           
-        run: ./k6 run performance/tests/aap-hybrid-load-performance-test.js --out web-dashboard=export=aap-load-report.html
+        run: ./k6 run performance/tests/aap-hybrid-load-performance-test.js --out web-dashboard=export=aap-hybrid-load-report.html
 
       - name: Upload Hybrid Load Test Report
         if: always()
