@@ -43,7 +43,7 @@ export function runApi(data) {
 }
 
 export async function runUi() {
-  const page = browser.newPage();
+  const page = await browser.newPage();
   
   try {
     //#region navigate to url
@@ -110,6 +110,6 @@ export async function runUi() {
     
   } finally {
     simulateThinkingTime();
-    page.close();
+    await page.close();
   }
 }
