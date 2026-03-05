@@ -47,12 +47,11 @@ export async function runUi() {
   
   try {
     //#region navigate to url
-    const baseUrl = __ENV.BASE_URL || 'https://arns-assessment-platform-dev.hmpps.service.justice.gov.uk';
+    const baseUrl = (__ENV.BASE_URL || 'https://arns-assessment-platform-dev.hmpps.service.justice.gov.uk').replace(/\/$/, '');
     const nationalRolloutPath = '/training-session-launcher/browse?scenario=sp-national-rollout';
-    const targetUrl = new URL(nationalRolloutPath, baseUrl).href;
     //#endregion
 
-    await page.goto(targetUrl);
+    await page.goto(`${baseUrl}${nationalRolloutPath}`);
     
     //#region UI journey
     await page.getByRole('button', { name: 'Start session' }).click();
