@@ -7,7 +7,7 @@ export function setup() {
 
 const P90_THRESHOLD = __ENV.P90_THRESHOLD ? parseInt(__ENV.P90_THRESHOLD) : 200;
 const P95_THRESHOLD = __ENV.P95_THRESHOLD ? parseInt(__ENV.P95_THRESHOLD) : 500;
-const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 400;
+const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 1500;
 const DURATION = __ENV.DURATION || "20m";
 
 export const options = {
