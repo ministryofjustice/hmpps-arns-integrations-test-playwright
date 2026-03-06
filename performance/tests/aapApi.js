@@ -288,3 +288,10 @@ export function apiJourney (data) {
 
   simulateThinkingTime();
 }
+export function setup() {
+  return apiSetup();
+}
+
+export default function (data) {
+  apiJourney(data);
+}
