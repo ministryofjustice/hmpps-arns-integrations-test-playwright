@@ -1,7 +1,7 @@
 import { Locator, Page } from '@playwright/test';
 import { MPOP_DEV_LINK } from './pages-common';
 
-const hmppsAuthUsername = process.env.DELIUS_USERNAME;
+const hmppsAuthUsername = process.env.MPOP_USERNAME;
 const hmppsAuthPassword = process.env.DELIUS_PASSWORD;
 
 export class MpopPages {

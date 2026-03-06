@@ -41,6 +41,7 @@ jobs:
           DELIUS_URL: https://ndelius.test.probation.service.justice.gov.uk
           TOKEN_URL: ${{ secrets.TOKEN_URL }}
           # Credentials
+          MPOP_USERNAME: ${{ secrets.E2E_MPOP_USERNAME }}
           DELIUS_USERNAME: ${{ secrets.E2E_DELIUS_USERNAME }}
           DELIUS_PASSWORD: ${{ secrets.E2E_DELIUS_PASSWORD }}
 
