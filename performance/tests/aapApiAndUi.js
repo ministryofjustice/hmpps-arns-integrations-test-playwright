@@ -1,5 +1,4 @@
 import { browser } from 'k6/browser';
-import { sleep } from 'k6';
 import { apiJourney, apiSetup, simulateThinkingTime } from './aapApi.js';
 
 export function setup() {
@@ -8,8 +7,8 @@ export function setup() {
 
 const P90_THRESHOLD = __ENV.P90_THRESHOLD ? parseInt(__ENV.P90_THRESHOLD) : 200;
 const P95_THRESHOLD = __ENV.P95_THRESHOLD ? parseInt(__ENV.P95_THRESHOLD) : 500;
-const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 5;
-const DURATION = __ENV.DURATION || "30s";
+const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 1500;
+const DURATION = __ENV.DURATION || "20m";
 
 export const options = {
   thresholds: {
@@ -44,16 +43,15 @@ export function runApi(data) {
 }
 
 export async function runUi() {
-  const page = browser.newPage();
+  const page = await browser.newPage();
   
   try {
     //#region navigate to url
-    const baseUrl = __ENV.BASE_URL || 'https://arns-assessment-platform-dev.hmpps.service.justice.gov.uk';
+    const baseUrl = (__ENV.BASE_URL || 'https://arns-assessment-platform-dev.hmpps.service.justice.gov.uk').replace(/\/$/, '');
     const nationalRolloutPath = '/training-session-launcher/browse?scenario=sp-national-rollout';
-    const targetUrl = new URL(nationalRolloutPath, baseUrl).href;
     //#endregion
 
-    await page.goto(targetUrl);
+    await page.goto(`${baseUrl}${nationalRolloutPath}`);
     
     //#region UI journey
     await page.getByRole('button', { name: 'Start session' }).click();
@@ -111,6 +109,6 @@ export async function runUi() {
     
   } finally {
     simulateThinkingTime();
-    page.close();
+    await page.close();
   }
 }

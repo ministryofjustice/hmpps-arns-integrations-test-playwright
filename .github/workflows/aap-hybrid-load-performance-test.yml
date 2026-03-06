@@ -33,13 +33,15 @@ jobs:
           K6_BROWSER_EXECUTABLE_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           K6_BROWSER_ENABLED: "true"
           K6_BROWSER_HEADLESS: "true"
-          UI_DURATION: "18m"
+          K6_BROWSER_ARGS: "no-sandbox,disable-setuid-sandbox,disable-dev-shm-usage,disable-gpu"
+          UI_DURATION: "20m" 
+          DURATION: "20m"
           
           AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
           AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
           TOKEN_URL: ${{ secrets.TOKEN_URL }}
           
-          CUSTOM_STAGES: '[{"duration":"3m","target":300},{"duration":"10m","target":400},{"duration":"5m","target":0}]'
+          CUSTOM_STAGES: '[{"duration":"5m","target":400},{"duration":"5m","target":800},{"duration":"5m","target":1200},{"duration":"5m","target":1600}]'
           
           MIN_THINK_TIME: "5"
           MAX_THINK_TIME: "10"
@@ -48,7 +50,7 @@ jobs:
           P95_THRESHOLD: "1000" 
           P90_THRESHOLD: "700"
           
-        run: ./k6 run performance/tests/aap-hybrid-load-performance-test.js --out web-dashboard=export=aap-hybrid-load-report.html
+        run: ./k6 run performance/tests/aapApiAndUi.js --out web-dashboard=export=aap-hybrid-load-report.html
 
       - name: Upload Hybrid Load Test Report
         if: always()
