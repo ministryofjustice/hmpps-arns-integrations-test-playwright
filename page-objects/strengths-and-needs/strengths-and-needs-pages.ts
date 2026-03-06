@@ -333,12 +333,17 @@ export class StrengthsAndNeedsPage {
     this.thinkingManipulativeBehaviour = page.locator(
       '#thinking_behaviours_attitudes_manipulative_predatory_behaviour'
     );
-    this.thinkingRiskSexualHarm = page.locator('#thinking_behaviours_attitudes_risk_sexual_harm-2');
-    this.thinkingSexualPreoccupation = page.locator('#thinking_behaviours_attitudes_sexual_preoccupation-3');
-    this.thinkingOffenceRelatedSexualInterest = page.locator(
-      '#thinking_behaviours_attitudes_offence_related_sexual_interest-3'
-    );
-    this.thinkingEmotionalIntimacy = page.locator('#thinking_behaviours_attitudes_emotional_intimacy-3');
+    this.thinkingRiskSexualHarm = page.getByRole('radio', { name: 'Yes' });
+
+    this.thinkingSexualPreoccupation = page
+      .getByRole('group', { name: 'shows sexual preoccupation' })
+      .getByLabel('Unknown');
+    this.thinkingOffenceRelatedSexualInterest = page
+      .getByRole('group', { name: 'offence-related sexual interests' })
+      .getByLabel('Unknown');
+    this.thinkingEmotionalIntimacy = page
+      .getByRole('group', { name: 'emotional intimacy with children' })
+      .getByLabel('Unknown');
     this.thinkingTemperManagement = page.locator('#thinking_behaviours_attitudes_temper_management');
     this.thinkingViolenceControllingBehaviour = page.locator(
       '#thinking_behaviours_attitudes_violence_controlling_behaviour'
@@ -572,6 +577,11 @@ export class StrengthsAndNeedsPage {
     await this.saveAndContinue.click();
 
     await this.thinkingRiskSexualHarm.check();
+    await this.saveAndContinue.click();
+
+    await this.thinkingSexualPreoccupation.check();
+    await this.thinkingOffenceRelatedSexualInterest.check();
+    await this.thinkingEmotionalIntimacy.check();
     await this.saveAndContinue.click();
 
     await this.practitionerAnalysis.click();
