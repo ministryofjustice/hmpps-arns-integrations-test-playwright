@@ -10,6 +10,8 @@ export class SentencePlanPage {
   readonly yesIAgree: Locator;
   readonly save: Locator;
   readonly planHistory: Locator;
+  readonly about: Locator;
+  readonly viewPreviousVersions: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -21,5 +23,7 @@ export class SentencePlanPage {
     this.yesIAgree = page.getByRole('radio', { name: 'Yes, I agree' });
     this.save = page.getByRole('button', { name: 'Save' });
     this.planHistory = page.getByRole('link', { name: 'View plan history' });
+    this.about = page.getByRole('link', { name: 'About' });
+    this.viewPreviousVersions = page.getByRole('link', { name: 'View previous versions' });
   }
 }
