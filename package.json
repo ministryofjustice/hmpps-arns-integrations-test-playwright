@@ -4,10 +4,10 @@
   "main": "index.js",
   "scripts": {
     "dev:api": "playwright test --config=playwright.api.config.ts",
-    "dev:ci": "playwright test --project=chromium",
+    "dev:ci": "playwright test --project=edge",
     "dev:ui": "playwright test --project=chromium --ui",
     "test:ui": "playwright test --config=playwright.test.config.ts --project=chromium --ui",
-    "test:ci": "playwright test --config=playwright.test.config.ts --project=chromium",
+    "test:ci": "playwright test --config=playwright.test.config.ts --project=edge",
     "lint": "eslint tests/** page-objects/**",
     "lint:fix": "eslint tests/** page-objects/** utils/** --fix",
     "prettier": "prettier . --check",
