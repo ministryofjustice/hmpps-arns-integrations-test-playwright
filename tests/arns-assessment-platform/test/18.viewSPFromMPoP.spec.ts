@@ -19,10 +19,13 @@ test.beforeEach(async ({ page }) => {
   await expect(page).toHaveTitle('Plan - Sentence plan');
 });
 
-test('should display goals and steps', async ({ page }) => {
+test('should display goals, steps and sentence information', async ({ page }) => {
   const sentencePlan = new SentencePlanPage(page);
 
   await expect(sentencePlan.header).toContainText(crn);
   await expect(sentencePlan.goalTitle).toContainText('I will work towards finding accommodation');
   await expect(sentencePlan.goalSummary).toContainText('Probation practitioner');
+
+  await sentencePlan.about.click();
+  await expect(page.getByText('Adult Custody < 12m')).toBeVisible();
 });

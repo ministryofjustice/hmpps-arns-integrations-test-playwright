@@ -3,6 +3,7 @@ import { TrainingLauncherPage } from '../../../page-objects/arns-assessment-plat
 import { PrivacyPage } from '../../../page-objects/arns-assessment-platform/privacy-page';
 import { SentencePlanPage } from '../../../page-objects/arns-assessment-platform/sentence-plan-page';
 import { CreateGoalPage } from '../../../page-objects/arns-assessment-platform/create-goal-page';
+import { AboutPage } from '../../../page-objects/arns-assessment-platform/about-page';
 
 test.beforeEach(async ({ page }) => {
   const trainingLauncher = new TrainingLauncherPage(page);
@@ -17,7 +18,7 @@ test.beforeEach(async ({ page }) => {
   await expect(page).toHaveTitle('Plan - Sentence plan');
 });
 
-test('should create goal and steps as private beta user', async ({ page }) => {
+test('should view Strengths and Needs assessment information as private beta user', async ({ page }) => {
   const sentencePlan = new SentencePlanPage(page);
   const createGoal = new CreateGoalPage(page);
 
@@ -29,4 +30,14 @@ test('should create goal and steps as private beta user', async ({ page }) => {
   await createGoal.employmentAndEducation.click();
   await createGoal.viewInformation.click();
   await expect(page.getByText('does not want to make changes.')).toBeVisible();
+});
+
+test('should view Strengths and Needs risks and needs scores as private beta user', async ({ page }) => {
+  const sentencePlan = new SentencePlanPage(page);
+  const about = new AboutPage(page);
+
+  await sentencePlan.about.click();
+  await about.alcoholUse.click();
+
+  await expect(about.assessmentInfoAndScore.filter({ hasText: 'did not have to answer' })).toHaveCount(2);
 });
