@@ -1,10 +1,6 @@
 import { APIRequestContext, Page } from '@playwright/test';
-import {
-  createGoal,
-  createGoalsCollection,
-  createStep,
-  createStepsCollection,
-} from '../../../utils/aap/sentencePlanCommands';
+import { createGoal, createGoalsCollection } from '../../../utils/aap/sentencePlan/goalsCommands';
+import { createStep, createStepsCollection } from '../../../utils/aap/sentencePlan/stepsCommands';
 
 export const createGoalAndStep = async (page: Page, apiContext: APIRequestContext): Promise<string> => {
   const info = await page.locator('pre').textContent();

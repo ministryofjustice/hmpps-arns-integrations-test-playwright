@@ -1,7 +1,8 @@
 import { test, expect, APIRequestContext } from '@playwright/test';
 import { getBaseUrl, getToken, queryAssessment } from '../../../../utils/aapClient';
-import { createAssessmentSP, createGoalsCollection } from '../../../../utils/aap/sentencePlanCommands';
-import { AssessmentQueryResponse } from '../../../../utils/aap/assessmentTypes';
+import { createGoalsCollection } from '../../../../utils/aap/sentencePlan/goalsCommands';
+import { AssessmentQueryResponse, CreateAssessmentResult } from '../../../../utils/aap/assessmentTypes';
+import { createAssessmentSP } from '../../../../utils/aap/sentencePlan/assessmentCommands';
 
 let apiContext: APIRequestContext;
 
@@ -20,8 +21,8 @@ test.afterAll(async () => {
 });
 
 test('create and query AAP sentence plan', async () => {
-  const spAssessmentUuid = await test.step('Assert created AAP sentence plan', async () => {
-    const createResponse = await createAssessmentSP(apiContext);
+  const spAssessmentUuid: string = await test.step('Assert created AAP sentence plan', async () => {
+    const createResponse: CreateAssessmentResult = await createAssessmentSP(apiContext);
     expect(createResponse).toBeTruthy();
     expect(createResponse.commands?.length).toBeGreaterThan(0);
 
@@ -47,7 +48,7 @@ test('create and query AAP sentence plan', async () => {
   });
 
   await test.step('Query the created sentence plan', async () => {
-    const queryResponse = (await queryAssessment(apiContext, spAssessmentUuid)) as AssessmentQueryResponse;
+    const queryResponse: AssessmentQueryResponse = await queryAssessment(apiContext, spAssessmentUuid);
 
     expect(queryResponse).toBeTruthy();
     expect(queryResponse.queries?.length).toBeGreaterThan(0);
