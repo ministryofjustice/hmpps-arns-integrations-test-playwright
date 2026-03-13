@@ -1,5 +1,5 @@
 import { test, expect, APIRequestContext } from '@playwright/test';
-import { getBaseUrl, getToken } from '../../../../utils/aapClient';
+import { getToken } from '../../../../utils/aapClient';
 import {
   createOasysAssociation,
   crn,
@@ -7,17 +7,17 @@ import {
   getCoordinatorUrl,
   getVersionDate,
 } from '../../../../utils/coordinator/coordinatorClient';
-import { updateAnswers } from '../../../../utils/aap/sentencePlan/assessmentCommands';
 import { PreviousVersionsResponse } from '../../../../utils/coordinator/coordinatorTypes';
-import { GroupCommandResult } from '../../../../utils/aap/assessmentTypes';
+import { getHandoverLink, getHandoverUrl } from '../../../../utils/handover/handoverClient';
+import { CreateHandoverLinkResponse } from '../../../../utils/handover/handoverTypes';
 
-let apiContext: APIRequestContext;
+let handoverContext: APIRequestContext;
 let coordinatorContext: APIRequestContext;
 const today = getVersionDate();
 
 test.beforeAll(async ({ playwright, baseURL }) => {
-  apiContext = await playwright.request.newContext({
-    baseURL: getBaseUrl(baseURL),
+  handoverContext = await playwright.request.newContext({
+    baseURL: getHandoverUrl(baseURL),
     extraHTTPHeaders: {
       Authorization: `Bearer ${getToken()}`,
       'Content-Type': 'application/json',
@@ -33,15 +33,14 @@ test.beforeAll(async ({ playwright, baseURL }) => {
 });
 
 test.afterAll(async () => {
-  await apiContext.dispose();
+  await handoverContext.dispose();
   await coordinatorContext.dispose();
 });
 
-let sentencePlanId: string;
 let planVersion: number;
 
 test.beforeEach(async () => {
-  sentencePlanId = await test.step('OAsys association', async () => {
+  const sentencePlanId: string = await test.step('OAsys association', async () => {
     const oasysResponse = await createOasysAssociation(coordinatorContext, crn);
     expect(oasysResponse).toBeTruthy();
 
@@ -59,19 +58,9 @@ test.beforeEach(async () => {
   });
 });
 
-test('Coordinator get previous versions', async () => {
-  await test.step('Update answers', async () => {
-    const updateResponse: GroupCommandResult = await updateAnswers(apiContext, sentencePlanId, crn);
+test('Get Handover link', async () => {
+  const handoverResponse: CreateHandoverLinkResponse = await getHandoverLink(handoverContext, planVersion);
 
-    expect(updateResponse).toBeTruthy();
-    expect(updateResponse.commands[0].result.success).toBeTruthy();
-  });
-
-  await test.step('Get plan versions', async () => {
-    const queryResponse: PreviousVersionsResponse = await entityVersions(coordinatorContext, sentencePlanId);
-
-    expect(queryResponse).toBeTruthy();
-    expect(queryResponse.allVersions[today].planVersion.status).toBe('UNSIGNED');
-    expect(queryResponse.allVersions[today].planVersion.version).not.toBe(planVersion);
-  });
+  expect(handoverResponse).toBeTruthy();
+  expect(handoverResponse.handoverLink).toContain('/handover/');
 });

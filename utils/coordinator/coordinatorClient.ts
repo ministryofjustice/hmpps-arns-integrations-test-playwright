@@ -9,9 +9,9 @@ export const getCoordinatorUrl = (baseUrl: string): string => {
 };
 
 export const crn = Math.random().toString().substring(2, 7);
+export const oasysPk = Math.floor(Math.random() * 1000000000).toString();
 
 export const createOasysAssociation = async (request: APIRequestContext, crn: string): Promise<OasysCreateResponse> => {
-  const oasysPk = Math.floor(Math.random() * 1000000000).toString();
   const create: OasysCreateRequest = {
     oasysAssessmentPk: oasysPk,
     planType: 'INITIAL',
