@@ -83,3 +83,63 @@ export interface AssessmentQueryResponse {
     };
   }[];
 }
+
+interface CommandTimeline {
+  type: string;
+  data: Record<string, any>;
+}
+
+export interface Command {
+  type: string;
+  timeline?: CommandTimeline;
+  user: User;
+  assessmentUuid: string;
+}
+
+export interface Answers {
+  [key: string]: Values;
+}
+
+export interface Value {
+  type: string;
+}
+
+export interface SingleValue extends Value {
+  type: 'Single';
+  value: string;
+}
+
+export interface MultiValue extends Value {
+  type: 'Multi';
+  values: string[];
+}
+
+export type Values = SingleValue | MultiValue;
+
+export type QuestionCodes = Array<string>;
+
+export interface UpdateAssessmentAnswersCommand extends Command {
+  type: 'UpdateAssessmentAnswersCommand';
+  added: Answers;
+  removed: QuestionCodes;
+}
+
+export interface CommandResult {
+  message: string;
+  success: boolean;
+  type: string;
+}
+
+export type Commands = UpdateAssessmentAnswersCommand;
+
+export type CommandResults = CommandResult | GroupCommandResult;
+
+export interface CommandResponse {
+  request: Commands;
+  result: CommandResults;
+}
+
+export interface GroupCommandResult extends CommandResult {
+  type: 'GroupCommandResult';
+  commands: CommandResponse[];
+}

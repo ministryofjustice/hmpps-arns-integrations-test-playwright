@@ -9,6 +9,6 @@ export default defineConfig({
   testDir: './tests/arns-assessment-platform/dev/api',
   globalSetup: require.resolve('./utils/global-setup.ts'),
   use: {
-    baseURL: process.env.BASE_URL || 'https://arns-assessment-platform-dev.hmpps.service.justice.gov.uk',
+    baseURL: process.env.BASE_URL || 'https://arns-assessment-platform-test.hmpps.service.justice.gov.uk',
   },
 });

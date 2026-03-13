@@ -4,6 +4,9 @@
   "main": "index.js",
   "scripts": {
     "dev:api": "playwright test --config=playwright.api.config.ts",
+    "dev:api:ui": "playwright test --config=playwright.api.config.ts --ui",
+    "test:api": "playwright test --config=playwright.api.test.config.ts",
+    "test:api:ui": "playwright test --config=playwright.api.test.config.ts --ui",
     "dev:ci": "playwright test",
     "dev:ui": "playwright test --project=chromium --ui",
     "test:ui": "playwright test --config=playwright.test.config.ts --project=chromium --ui",
