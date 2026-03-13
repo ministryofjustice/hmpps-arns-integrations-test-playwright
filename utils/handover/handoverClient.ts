@@ -7,8 +7,11 @@ import {
   HandoverSubjectDetails,
 } from './handoverTypes';
 
+let OasysReturnUrl: string = 'https://t2.oasys.service.justice.gov.uk';
+
 export const getHandoverUrl = (baseUrl: string): string => {
   if (baseUrl.includes('test')) {
+    OasysReturnUrl = 'https://t2-b.oasys.service.justice.gov.uk';
     return 'https://arns-handover-service-test.hmpps.service.justice.gov.uk';
   }
   return 'https://arns-handover-service-dev.hmpps.service.justice.gov.uk';
@@ -71,7 +74,7 @@ let createRequest: CreateHandoverLinkRequest = {
     displayName: 'Test User',
     accessMode: 'READ_WRITE',
     planAccessMode: 'READ_WRITE',
-    returnUrl: 'https://t2.oasys.service.justice.gov.uk',
+    returnUrl: OasysReturnUrl,
   },
   subjectDetails,
   oasysAssessmentPk: oasysPk,
@@ -92,6 +95,8 @@ export const getHandoverLink = async (
   planVersion: number
 ): Promise<CreateHandoverLinkResponse> => {
   createRequest.sentencePlanVersion = planVersion;
+  createRequest.user.returnUrl = OasysReturnUrl;
+
   const response: APIResponse = await request.post(`/handover`, { data: createRequest });
 
   if (!response.ok()) {
