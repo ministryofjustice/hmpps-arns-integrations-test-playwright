@@ -2,7 +2,6 @@ import { test, expect, APIRequestContext } from '@playwright/test';
 import { getToken } from '../../../../utils/aapClient';
 import {
   createOasysAssociation,
-  crn,
   entityVersions,
   getCoordinatorUrl,
   getVersionDate,
@@ -38,6 +37,7 @@ test.afterAll(async () => {
 });
 
 let planVersion: number;
+const crn = Math.random().toString().substring(2, 7);
 
 test.beforeEach(async () => {
   const sentencePlanId: string = await test.step('OAsys association', async () => {

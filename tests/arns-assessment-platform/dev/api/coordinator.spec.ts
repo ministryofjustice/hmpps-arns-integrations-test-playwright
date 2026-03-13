@@ -2,7 +2,6 @@ import { test, expect, APIRequestContext } from '@playwright/test';
 import { getBaseUrl, getToken } from '../../../../utils/aapClient';
 import {
   createOasysAssociation,
-  crn,
   entityVersions,
   getCoordinatorUrl,
   getVersionDate,
@@ -14,6 +13,7 @@ import { GroupCommandResult } from '../../../../utils/aap/assessmentTypes';
 let apiContext: APIRequestContext;
 let coordinatorContext: APIRequestContext;
 const today = getVersionDate();
+const crn = Math.random().toString().substring(2, 7);
 
 test.beforeAll(async ({ playwright, baseURL }) => {
   apiContext = await playwright.request.newContext({

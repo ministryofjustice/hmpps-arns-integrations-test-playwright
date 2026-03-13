@@ -8,7 +8,6 @@ export const getCoordinatorUrl = (baseUrl: string): string => {
   return 'https://arns-coordinator-api-dev.hmpps.service.justice.gov.uk';
 };
 
-export const crn = Math.random().toString().substring(2, 7);
 export const oasysPk = Math.floor(Math.random() * 1000000000).toString();
 
 export const createOasysAssociation = async (request: APIRequestContext, crn: string): Promise<OasysCreateResponse> => {
