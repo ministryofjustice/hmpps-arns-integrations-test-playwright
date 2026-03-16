@@ -9,8 +9,7 @@ if (!process.env.CI) {
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  globalSetup: require.resolve('./utils/global-setup.ts'),
-  testDir: './tests/arns-assessment-platform',
+  globalSetup: require.resolve('../utils/global-setup.ts'),
   /* Maximum time one test can run for. */
   timeout: 300 * 1000,
   expect: {
@@ -33,9 +32,9 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     permissions: ['clipboard-read', 'clipboard-write'],
-    // API https://arns-assessment-platform-api-test.hmpps.service.justice.gov.uk
+
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'https://arns-assessment-platform-test.hmpps.service.justice.gov.uk',
+    baseURL: process.env.BASE_URL || 'https://arns-assessment-platform-dev.hmpps.service.justice.gov.uk',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -46,11 +45,22 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      testDir: '../tests/arns-assessment-platform/dev',
     },
-
     {
       name: 'edge',
       use: { ...devices['Desktop Edge'] },
+      testDir: '../tests/arns-assessment-platform/dev',
+    },
+    {
+      name: 'chromium_aap',
+      use: { ...devices['Desktop Chrome'] },
+      testDir: '../tests/arns-assessment-platform/dev/aap',
+    },
+    {
+      name: 'edge_aap',
+      use: { ...devices['Desktop Edge'] },
+      testDir: '../tests/arns-assessment-platform/dev/aap',
     },
   ],
 });

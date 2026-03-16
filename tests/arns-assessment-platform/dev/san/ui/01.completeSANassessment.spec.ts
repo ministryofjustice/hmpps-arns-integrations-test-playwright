@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
-import { StrengthsAndNeedsPage } from '../../../page-objects/strengths-and-needs/strengths-and-needs-pages';
-import { TrainingLauncherPage } from '../../../page-objects/arns-assessment-platform/training-launcher-page';
-import { PrivacyPage } from '../../../page-objects/arns-assessment-platform/privacy-page';
+import { StrengthsAndNeedsPage } from '../../../../../page-objects/strengths-and-needs/strengths-and-needs-pages';
+import { TrainingLauncherPage } from '../../../../../page-objects/arns-assessment-platform/training-launcher-page';
+import { PrivacyPage } from '../../../../../page-objects/arns-assessment-platform/privacy-page';
 
 test.describe('Private beta', () => {
   test.beforeEach(async ({ page }) => {

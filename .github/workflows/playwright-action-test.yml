@@ -1,6 +1,12 @@
 name: Integration tests
 on:
   workflow_dispatch:
+    inputs:
+      source:
+        description: 'Repo triggering tests'
+        required: false
+        default: 'all'
+        type: string
   schedule:
     - cron: '45 7 * * 1-5'
 jobs:
@@ -10,4 +16,5 @@ jobs:
     with:
       channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
       environment: test
+      source: ${{ inputs.source }}
     secrets: inherit

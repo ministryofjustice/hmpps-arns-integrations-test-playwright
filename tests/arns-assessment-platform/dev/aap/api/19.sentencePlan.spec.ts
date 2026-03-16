@@ -1,8 +1,8 @@
 import { test, expect, APIRequestContext } from '@playwright/test';
-import { getBaseUrl, getToken, queryAssessment } from '../../../../utils/aapClient';
-import { createGoalsCollection } from '../../../../utils/aap/sentencePlan/goalsCommands';
-import { AssessmentQueryResponse, CreateAssessmentResult } from '../../../../utils/aap/assessmentTypes';
-import { createAssessmentSP } from '../../../../utils/aap/sentencePlan/assessmentCommands';
+import { getBaseUrl, getToken, queryAssessment } from '../../../../../utils/aapClient';
+import { createGoalsCollection } from '../../../../../utils/aap/sentencePlan/goalsCommands';
+import { AssessmentQueryResponse, CreateAssessmentResult } from '../../../../../utils/aap/assessmentTypes';
+import { createAssessmentSP } from '../../../../../utils/aap/sentencePlan/assessmentCommands';
 
 let apiContext: APIRequestContext;
 

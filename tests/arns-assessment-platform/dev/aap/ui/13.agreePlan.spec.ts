@@ -1,9 +1,9 @@
 import { APIRequestContext, expect, test } from '@playwright/test';
-import { TrainingLauncherPage } from '../../../page-objects/arns-assessment-platform/training-launcher-page';
-import { PrivacyPage } from '../../../page-objects/arns-assessment-platform/privacy-page';
-import { SentencePlanPage } from '../../../page-objects/arns-assessment-platform/sentence-plan-page';
-import { getBaseUrl, getToken } from '../../../utils/aapClient';
-import { createGoalAndStep } from '../../../page-objects/arns-assessment-platform/api/setup-plan';
+import { TrainingLauncherPage } from '../../../../../page-objects/arns-assessment-platform/training-launcher-page';
+import { PrivacyPage } from '../../../../../page-objects/arns-assessment-platform/privacy-page';
+import { SentencePlanPage } from '../../../../../page-objects/arns-assessment-platform/sentence-plan-page';
+import { getBaseUrl, getToken } from '../../../../../utils/aapClient';
+import { createGoalAndStep } from '../../../../../page-objects/arns-assessment-platform/api/setup-plan';
 
 let apiContext: APIRequestContext;
 
