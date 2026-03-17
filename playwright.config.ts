@@ -62,5 +62,15 @@ export default defineConfig({
       use: { ...devices['Desktop Edge'] },
       testDir: './tests/arns-assessment-platform/dev/aap',
     },
+    {
+      name: 'chromium_san',
+      use: { ...devices['Desktop Chrome'] },
+      testDir: '../tests/arns-assessment-platform/dev/san',
+    },
+    {
+      name: 'edge_san',
+      use: { ...devices['Desktop Edge'] },
+      testDir: '../tests/arns-assessment-platform/dev/san',
+    },
   ],
 });
