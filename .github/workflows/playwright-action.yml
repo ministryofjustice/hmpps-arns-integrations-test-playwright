@@ -16,5 +16,5 @@ jobs:
     with:
       channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
       environment: dev
-      source: ${{ inputs.source }}
+      source: ${{ inputs.source || 'all' }}
     secrets: inherit
