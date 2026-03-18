@@ -10,7 +10,6 @@ if (!process.env.CI) {
  */
 export default defineConfig({
   globalSetup: require.resolve('./utils/global-setup.ts'),
-  testDir: './tests/arns-assessment-platform/dev',
   /* Maximum time one test can run for. */
   timeout: 300 * 1000,
   expect: {
@@ -46,11 +45,32 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      testDir: './tests/arns-assessment-platform/dev',
     },
-
     {
       name: 'edge',
       use: { ...devices['Desktop Edge'] },
+      testDir: './tests/arns-assessment-platform/dev',
+    },
+    {
+      name: 'chromium_aap',
+      use: { ...devices['Desktop Chrome'] },
+      testDir: './tests/arns-assessment-platform/dev/aap',
+    },
+    {
+      name: 'edge_aap',
+      use: { ...devices['Desktop Edge'] },
+      testDir: './tests/arns-assessment-platform/dev/aap',
+    },
+    {
+      name: 'chromium_san',
+      use: { ...devices['Desktop Chrome'] },
+      testDir: '../tests/arns-assessment-platform/dev/san',
+    },
+    {
+      name: 'edge_san',
+      use: { ...devices['Desktop Edge'] },
+      testDir: '../tests/arns-assessment-platform/dev/san',
     },
   ],
 });

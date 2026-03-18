@@ -12,6 +12,11 @@ on:
         required: false
         default: 'dev'
         type: string
+      source:
+        description: 'Repo triggering tests'
+        required: false
+        default: 'all'
+        type: string
 
 jobs:
   test:
@@ -28,7 +33,7 @@ jobs:
         run: npx playwright install --only-shell
       - name: Run Playwright tests
         id: playwright-tests
-        run: npm run ${{ inputs.environment }}:ci
+        run: npm run ${{ inputs.environment }}:${{ inputs.source }}:ci
         env:
           ORACLE_DB_USER: ${{ secrets.ORACLE_DB_USER }}
           ORACLE_DB_PASSWORD: ${{ secrets.ORACLE_DB_PASSWORD }}

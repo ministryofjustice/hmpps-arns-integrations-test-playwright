@@ -1,14 +1,14 @@
 import { test, expect, APIRequestContext } from '@playwright/test';
-import { getToken } from '../../../../utils/aapClient';
+import { getToken } from '../../../../../utils/aapClient';
 import {
   createOasysAssociation,
   entityVersions,
   getCoordinatorUrl,
   getVersionDate,
-} from '../../../../utils/coordinator/coordinatorClient';
-import { PreviousVersionsResponse } from '../../../../utils/coordinator/coordinatorTypes';
-import { getHandoverLink, getHandoverUrl } from '../../../../utils/handover/handoverClient';
-import { CreateHandoverLinkResponse } from '../../../../utils/handover/handoverTypes';
+} from '../../../../../utils/coordinator/coordinatorClient';
+import { PreviousVersionsResponse } from '../../../../../utils/coordinator/coordinatorTypes';
+import { getHandoverLink, getHandoverUrl } from '../../../../../utils/handover/handoverClient';
+import { CreateHandoverLinkResponse } from '../../../../../utils/handover/handoverTypes';
 
 let handoverContext: APIRequestContext;
 let coordinatorContext: APIRequestContext;

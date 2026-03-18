@@ -1,6 +1,6 @@
 import { test, expect, APIRequestContext } from '@playwright/test';
-import { createAssessment, getBaseUrl, getToken, queryAssessment } from '../../../../utils/aapClient';
-import { AssessmentQueryResponse } from '../../../../utils/aap/assessmentTypes';
+import { createAssessment, getBaseUrl, getToken, queryAssessment } from '../../../../../utils/aapClient';
+import { AssessmentQueryResponse } from '../../../../../utils/aap/assessmentTypes';
 
 let apiContext: APIRequestContext;
 

@@ -1,10 +1,10 @@
 import { APIRequestContext, expect, test } from '@playwright/test';
-import { TrainingLauncherPage } from '../../../page-objects/arns-assessment-platform/training-launcher-page';
-import { PrivacyPage } from '../../../page-objects/arns-assessment-platform/privacy-page';
-import { SentencePlanPage } from '../../../page-objects/arns-assessment-platform/sentence-plan-page';
-import { CreateGoalPage } from '../../../page-objects/arns-assessment-platform/create-goal-page';
-import { AddStepsPage } from '../../../page-objects/arns-assessment-platform/add-steps-page';
-import { getBaseUrl, getToken, queryAssessment } from '../../../utils/aapClient';
+import { TrainingLauncherPage } from '../../../../../page-objects/arns-assessment-platform/training-launcher-page';
+import { PrivacyPage } from '../../../../../page-objects/arns-assessment-platform/privacy-page';
+import { SentencePlanPage } from '../../../../../page-objects/arns-assessment-platform/sentence-plan-page';
+import { CreateGoalPage } from '../../../../../page-objects/arns-assessment-platform/create-goal-page';
+import { AddStepsPage } from '../../../../../page-objects/arns-assessment-platform/add-steps-page';
+import { getBaseUrl, getToken, queryAssessment } from '../../../../../utils/aapClient';
 
 test.describe('National rollout', () => {
   test.beforeEach(async ({ page }) => {

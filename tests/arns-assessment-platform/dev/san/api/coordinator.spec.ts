@@ -1,14 +1,14 @@
 import { test, expect, APIRequestContext } from '@playwright/test';
-import { getBaseUrl, getToken } from '../../../../utils/aapClient';
+import { getBaseUrl, getToken } from '../../../../../utils/aapClient';
 import {
   createOasysAssociation,
   entityVersions,
   getCoordinatorUrl,
   getVersionDate,
-} from '../../../../utils/coordinator/coordinatorClient';
-import { updateAnswers } from '../../../../utils/aap/sentencePlan/assessmentCommands';
-import { PreviousVersionsResponse } from '../../../../utils/coordinator/coordinatorTypes';
-import { GroupCommandResult } from '../../../../utils/aap/assessmentTypes';
+} from '../../../../../utils/coordinator/coordinatorClient';
+import { updateAnswers } from '../../../../../utils/aap/sentencePlan/assessmentCommands';
+import { PreviousVersionsResponse } from '../../../../../utils/coordinator/coordinatorTypes';
+import { GroupCommandResult } from '../../../../../utils/aap/assessmentTypes';
 
 let apiContext: APIRequestContext;
 let coordinatorContext: APIRequestContext;
