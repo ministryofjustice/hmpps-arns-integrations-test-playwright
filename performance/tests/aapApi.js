@@ -220,14 +220,14 @@ export function apiJourney (data) {
       `Failed to create assessment | status: ${commandResponse.status} | body: ${commandResponse.body}`
     );
 
-    simulateThinkingTime();
+    /*simulateThinkingTime();
     return;
   }
 
-  sleep(0.5);
+  /*sleep(0.5);
 
   // Step 2 — Query Assessment
-  const queryPayload = JSON.stringify({
+  /*const queryPayload = JSON.stringify({
     queries: [
       {
         type: "AssessmentVersionQuery",
@@ -293,5 +293,6 @@ export function setup() {
 }
 
 export default function (data) {
-  apiJourney(data);
+  apiJourney(data);*/
+}
 }
