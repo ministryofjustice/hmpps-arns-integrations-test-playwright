@@ -42,7 +42,7 @@ test.describe('Private beta', () => {
     await sentencePlan.agreePlan.click();
     await sentencePlan.yesIAgree.click();
     await sentencePlan.save.click();
-    await expect(page.getByText('Plan created')).toBeVisible();
+    await expect(page.getByText('agreed to their plan')).toBeVisible();
 
     await sentencePlan.planHistory.click();
     await expect(page.getByText('Plan agreed')).toBeVisible();
@@ -70,7 +70,7 @@ test.describe('National rollout', () => {
     await sentencePlan.agreePlan.click();
     await sentencePlan.yesIAgree.click();
     await sentencePlan.save.click();
-    await expect(page.getByText('Plan created')).toBeVisible();
+    await expect(page.getByText('agreed to their plan')).toBeVisible();
 
     await sentencePlan.planHistory.click();
     await expect(page.getByText('Plan agreed')).toBeVisible();
