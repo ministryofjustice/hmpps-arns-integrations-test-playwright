@@ -220,7 +220,7 @@ export function apiJourney (data) {
       `Failed to create assessment | status: ${commandResponse.status} | body: ${commandResponse.body}`
     );
 
-    /*simulateThinkingTime();
+    //simulateThinkingTime();
     return;
   }
 
@@ -284,15 +284,14 @@ export function apiJourney (data) {
       /^[0-9a-fA-F-]{36}$/.test(r.assessmentUuid),
     "aggregateUuid is UUID-ish": (r) =>
       /^[0-9a-fA-F-]{36}$/.test(r.aggregateUuid),
-  });
+  });*/
 
-  simulateThinkingTime();
+  //simulateThinkingTime();
 }
 export function setup() {
   return apiSetup();
 }
 
 export default function (data) {
-  apiJourney(data);*/
-}
+  apiJourney(data);
 }
