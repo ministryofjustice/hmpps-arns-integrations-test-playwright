@@ -1,4 +1,4 @@
-name: K6 AAP Stress Test 
+name: K6 AAP Stress Test
 
 on:
   workflow_dispatch: # Manual trigger only
@@ -12,15 +12,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Set up Go
-        uses: actions/setup-go@v6
-        with:
-          go-version: "1.26"
-
-      - name: Build xk6 dashboard-enabled k6
-        run: |
-          go install go.k6.io/xk6/cmd/xk6@latest
-          xk6 build --with github.com/grafana/xk6-dashboard@latest
+      - name: Set up k6
+        uses: grafana/setup-k6-action@v1
 
       - name: Run k6 AAP Stress Test
         env:
@@ -28,13 +21,16 @@ jobs:
           AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
           TOKEN_URL: ${{ secrets.TOKEN_URL }}
           
-          CUSTOM_STAGES: '[{"duration":"3m","target":300},{"duration":"5m","target":400},{"duration":"2m","target":0}]'
+          CUSTOM_STAGES: '[{"duration":"3m","target":800},{"duration":"5m","target":1200},{"duration":"2m","target":0}]'
 
           # Adjust thresholds for heavier load
-          P95_THRESHOLD: "1200" 
+          P95_THRESHOLD: "1200"
           P90_THRESHOLD: "800"
+
+          K6_WEB_DASHBOARD: "true"
+          K6_WEB_DASHBOARD_EXPORT: "aap-stress-report.html"
           
-        run: ./k6 run performance/tests/aapApi.js --out web-dashboard=export=aap-stress-report.html
+        run: k6 run performance/tests/aapApi.js
 
       - name: Upload Stress Test Report
         if: always()

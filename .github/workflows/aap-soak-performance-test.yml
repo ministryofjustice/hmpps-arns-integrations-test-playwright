@@ -13,15 +13,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Set up Go
-        uses: actions/setup-go@v6
-        with:
-          go-version: "1.26"
-
-      - name: Build xk6 dashboard-enabled k6
-        run: |
-          go install go.k6.io/xk6/cmd/xk6@latest
-          xk6 build --with github.com/grafana/xk6-dashboard@latest
+      - name: Set up k6
+        uses: grafana/setup-k6-action@v1
 
       - name: Run k6 AAP Soak Test
         env:
@@ -38,8 +31,12 @@ jobs:
           P90_THRESHOLD: "450"
 
           NO_CONNECTION_REUSE: "true"
+
+          # Environment variables for the Web Dashboard
+          K6_WEB_DASHBOARD: "true"
+          K6_WEB_DASHBOARD_EXPORT: "aap-soak-report.html"
           
-        run: ./k6 run performance/tests/aapApi.js --out web-dashboard=export=aap-soak-report.html
+        run: k6 run performance/tests/aapApi.js
 
       - name: Upload Soak Test Report
         if: always()
