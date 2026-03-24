@@ -68,7 +68,7 @@ const criminogenicNeedsData: CriminogenicNeedsData = {
   },
 };
 
-let createRequest: CreateHandoverLinkRequest = {
+const createRequest: CreateHandoverLinkRequest = {
   user: {
     identifier: generateUserId(),
     displayName: 'Test User',
@@ -104,4 +104,10 @@ export const getHandoverLink = async (
   }
 
   return await response.json();
+};
+
+export const createHandoverLink = async (request: APIRequestContext, planVersion: number) => {
+  const handoverResponse: CreateHandoverLinkResponse = await getHandoverLink(request, planVersion);
+
+  return handoverResponse.handoverLink;
 };
