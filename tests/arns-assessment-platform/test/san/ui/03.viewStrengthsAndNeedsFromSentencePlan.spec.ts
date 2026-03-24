@@ -9,7 +9,7 @@ test.beforeEach(async ({ page }) => {
   const trainingLauncher = new TrainingLauncherPage(page);
   const privacy = new PrivacyPage(page);
 
-  await trainingLauncher.customiseScenario('K792077', '1623046');
+  await trainingLauncher.customiseScenario('K792077', '9350893');
   await trainingLauncher.generateLink.click();
 
   await expect(page).toHaveTitle('Close other applications - Sentence plan');
@@ -29,7 +29,7 @@ test('should view Strengths and Needs assessment information as private beta use
 
   await createGoal.employmentAndEducation.click();
   await createGoal.viewInformation.click();
-  await expect(page.getByText('does not want to make changes.')).toBeVisible();
+  await expect(page.getByText('does not want to answer.')).toBeVisible();
 });
 
 test('should view Strengths and Needs risks and needs scores as private beta user', async ({ page }) => {
