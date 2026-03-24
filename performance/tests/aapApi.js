@@ -143,7 +143,7 @@ export function apiJourney (data) {
   const TOKEN = cachedToken;
 
   // Step 1 — Create Assessment
-  /*const commandPayload = JSON.stringify({
+  const commandPayload = JSON.stringify({
     commands: [
       {
         type: "CreateAssessmentCommand",
@@ -224,10 +224,10 @@ export function apiJourney (data) {
     return;
   }
 
-  //sleep(0.5);*/
+  //sleep(0.5);
 
   // Step 2 — Query Assessment
-  const queryPayload = JSON.stringify({
+  /*const queryPayload = JSON.stringify({
     queries: [
       {
         type: "AssessmentVersionQuery",
@@ -287,7 +287,7 @@ export function apiJourney (data) {
       /^[0-9a-fA-F-]{36}$/.test(r.aggregateUuid),
   });
 
-  //simulateThinkingTime();
+  //simulateThinkingTime();*/
 }
 export function setup() {
   return apiSetup();
