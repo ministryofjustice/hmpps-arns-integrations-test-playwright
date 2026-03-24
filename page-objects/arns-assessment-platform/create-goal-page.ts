@@ -22,4 +22,13 @@ export class CreateGoalPage {
     this.viewInformation = page.locator('summary').filter({ hasText: 'View information' });
     this.employmentAndEducation = page.getByRole('link', { name: 'Employment and education' });
   }
+
+  createGoal = async (goalTitle: string) => {
+    await this.searchGoal.fill(goalTitle);
+    await this.relatedGoalYes.click();
+    await this.relatedAreaAlcohol.click();
+    await this.startWorkingOnThisGoalYes.click();
+    await this.whenAimToAchieveGoal.click();
+    await this.addSteps.click();
+  };
 }

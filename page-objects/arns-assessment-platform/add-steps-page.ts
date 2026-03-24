@@ -16,4 +16,10 @@ export class AddStepsPage {
   whoWillDoTheStep = async (who: string) => {
     await this.chooseSomeone.selectOption(who);
   };
+
+  addStep = async () => {
+    await this.whoWillDoTheStep('Probation practitioner');
+    await this.whatShouldTheyDo.fill('Step 1');
+    await this.saveAndContinue.click();
+  };
 }

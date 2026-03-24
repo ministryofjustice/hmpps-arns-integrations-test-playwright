@@ -12,6 +12,7 @@ export class SentencePlanPage {
   readonly planHistory: Locator;
   readonly about: Locator;
   readonly viewPreviousVersions: Locator;
+  readonly removedGoals: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -25,5 +26,6 @@ export class SentencePlanPage {
     this.planHistory = page.getByRole('link', { name: 'View plan history' });
     this.about = page.getByRole('link', { name: 'About' });
     this.viewPreviousVersions = page.getByRole('link', { name: 'View previous versions' });
+    this.removedGoals = page.getByRole('link', { name: 'Removed goals' });
   }
 }

@@ -14,6 +14,8 @@ export class TrainingLauncherPage {
   readonly createSession: Locator;
   readonly privateBeta: Locator;
   readonly targetService: Locator;
+  readonly scenarioFlags: Locator;
+  readonly newPeriod: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -29,6 +31,8 @@ export class TrainingLauncherPage {
     this.createSession = page.getByRole('button', { name: 'Create session' });
     this.privateBeta = page.getByRole('checkbox', { name: 'SAN Private Beta' });
     this.targetService = page.locator('[name="targetApplication"]');
+    this.scenarioFlags = page.locator('[data-panel-id="flags"]');
+    this.newPeriod = page.getByRole('checkbox', { name: 'New Period of Supervision' });
   }
 
   goto = async (scenario: string = 'default') => {
@@ -54,13 +58,17 @@ export class TrainingLauncherPage {
     await this.generateLink.click();
   };
 
-  customiseScenario = async (crn: string, oasysPk: string) => {
+  customiseSubjectDetails = async (crn: string, oasysPk: string) => {
     await this.goto('sp-private-beta');
     await this.customise.click();
     await this.randomCrn.click();
     await this.crn.fill(crn);
     await this.randomOASysPk.click();
     await this.oasysPk.fill(oasysPk);
+  };
+
+  customiseScenario = async (crn: string, oasysPk: string) => {
+    await this.customiseSubjectDetails(crn, oasysPk);
     await this.createSession.click();
   };
 
@@ -69,5 +77,10 @@ export class TrainingLauncherPage {
     await this.startSession.click();
     await this.targetService.selectOption('strengths-and-needs');
     await this.generateLink.click();
+  };
+
+  newPeriodOfSupervision = async () => {
+    await this.scenarioFlags.click();
+    await this.newPeriod.click();
   };
 }
