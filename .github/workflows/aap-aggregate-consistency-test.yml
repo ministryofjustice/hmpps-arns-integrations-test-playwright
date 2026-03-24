@@ -48,7 +48,7 @@ jobs:
 
       - name: Slack notification
         if: failure()
-        uses: slackapi/slack-github-action@v2.1.1
+        uses: slackapi/slack-github-action@v3.0.1
         env:
           SLACK_CHANNEL: ${{ inputs.channel_id }}
           REPO_NAME: ${{ github.repository }}
