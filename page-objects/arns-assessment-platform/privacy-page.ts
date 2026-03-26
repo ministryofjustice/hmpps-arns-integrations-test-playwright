@@ -17,4 +17,11 @@ export class PrivacyPage {
     await this.confirm.click();
     await expect(this.page).toHaveTitle('Plan - Sentence plan');
   };
+
+  toHistoricPlan = async () => {
+    await expect(this.page).toHaveTitle('Close other applications - Sentence plan');
+    await this.confirmPrivacy.click();
+    await this.confirm.click();
+    await expect(this.page).toHaveTitle('View historic version - Sentence plan');
+  };
 }
