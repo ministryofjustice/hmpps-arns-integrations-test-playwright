@@ -45,10 +45,12 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      testDir: './tests/arns-assessment-platform',
     },
     {
       name: 'edge',
       use: { ...devices['Desktop Edge'] },
+      testDir: './tests/arns-assessment-platform',
     },
     {
       name: 'chromium_aap',
