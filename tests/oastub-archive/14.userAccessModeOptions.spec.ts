@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
-import { StubHomePage } from '../page-objects/stub-home-page';
-import { SentencePlanPage } from '../page-objects/sentence-plan-pages';
+import { StubHomePage } from '../../page-objects/oastub-archive/stub-home-page';
+import { SentencePlanPage } from '../../page-objects/oastub-archive/sentence-plan-pages';
 
 test('User views sentence plan with view and edit access', async ({ page }) => {
   const stubHomePage = new StubHomePage(page);
