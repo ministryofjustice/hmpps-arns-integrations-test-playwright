@@ -69,11 +69,11 @@ jobs:
           payload: |
             {
               "channel": "${{ env.SLACK_CHANNEL }}",
-              "text": "🚨 Integration Playwright Tests Failed",
+              "text": "🚨 ${{ inputs.environment }} - Integration Playwright Tests Failed",
               "attachments": [
                {
                  "color": "#FF0000",
-                 "text": ":x: *Playwright Integration tests notification*\nWorkflow failed for ${{ env.REPO_NAME }}"
+                 "text": ":x: *Playwright Integration tests notification*\nWorkflow failed on ${{ inputs.environment }} environment for ${{ env.REPO_NAME }}"
                 }
               ]
             }
