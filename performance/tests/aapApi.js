@@ -232,7 +232,7 @@ export function apiJourney (data) {
       {
         type: "AssessmentVersionQuery",
         user: { id: "test-user", name: "Test User" },
-        assessmentIdentifier: { type: 'UUID', uuid: "91f067f7-83f6-4a7e-a143-aaf9f5ce6d9e"}
+        assessmentIdentifier: { type: 'UUID', uuid: "96c7987e3-2f4a-4b7a-9c61-dd1b2fa0ca68"}
         //assessmentIdentifier: { type: 'UUID', uuid: assessmentUuid },
       },
     ],
