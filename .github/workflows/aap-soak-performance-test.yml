@@ -1,7 +1,16 @@
 name: K6 AAP Soak Test
 
 on:
-  workflow_dispatch: # Manual trigger only
+  workflow_dispatch:
+    inputs:
+      scenario:
+        description: "Test scenario to run"
+        required: false
+        default: "create-only"
+        type: choice
+        options:
+          - create-only
+          - write-journey
 
 jobs:
   soak_test:
@@ -39,7 +48,13 @@ jobs:
 
           NO_CONNECTION_REUSE: "true"
           
-        run: ./k6 run performance/tests/aapApi.js --out web-dashboard=export=aap-soak-report.html
+        run: |
+          if [ "${{ inputs.scenario }}" = "write-journey" ]; then
+            TEST_FILE="performance/tests/aapApiWriteJourney.js"
+          else
+            TEST_FILE="performance/tests/aapApi.js"
+          fi
+          ./k6 run "$TEST_FILE" --out web-dashboard=export=aap-soak-report.html
 
       - name: Upload Soak Test Report
         if: always()

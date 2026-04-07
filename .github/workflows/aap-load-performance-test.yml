@@ -1,7 +1,16 @@
 name: K6 AAP Load Test 
 
 on:
-  workflow_dispatch: # Manual trigger only
+  workflow_dispatch:
+    inputs:
+      scenario:
+        description: "Test scenario to run"
+        required: false
+        default: "create-only"
+        type: choice
+        options:
+          - create-only
+          - write-journey
 
 jobs:
   load_test:
@@ -37,7 +46,13 @@ jobs:
           P95_THRESHOLD: "1000" 
           P90_THRESHOLD: "700"
           
-        run: ./k6 run performance/tests/aapApi.js --out web-dashboard=export=aap-load-report.html
+        run: |
+          if [ "${{ inputs.scenario }}" = "write-journey" ]; then
+            TEST_FILE="performance/tests/aapApiWriteJourney.js"
+          else
+            TEST_FILE="performance/tests/aapApi.js"
+          fi
+          ./k6 run "$TEST_FILE" --out web-dashboard=export=aap-load-report.html
 
       - name: Upload Load Test Report
         if: always()

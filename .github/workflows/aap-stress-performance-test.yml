@@ -1,7 +1,16 @@
 name: K6 AAP Stress Test 
 
 on:
-  workflow_dispatch: # Manual trigger only
+  workflow_dispatch:
+    inputs:
+      scenario:
+        description: "Test scenario to run"
+        required: false
+        default: "create-only"
+        type: choice
+        options:
+          - create-only
+          - write-journey
 
 jobs:
   load_test:
@@ -31,7 +40,13 @@ jobs:
           K6_WEB_DASHBOARD: "true"
           K6_WEB_DASHBOARD_EXPORT: "aap-stress-report.html"
           
-        run: k6 run performance/tests/aapApi.js
+        run: |
+          if [ "${{ inputs.scenario }}" = "write-journey" ]; then
+            TEST_FILE="performance/tests/aapApiWriteJourney.js"
+          else
+            TEST_FILE="performance/tests/aapApi.js"
+          fi
+          k6 run "$TEST_FILE"
 
       - name: Upload Stress Test Report
         if: always()
