@@ -26,6 +26,7 @@ test('should display goals, steps and sentence information', async ({ page }) =>
   await expect(sentencePlan.goalTitle).toContainText('I will work towards finding accommodation');
   await expect(sentencePlan.goalSummary).toContainText('Probation practitioner');
 
-  await sentencePlan.about.click();
-  await expect(page.getByText('Adult Custody < 12m')).toBeVisible();
+  // Hide about page until ARNS API ready: https://dsdmoj.atlassian.net/browse/SP2-1984
+  // await sentencePlan.about.click();
+  // await expect(page.getByText('Adult Custody < 12m')).toBeVisible();
 });
