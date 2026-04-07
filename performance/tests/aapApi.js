@@ -2,6 +2,7 @@ import http from "k6/http";
 import { check, sleep } from "k6";
 import { Counter } from "k6/metrics";
 import { b64encode } from "k6/encoding";
+import exec from 'k6/execution';
 
 // --- CONFIGURATION ---
 
@@ -150,7 +151,7 @@ export function apiJourney (data) {
         assessmentType: 'TEST',
         formVersion: "1.0",
         properties: {},
-        user: { id: "test-user", name: "Test User" },
+        user: { id: `test-user-${exec.vu.idInInstance}`, name: "Test User" },
       },
     ],
   });
