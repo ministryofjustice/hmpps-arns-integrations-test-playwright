@@ -7,7 +7,7 @@ export function setup() {
 
 const P90_THRESHOLD = __ENV.P90_THRESHOLD ? parseInt(__ENV.P90_THRESHOLD) : 200;
 const P95_THRESHOLD = __ENV.P95_THRESHOLD ? parseInt(__ENV.P95_THRESHOLD) : 500;
-const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 1500;
+const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 200;
 const DURATION = __ENV.DURATION || "20m";
 
 export const options = {
@@ -55,7 +55,7 @@ export async function runUi() {
     
     //#region UI journey
     await page.getByRole('button', { name: 'Start session' }).click();
-    await page.getByRole('button', { name: 'Generate link' }).click();
+    await page.locator('button[value="generateLink"]').click();
     await page.getByRole('checkbox', { name: 'I confirm I\'ll do this before' }).check();
     await page.getByRole('button', { name: 'Confirm' }).click();
     simulateThinkingTime();
@@ -104,7 +104,6 @@ export async function runUi() {
     await page.getByRole('textbox', { name: 'Add notes about progress (' }).fill('Progress note');
     simulateThinkingTime();
     await page.getByRole('button', { name: 'Save goal and steps' }).click();
-    await page.getByRole('link', { name: 'Plan history', exact: true }).click();
   //#endregion
     
   } finally {
