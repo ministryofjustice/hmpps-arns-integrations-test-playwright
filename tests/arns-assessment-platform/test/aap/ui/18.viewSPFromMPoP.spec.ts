@@ -3,7 +3,7 @@ import { PrivacyPage } from '../../../../../page-objects/arns-assessment-platfor
 import { SentencePlanPage } from '../../../../../page-objects/arns-assessment-platform/sentence-plan-page';
 import { MpopPages } from '../../../../../page-objects/oastub-archive/mpop-pages';
 
-const crn = 'X986584';
+const crn = 'X998795';
 
 test.beforeEach(async ({ page }) => {
   const privacy = new PrivacyPage(page);
