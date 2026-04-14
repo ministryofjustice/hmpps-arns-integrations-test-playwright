@@ -4,6 +4,10 @@ export type AssessmentType = 'SAN_SP' | 'SP';
 
 export type UserLocation = 'PRISON' | 'COMMUNITY';
 
+export interface UserDetails {
+  userDetails: OasysUserDetails;
+}
+
 export interface OasysUserDetails {
   id: string;
   name: string;
@@ -57,4 +61,11 @@ export interface OasysCreateResponse {
   sanAssessmentVersion: number;
   sentencePlanId: string;
   sentencePlanVersion: number;
+}
+
+export type SignType = 'SELF' | 'COUNTERSIGN';
+
+export interface OasysSignRequest {
+  signType: SignType;
+  userDetails: OasysUserDetails;
 }

@@ -1,5 +1,5 @@
 import { APIRequestContext, APIResponse } from '@playwright/test';
-import { OasysCreateRequest, OasysCreateResponse, PreviousVersionsResponse } from './coordinatorTypes';
+import { OasysCreateRequest, OasysCreateResponse, PreviousVersionsResponse, UserDetails } from './coordinatorTypes';
 
 export const getCoordinatorUrl = (baseUrl: string): string => {
   if (baseUrl.includes('test')) {
@@ -9,6 +9,7 @@ export const getCoordinatorUrl = (baseUrl: string): string => {
 };
 
 export const oasysPk = Math.floor(Math.random() * 1000000000).toString();
+export const name = 'Test';
 
 export const createOasysAssociation = async (request: APIRequestContext, crn: string): Promise<OasysCreateResponse> => {
   const create: OasysCreateRequest = {
@@ -17,7 +18,7 @@ export const createOasysAssociation = async (request: APIRequestContext, crn: st
     assessmentType: 'SAN_SP',
     userDetails: {
       id: oasysPk,
-      name: 'Test',
+      name: name,
       location: 'PRISON',
     },
     subjectDetails: {
@@ -53,4 +54,20 @@ export const entityVersions = async (
 export const getVersionDate = (): string => {
   const today = new Date();
   return today.toISOString().split('T')[0];
+};
+
+export const lock = async (request: APIRequestContext) => {
+  const userDetails: UserDetails = {
+    userDetails: {
+      id: oasysPk,
+      name: name,
+    },
+  };
+
+  const response = await request.post(`/oasys/${oasysPk}/lock`, { data: userDetails });
+  if (!response.ok()) {
+    throw new Error(`Oasys signing failed: ${response.status()} ${response.statusText()}`);
+  }
+
+  return await response.json();
 };
