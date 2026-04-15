@@ -5,15 +5,16 @@ import {
   getCoordinatorUrl,
   getVersionDate,
   getAssociations,
-  selfSign,
   rollback,
+  sign,
 } from '../../../../../utils/coordinator/coordinatorClient';
 import { PreviousVersionsResponse } from '../../../../../utils/coordinator/coordinatorTypes';
 
 let apiContext: APIRequestContext;
 let coordinatorContext: APIRequestContext;
 const today = getVersionDate();
-const oasysPk = '7282419';
+const oasysPk = '3173002';
+const name = 'Burley Zieme';
 
 test.beforeAll(async ({ playwright, baseURL }) => {
   apiContext = await playwright.request.newContext({
@@ -62,9 +63,9 @@ test.beforeEach(async () => {
   });
 });
 
-test('Coordinator self signing', async () => {
+test('Coordinator counter signing', async () => {
   await test.step('Rollback plan', async () => {
-    await rollback(coordinatorContext, oasysPk, versions.assessmentVersion, versions.planVersion);
+    await rollback(coordinatorContext, oasysPk, name, versions.assessmentVersion, versions.planVersion);
 
     const queryResponse: PreviousVersionsResponse = await entityVersions(
       coordinatorContext,
@@ -75,8 +76,8 @@ test('Coordinator self signing', async () => {
     expect(queryResponse.allVersions[today].planVersion.status).toBe('ROLLED_BACK');
   });
 
-  await test.step('Sign plan', async () => {
-    await selfSign(coordinatorContext, oasysPk);
+  await test.step('Counter-sign plan', async () => {
+    await sign(coordinatorContext, oasysPk, name, 'COUNTERSIGN');
 
     const queryResponse: PreviousVersionsResponse = await entityVersions(
       coordinatorContext,
@@ -84,6 +85,6 @@ test('Coordinator self signing', async () => {
     );
 
     expect(queryResponse).toBeTruthy();
-    expect(queryResponse.allVersions[today].planVersion.status).toBe('SELF_SIGNED');
+    expect(queryResponse.allVersions[today].planVersion.status).toBe('AWAITING_COUNTERSIGN');
   });
 });

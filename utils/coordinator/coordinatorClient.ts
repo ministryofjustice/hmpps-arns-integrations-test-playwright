@@ -5,6 +5,7 @@ import {
   OasysRollbackRequest,
   OasysSignRequest,
   PreviousVersionsResponse,
+  SignType,
   UserDetails,
 } from './coordinatorTypes';
 
@@ -89,12 +90,17 @@ export const lock = async (request: APIRequestContext) => {
   return await response.json();
 };
 
-export const selfSign = async (request: APIRequestContext, oasysPk: string) => {
+export const sign = async (
+  request: APIRequestContext,
+  oasysPk: string,
+  name: string = 'Brennon Mayer',
+  signType: SignType = 'SELF'
+) => {
   const sign: OasysSignRequest = {
-    signType: 'SELF',
+    signType: signType,
     userDetails: {
       id: oasysPk,
-      name: 'Brennon Mayer',
+      name: name,
     },
   };
 
@@ -109,6 +115,7 @@ export const selfSign = async (request: APIRequestContext, oasysPk: string) => {
 export const rollback = async (
   request: APIRequestContext,
   oasysPk: string,
+  name: string = 'Brennon Mayer',
   sanVersionNumber?: number,
   sentencePlanVersionNumber?: number
 ) => {
@@ -117,7 +124,7 @@ export const rollback = async (
     sentencePlanVersionNumber: sentencePlanVersionNumber,
     userDetails: {
       id: oasysPk,
-      name: 'Brennon Mayer',
+      name: name,
     },
   };
 
