@@ -1,6 +1,6 @@
 export type PlanType = 'INITIAL' | 'REVIEW' | 'UPW' | 'PSR_OUTLINE';
 
-export type AssessmentType = 'SAN_SP' | 'SP';
+export type AssessmentType = 'SAN_SP' | 'SP' | 'SAN';
 
 export type UserLocation = 'PRISON' | 'COMMUNITY';
 
@@ -12,6 +12,7 @@ export interface OasysUserDetails {
   id: string;
   name: string;
   location?: UserLocation;
+  type?: AssessmentType;
 }
 
 export interface SubjectDetails {
@@ -67,5 +68,11 @@ export type SignType = 'SELF' | 'COUNTERSIGN';
 
 export interface OasysSignRequest {
   signType: SignType;
+  userDetails: OasysUserDetails;
+}
+
+export interface OasysRollbackRequest {
+  sanVersionNumber?: number;
+  sentencePlanVersionNumber?: number;
   userDetails: OasysUserDetails;
 }

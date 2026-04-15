@@ -1,5 +1,12 @@
 import { APIRequestContext, APIResponse } from '@playwright/test';
-import { OasysCreateRequest, OasysCreateResponse, PreviousVersionsResponse, UserDetails } from './coordinatorTypes';
+import {
+  OasysCreateRequest,
+  OasysCreateResponse,
+  OasysRollbackRequest,
+  OasysSignRequest,
+  PreviousVersionsResponse,
+  UserDetails,
+} from './coordinatorTypes';
 
 export const getCoordinatorUrl = (baseUrl: string): string => {
   if (baseUrl.includes('test')) {
@@ -51,6 +58,16 @@ export const entityVersions = async (
   return await response.json();
 };
 
+export const getAssociations = async (request: APIRequestContext, oasysPk: string = '7282419') => {
+  const response: APIResponse = await request.get(`/oasys/${oasysPk}/associations`);
+
+  if (!response.ok()) {
+    throw new Error(`OASys Associations failed: ${response.status()} ${response.statusText()}`);
+  }
+
+  return await response.json();
+};
+
 export const getVersionDate = (): string => {
   const today = new Date();
   return today.toISOString().split('T')[0];
@@ -66,7 +83,47 @@ export const lock = async (request: APIRequestContext) => {
 
   const response = await request.post(`/oasys/${oasysPk}/lock`, { data: userDetails });
   if (!response.ok()) {
-    throw new Error(`Oasys signing failed: ${response.status()} ${response.statusText()}`);
+    throw new Error(`Oasys lock failed: ${response.status()} ${response.statusText()}`);
+  }
+
+  return await response.json();
+};
+
+export const selfSign = async (request: APIRequestContext, oasysPk: string) => {
+  const sign: OasysSignRequest = {
+    signType: 'SELF',
+    userDetails: {
+      id: oasysPk,
+      name: 'Brennon Mayer',
+    },
+  };
+
+  const response = await request.post(`/oasys/${oasysPk}/sign`, { data: sign });
+  if (!response.ok()) {
+    throw new Error(`Oasys self signing failed: ${response.status()} ${response.statusText()}`);
+  }
+
+  return await response.json();
+};
+
+export const rollback = async (
+  request: APIRequestContext,
+  oasysPk: string,
+  sanVersionNumber?: number,
+  sentencePlanVersionNumber?: number
+) => {
+  const rollback: OasysRollbackRequest = {
+    sanVersionNumber: sanVersionNumber,
+    sentencePlanVersionNumber: sentencePlanVersionNumber,
+    userDetails: {
+      id: oasysPk,
+      name: 'Brennon Mayer',
+    },
+  };
+
+  const response = await request.post(`/oasys/${oasysPk}/rollback`, { data: rollback });
+  if (!response.ok()) {
+    throw new Error(`Oasys rollback failed: ${response.status()} ${response.statusText()}`);
   }
 
   return await response.json();
