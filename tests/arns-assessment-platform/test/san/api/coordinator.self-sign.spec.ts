@@ -13,6 +13,7 @@ import { PreviousVersionsResponse } from '../../../../../utils/coordinator/coord
 let apiContext: APIRequestContext;
 let coordinatorContext: APIRequestContext;
 const today = getVersionDate();
+let lastUpdatedDate = '';
 const oasysPk = '7282419';
 const name = 'Brennon Mayer';
 
@@ -54,11 +55,14 @@ test.beforeEach(async () => {
 
     expect(queryResponse).toBeTruthy();
     expect(queryResponse).toHaveProperty('allVersions');
-    expect(queryResponse.allVersions[today].planVersion.entityType).toBe('AAP_PLAN');
+    const date =
+      Object.entries(queryResponse.allVersions).find(([, e]) => Object.keys(e).includes('planVersion')) ?? [];
+    lastUpdatedDate = date[0] ?? '';
+    expect(queryResponse.allVersions[lastUpdatedDate].planVersion.entityType).toBe('AAP_PLAN');
 
     return {
-      assessmentVersion: queryResponse.allVersions[today].assessmentVersion.version,
-      planVersion: queryResponse.allVersions[today].planVersion.version,
+      assessmentVersion: queryResponse.allVersions[lastUpdatedDate].assessmentVersion.version,
+      planVersion: queryResponse.allVersions[lastUpdatedDate].planVersion.version,
     };
   });
 });

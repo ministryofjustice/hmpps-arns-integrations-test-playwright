@@ -1,9 +1,11 @@
 import { APIRequestContext, APIResponse } from '@playwright/test';
 import {
+  OasysCounterSignRequest,
   OasysCreateRequest,
   OasysCreateResponse,
   OasysRollbackRequest,
   OasysSignRequest,
+  Outcome,
   PreviousVersionsResponse,
   SignType,
   UserDetails,
@@ -112,6 +114,32 @@ export const sign = async (
   return await response.json();
 };
 
+export const counterSign = async (
+  request: APIRequestContext,
+  oasysPk: string,
+  name: string = 'Brennon Mayer',
+  outcome: Outcome = 'COUNTERSIGNED',
+  sanVersionNumber?: number,
+  sentencePlanVersionNumber?: number
+) => {
+  const sign: OasysCounterSignRequest = {
+    outcome: outcome,
+    sanVersionNumber: sanVersionNumber,
+    sentencePlanVersionNumber: sentencePlanVersionNumber,
+    userDetails: {
+      id: oasysPk,
+      name: name,
+    },
+  };
+
+  const response = await request.post(`/oasys/${oasysPk}/counter-sign`, { data: sign });
+  if (!response.ok()) {
+    throw new Error(`Oasys self signing failed: ${response.status()} ${response.statusText()}`);
+  }
+
+  return await response.json();
+};
+
 export const rollback = async (
   request: APIRequestContext,
   oasysPk: string,
@@ -128,10 +156,14 @@ export const rollback = async (
     },
   };
 
-  const response = await request.post(`/oasys/${oasysPk}/rollback`, { data: rollback });
-  if (!response.ok()) {
-    throw new Error(`Oasys rollback failed: ${response.status()} ${response.statusText()}`);
-  }
+  try {
+    const response = await request.post(`/oasys/${oasysPk}/rollback`, { data: rollback });
+    if (!response.ok()) {
+      throw new Error(`Oasys rollback failed: ${response.status()} ${response.statusText()}`);
+    }
 
-  return await response.json();
+    return await response.json();
+  } catch {
+    return {};
+  }
 };

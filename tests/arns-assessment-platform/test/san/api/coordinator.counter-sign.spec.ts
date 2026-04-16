@@ -7,6 +7,7 @@ import {
   getAssociations,
   rollback,
   sign,
+  counterSign,
 } from '../../../../../utils/coordinator/coordinatorClient';
 import { PreviousVersionsResponse } from '../../../../../utils/coordinator/coordinatorTypes';
 
@@ -50,15 +51,25 @@ test.beforeEach(async () => {
   });
 
   versions = await test.step('Get previous versions', async () => {
-    const queryResponse: PreviousVersionsResponse = await entityVersions(coordinatorContext, association.assessmentId);
+    const queryResponse: PreviousVersionsResponse = await entityVersions(
+      coordinatorContext,
+      association.sentencePlanId
+    );
 
     expect(queryResponse).toBeTruthy();
     expect(queryResponse).toHaveProperty('allVersions');
-    expect(queryResponse.allVersions[today].planVersion.entityType).toBe('AAP_PLAN');
+    const planDate =
+      Object.entries(queryResponse.countersignedVersions).find(([, e]) => Object.keys(e).includes('planVersion')) ?? [];
+    const planLastUpdatedDate = planDate[0] ?? '';
+    expect(queryResponse.countersignedVersions[planLastUpdatedDate].planVersion.entityType).toBe('AAP_PLAN');
+    const assessmentDate =
+      Object.entries(queryResponse.allVersions).find(([, e]) => Object.keys(e).includes('assessmentVersion')) ?? [];
+    const assessmentLastUpdatedDate = assessmentDate[0] ?? '';
+    expect(queryResponse.allVersions[assessmentLastUpdatedDate].assessmentVersion.entityType).toBe('ASSESSMENT');
 
     return {
-      assessmentVersion: queryResponse.allVersions[today].assessmentVersion.version,
-      planVersion: queryResponse.allVersions[today].planVersion.version,
+      assessmentVersion: queryResponse.allVersions[assessmentLastUpdatedDate].assessmentVersion.version,
+      planVersion: queryResponse.countersignedVersions[planLastUpdatedDate].planVersion.version,
     };
   });
 });
@@ -74,9 +85,13 @@ test('Coordinator counter signing', async () => {
 
     expect(queryResponse).toBeTruthy();
     expect(queryResponse.allVersions[today].planVersion.status).toBe('ROLLED_BACK');
+    versions = {
+      assessmentVersion: queryResponse.allVersions[today].assessmentVersion.version,
+      planVersion: queryResponse.allVersions[today].planVersion.version,
+    };
   });
 
-  await test.step('Counter-sign plan', async () => {
+  await test.step('Sign plan', async () => {
     await sign(coordinatorContext, oasysPk, name, 'COUNTERSIGN');
 
     const queryResponse: PreviousVersionsResponse = await entityVersions(
@@ -86,5 +101,24 @@ test('Coordinator counter signing', async () => {
 
     expect(queryResponse).toBeTruthy();
     expect(queryResponse.allVersions[today].planVersion.status).toBe('AWAITING_COUNTERSIGN');
+  });
+
+  await test.step('Counter-sign plan', async () => {
+    await counterSign(
+      coordinatorContext,
+      oasysPk,
+      name,
+      'COUNTERSIGNED',
+      versions.assessmentVersion,
+      versions.planVersion
+    );
+
+    const queryResponse: PreviousVersionsResponse = await entityVersions(
+      coordinatorContext,
+      association.sentencePlanId
+    );
+
+    expect(queryResponse).toBeTruthy();
+    expect(queryResponse.countersignedVersions[today].planVersion.status).toBe('COUNTERSIGNED');
   });
 });

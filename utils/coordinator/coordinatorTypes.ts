@@ -71,6 +71,15 @@ export interface OasysSignRequest {
   userDetails: OasysUserDetails;
 }
 
+export type Outcome = 'COUNTERSIGNED' | 'AWAITING_DOUBLE_COUNTERSIGN' | 'DOUBLE_COUNTERSIGNED' | 'REJECTED';
+
+export interface OasysCounterSignRequest {
+  sanVersionNumber?: number;
+  sentencePlanVersionNumber?: number;
+  outcome: Outcome;
+  userDetails: OasysUserDetails;
+}
+
 export interface OasysRollbackRequest {
   sanVersionNumber?: number;
   sentencePlanVersionNumber?: number;
