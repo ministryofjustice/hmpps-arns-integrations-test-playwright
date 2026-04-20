@@ -6,10 +6,12 @@ import {
   getCoordinatorUrl,
   getVersionDate,
   lock,
+  PreviousVersionsResponses,
 } from '../../../../../utils/coordinator/coordinatorClient';
 import { updateAnswers } from '../../../../../utils/aap/sentencePlan/assessmentCommands';
 import { OasysCreateResponse, PreviousVersionsResponse } from '../../../../../utils/coordinator/coordinatorTypes';
 import { GroupCommandResult } from '../../../../../utils/aap/assessmentTypes';
+import { softDelete, undelete } from '../../../../../utils/coordinator/client/deleting';
 
 let apiContext: APIRequestContext;
 let coordinatorContext: APIRequestContext;
@@ -50,7 +52,10 @@ test.beforeEach(async () => {
   });
 
   planVersion = await test.step('Get previous versions', async () => {
-    const queryResponse: PreviousVersionsResponse = await entityVersions(coordinatorContext, sentencePlanId);
+    const queryResponse: PreviousVersionsResponses = (await entityVersions(
+      coordinatorContext,
+      sentencePlanId
+    )) as PreviousVersionsResponse;
 
     expect(queryResponse).toBeTruthy();
     expect(queryResponse).toHaveProperty('allVersions');
@@ -70,7 +75,10 @@ test('Coordinator statuses', async () => {
   });
 
   await test.step('Get plan versions', async () => {
-    const queryResponse: PreviousVersionsResponse = await entityVersions(coordinatorContext, sentencePlanId);
+    const queryResponse: PreviousVersionsResponses = (await entityVersions(
+      coordinatorContext,
+      sentencePlanId
+    )) as PreviousVersionsResponse;
 
     expect(queryResponse).toBeTruthy();
     expect(queryResponse.allVersions[today].planVersion.status).toBe('UNSIGNED');
@@ -80,7 +88,33 @@ test('Coordinator statuses', async () => {
   await test.step('Lock plan', async () => {
     await lock(coordinatorContext);
 
-    const queryResponse: PreviousVersionsResponse = await entityVersions(coordinatorContext, sentencePlanId);
+    const queryResponse: PreviousVersionsResponses = (await entityVersions(
+      coordinatorContext,
+      sentencePlanId
+    )) as PreviousVersionsResponse;
+
+    expect(queryResponse).toBeTruthy();
+    expect(queryResponse.allVersions[today].planVersion.status).toBe('LOCKED');
+  });
+
+  await test.step('Soft delete plan', async () => {
+    await softDelete(coordinatorContext);
+
+    const queryResponse: PreviousVersionsResponses = (await entityVersions(
+      coordinatorContext,
+      sentencePlanId
+    )) as string;
+
+    expect(queryResponse).toBe('No associations found for the provided entityUuid');
+  });
+
+  await test.step('Undelete plan', async () => {
+    await undelete(coordinatorContext);
+
+    const queryResponse: PreviousVersionsResponses = (await entityVersions(
+      coordinatorContext,
+      sentencePlanId
+    )) as PreviousVersionsResponse;
 
     expect(queryResponse).toBeTruthy();
     expect(queryResponse.allVersions[today].planVersion.status).toBe('LOCKED');

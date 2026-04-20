@@ -57,6 +57,12 @@ export interface PreviousVersionsResponse {
   countersignedVersions: VersionsTable;
 }
 
+export interface OasysAssociationsResponse {
+  sanAssessmentId: string;
+  sentencePlanId: string;
+  sentencePlanVersion: number;
+}
+
 export interface OasysCreateResponse {
   sanAssessmentId: string;
   sanAssessmentVersion: number;

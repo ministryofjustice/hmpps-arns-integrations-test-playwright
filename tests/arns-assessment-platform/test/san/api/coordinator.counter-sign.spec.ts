@@ -5,10 +5,9 @@ import {
   getCoordinatorUrl,
   getVersionDate,
   getAssociations,
-  rollback,
-  sign,
-  counterSign,
+  PreviousVersionsResponses,
 } from '../../../../../utils/coordinator/coordinatorClient';
+import { counterSign, rollback, sign } from '../../../../../utils/coordinator/client/signing';
 import { PreviousVersionsResponse } from '../../../../../utils/coordinator/coordinatorTypes';
 
 let apiContext: APIRequestContext;
@@ -51,17 +50,19 @@ test.beforeEach(async () => {
   });
 
   versions = await test.step('Get previous versions', async () => {
-    const queryResponse: PreviousVersionsResponse = await entityVersions(
+    const queryResponse: PreviousVersionsResponses = (await entityVersions(
       coordinatorContext,
       association.sentencePlanId
-    );
+    )) as PreviousVersionsResponse;
 
     expect(queryResponse).toBeTruthy();
     expect(queryResponse).toHaveProperty('allVersions');
+
     const planDate =
       Object.entries(queryResponse.countersignedVersions).find(([, e]) => Object.keys(e).includes('planVersion')) ?? [];
     const planLastUpdatedDate = planDate[0] ?? '';
     expect(queryResponse.countersignedVersions[planLastUpdatedDate].planVersion.entityType).toBe('AAP_PLAN');
+
     const assessmentDate =
       Object.entries(queryResponse.allVersions).find(([, e]) => Object.keys(e).includes('assessmentVersion')) ?? [];
     const assessmentLastUpdatedDate = assessmentDate[0] ?? '';
@@ -78,10 +79,10 @@ test('Coordinator counter signing', async () => {
   await test.step('Rollback plan', async () => {
     await rollback(coordinatorContext, oasysPk, name, versions.assessmentVersion, versions.planVersion);
 
-    const queryResponse: PreviousVersionsResponse = await entityVersions(
+    const queryResponse: PreviousVersionsResponses = (await entityVersions(
       coordinatorContext,
       association.sentencePlanId
-    );
+    )) as PreviousVersionsResponse;
 
     expect(queryResponse).toBeTruthy();
     expect(queryResponse.allVersions[today].planVersion.status).toBe('ROLLED_BACK');
@@ -94,10 +95,10 @@ test('Coordinator counter signing', async () => {
   await test.step('Sign plan', async () => {
     await sign(coordinatorContext, oasysPk, name, 'COUNTERSIGN');
 
-    const queryResponse: PreviousVersionsResponse = await entityVersions(
+    const queryResponse: PreviousVersionsResponses = (await entityVersions(
       coordinatorContext,
       association.sentencePlanId
-    );
+    )) as PreviousVersionsResponse;
 
     expect(queryResponse).toBeTruthy();
     expect(queryResponse.allVersions[today].planVersion.status).toBe('AWAITING_COUNTERSIGN');
@@ -113,10 +114,10 @@ test('Coordinator counter signing', async () => {
       versions.planVersion
     );
 
-    const queryResponse: PreviousVersionsResponse = await entityVersions(
+    const queryResponse: PreviousVersionsResponses = (await entityVersions(
       coordinatorContext,
       association.sentencePlanId
-    );
+    )) as PreviousVersionsResponse;
 
     expect(queryResponse).toBeTruthy();
     expect(queryResponse.countersignedVersions[today].planVersion.status).toBe('COUNTERSIGNED');

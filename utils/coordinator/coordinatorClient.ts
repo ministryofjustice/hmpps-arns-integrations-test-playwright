@@ -1,13 +1,9 @@
 import { APIRequestContext, APIResponse } from '@playwright/test';
 import {
-  OasysCounterSignRequest,
+  OasysAssociationsResponse,
   OasysCreateRequest,
   OasysCreateResponse,
-  OasysRollbackRequest,
-  OasysSignRequest,
-  Outcome,
   PreviousVersionsResponse,
-  SignType,
   UserDetails,
 } from './coordinatorTypes';
 
@@ -48,11 +44,17 @@ export const createOasysAssociation = async (request: APIRequestContext, crn: st
   return await response.json();
 };
 
+export type PreviousVersionsResponses = PreviousVersionsResponse | string;
+
 export const entityVersions = async (
   request: APIRequestContext,
   assessmentUuid: string
-): Promise<PreviousVersionsResponse> => {
+): Promise<PreviousVersionsResponses> => {
   const response: APIResponse = await request.get(`/entity/versions/${assessmentUuid}`);
+
+  if (response.status() === 404) {
+    return await response.text();
+  }
 
   if (!response.ok()) {
     throw new Error(`Entity Versions failed: ${response.status()} ${response.statusText()}`);
@@ -61,7 +63,10 @@ export const entityVersions = async (
   return await response.json();
 };
 
-export const getAssociations = async (request: APIRequestContext, oasysPk: string = '7282419') => {
+export const getAssociations = async (
+  request: APIRequestContext,
+  oasysPk: string = '7282419'
+): Promise<OasysAssociationsResponse> => {
   const response: APIResponse = await request.get(`/oasys/${oasysPk}/associations`);
 
   if (!response.ok()) {
@@ -76,7 +81,7 @@ export const getVersionDate = (): string => {
   return today.toISOString().split('T')[0];
 };
 
-export const lock = async (request: APIRequestContext) => {
+export const lock = async (request: APIRequestContext): Promise<OasysCreateResponse> => {
   const userDetails: UserDetails = {
     userDetails: {
       id: oasysPk,
@@ -90,80 +95,4 @@ export const lock = async (request: APIRequestContext) => {
   }
 
   return await response.json();
-};
-
-export const sign = async (
-  request: APIRequestContext,
-  oasysPk: string,
-  name: string = 'Brennon Mayer',
-  signType: SignType = 'SELF'
-) => {
-  const sign: OasysSignRequest = {
-    signType: signType,
-    userDetails: {
-      id: oasysPk,
-      name: name,
-    },
-  };
-
-  const response = await request.post(`/oasys/${oasysPk}/sign`, { data: sign });
-  if (!response.ok()) {
-    throw new Error(`Oasys self signing failed: ${response.status()} ${response.statusText()}`);
-  }
-
-  return await response.json();
-};
-
-export const counterSign = async (
-  request: APIRequestContext,
-  oasysPk: string,
-  name: string = 'Brennon Mayer',
-  outcome: Outcome = 'COUNTERSIGNED',
-  sanVersionNumber?: number,
-  sentencePlanVersionNumber?: number
-) => {
-  const sign: OasysCounterSignRequest = {
-    outcome: outcome,
-    sanVersionNumber: sanVersionNumber,
-    sentencePlanVersionNumber: sentencePlanVersionNumber,
-    userDetails: {
-      id: oasysPk,
-      name: name,
-    },
-  };
-
-  const response = await request.post(`/oasys/${oasysPk}/counter-sign`, { data: sign });
-  if (!response.ok()) {
-    throw new Error(`Oasys self signing failed: ${response.status()} ${response.statusText()}`);
-  }
-
-  return await response.json();
-};
-
-export const rollback = async (
-  request: APIRequestContext,
-  oasysPk: string,
-  name: string = 'Brennon Mayer',
-  sanVersionNumber?: number,
-  sentencePlanVersionNumber?: number
-) => {
-  const rollback: OasysRollbackRequest = {
-    sanVersionNumber: sanVersionNumber,
-    sentencePlanVersionNumber: sentencePlanVersionNumber,
-    userDetails: {
-      id: oasysPk,
-      name: name,
-    },
-  };
-
-  try {
-    const response = await request.post(`/oasys/${oasysPk}/rollback`, { data: rollback });
-    if (!response.ok()) {
-      throw new Error(`Oasys rollback failed: ${response.status()} ${response.statusText()}`);
-    }
-
-    return await response.json();
-  } catch {
-    return {};
-  }
 };
