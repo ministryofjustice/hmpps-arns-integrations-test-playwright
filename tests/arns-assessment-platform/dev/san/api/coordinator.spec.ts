@@ -17,7 +17,7 @@ let apiContext: APIRequestContext;
 let coordinatorContext: APIRequestContext;
 const today = getVersionDate();
 const crn = Math.random().toString().substring(2, 7);
-export const oasysPk = Math.floor(Math.random() * 1000000000).toString();
+const oasysPk = Math.floor(Math.random() * 1000000000).toString();
 
 test.beforeAll(async ({ playwright, baseURL }) => {
   apiContext = await playwright.request.newContext({
@@ -99,7 +99,7 @@ test('Coordinator statuses', async () => {
   });
 
   await test.step('Soft delete plan', async () => {
-    await softDelete(coordinatorContext);
+    await softDelete(coordinatorContext, oasysPk);
 
     const queryResponse: PreviousVersionsResponses = (await entityVersions(
       coordinatorContext,
@@ -110,7 +110,7 @@ test('Coordinator statuses', async () => {
   });
 
   await test.step('Undelete plan', async () => {
-    await undelete(coordinatorContext);
+    await undelete(coordinatorContext, oasysPk);
 
     const queryResponse: PreviousVersionsResponses = (await entityVersions(
       coordinatorContext,

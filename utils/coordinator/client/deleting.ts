@@ -1,8 +1,8 @@
 import { APIRequestContext } from '@playwright/test';
 import { OasysCreateResponse, UserDetails } from '../coordinatorTypes';
-import { oasysPk, name } from '../coordinatorClient';
+import { name } from '../coordinatorClient';
 
-export const softDelete = async (request: APIRequestContext): Promise<OasysCreateResponse> => {
+export const softDelete = async (request: APIRequestContext, oasysPk: string): Promise<OasysCreateResponse> => {
   const userDetails: UserDetails = {
     userDetails: {
       id: oasysPk,
@@ -18,7 +18,7 @@ export const softDelete = async (request: APIRequestContext): Promise<OasysCreat
   return await response.json();
 };
 
-export const undelete = async (request: APIRequestContext): Promise<OasysCreateResponse> => {
+export const undelete = async (request: APIRequestContext, oasysPk: string): Promise<OasysCreateResponse> => {
   const userDetails: UserDetails = {
     userDetails: {
       id: oasysPk,
