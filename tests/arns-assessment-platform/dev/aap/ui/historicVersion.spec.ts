@@ -35,18 +35,19 @@ test.afterAll(async () => {
 });
 
 const crn = Math.random().toString().substring(2, 7);
+const oasysPk = Math.floor(Math.random() * 1000000000).toString();
 const today = getVersionDate();
 let planVersion: number;
 
 test.describe('Private beta', () => {
   test.beforeEach(async () => {
-    const oasysResponse = await createOasysAssociation(coordinatorContext, crn);
+    const oasysResponse = await createOasysAssociation(coordinatorContext, crn, oasysPk);
     const queryResponse = await entityVersions(coordinatorContext, oasysResponse.sentencePlanId);
     planVersion = queryResponse.allVersions[today].planVersion.version;
   });
 
   test('should navigate directly to historic version', async ({ page }) => {
-    const handoverLink = await createHandoverLink(apiContext, planVersion);
+    const handoverLink = await createHandoverLink(apiContext, planVersion, oasysPk);
     const privacy = new PrivacyPage(page);
 
     await page.goto(`${handoverLink}?clientId=sentence-plan`);

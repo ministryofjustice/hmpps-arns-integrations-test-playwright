@@ -5,9 +5,9 @@ import {
   getCoordinatorUrl,
   getVersionDate,
   getAssociations,
-  rollback,
-  sign,
+  PreviousVersionsResponses,
 } from '../../../../../utils/coordinator/coordinatorClient';
+import { rollback, sign } from '../../../../../utils/coordinator/client/signing';
 import { PreviousVersionsResponse } from '../../../../../utils/coordinator/coordinatorTypes';
 
 let apiContext: APIRequestContext;
@@ -51,7 +51,10 @@ test.beforeEach(async () => {
   });
 
   versions = await test.step('Get previous versions', async () => {
-    const queryResponse: PreviousVersionsResponse = await entityVersions(coordinatorContext, association.assessmentId);
+    const queryResponse: PreviousVersionsResponses = (await entityVersions(
+      coordinatorContext,
+      association.assessmentId
+    )) as PreviousVersionsResponse;
 
     expect(queryResponse).toBeTruthy();
     expect(queryResponse).toHaveProperty('allVersions');
@@ -71,10 +74,10 @@ test('Coordinator self signing', async () => {
   await test.step('Rollback plan', async () => {
     await rollback(coordinatorContext, oasysPk, name, versions.assessmentVersion, versions.planVersion);
 
-    const queryResponse: PreviousVersionsResponse = await entityVersions(
+    const queryResponse: PreviousVersionsResponses = (await entityVersions(
       coordinatorContext,
       association.sentencePlanId
-    );
+    )) as PreviousVersionsResponse;
 
     expect(queryResponse).toBeTruthy();
     expect(queryResponse.allVersions[today].planVersion.status).toBe('ROLLED_BACK');
@@ -83,7 +86,7 @@ test('Coordinator self signing', async () => {
   await test.step('Sign plan', async () => {
     await sign(coordinatorContext, oasysPk);
 
-    const queryResponse: PreviousVersionsResponse = await entityVersions(
+    const queryResponse: PreviousVersionsResponses = await entityVersions(
       coordinatorContext,
       association.sentencePlanId
     );

@@ -1,5 +1,4 @@
 import { APIRequestContext, APIResponse } from '@playwright/test';
-import { oasysPk } from '../coordinator/coordinatorClient';
 import {
   CreateHandoverLinkRequest,
   CreateHandoverLinkResponse,
@@ -68,19 +67,6 @@ const criminogenicNeedsData: CriminogenicNeedsData = {
   },
 };
 
-const createRequest: CreateHandoverLinkRequest = {
-  user: {
-    identifier: generateUserId(),
-    displayName: 'Test User',
-    accessMode: 'READ_WRITE',
-    planAccessMode: 'READ_WRITE',
-    returnUrl: OasysReturnUrl,
-  },
-  subjectDetails,
-  oasysAssessmentPk: oasysPk,
-  criminogenicNeedsData: criminogenicNeedsData,
-};
-
 export function generateUserId(prefix: string = 'int-test'): string {
   const timestamp = Date.now();
   const random = Math.floor(Math.random() * 10000)
@@ -92,10 +78,22 @@ export function generateUserId(prefix: string = 'int-test'): string {
 
 export const getHandoverLink = async (
   request: APIRequestContext,
-  planVersion: number
+  planVersion: number,
+  oasysPk: string
 ): Promise<CreateHandoverLinkResponse> => {
-  createRequest.sentencePlanVersion = planVersion;
-  createRequest.user.returnUrl = OasysReturnUrl;
+  const createRequest: CreateHandoverLinkRequest = {
+    user: {
+      identifier: generateUserId(),
+      displayName: 'Test User',
+      accessMode: 'READ_WRITE',
+      planAccessMode: 'READ_WRITE',
+      returnUrl: OasysReturnUrl,
+    },
+    subjectDetails,
+    oasysAssessmentPk: oasysPk,
+    criminogenicNeedsData: criminogenicNeedsData,
+    sentencePlanVersion: planVersion,
+  };
 
   const response: APIResponse = await request.post(`/handover`, { data: createRequest });
 
@@ -106,8 +104,8 @@ export const getHandoverLink = async (
   return await response.json();
 };
 
-export const createHandoverLink = async (request: APIRequestContext, planVersion: number) => {
-  const handoverResponse: CreateHandoverLinkResponse = await getHandoverLink(request, planVersion);
+export const createHandoverLink = async (request: APIRequestContext, planVersion: number, oasysPk: string) => {
+  const handoverResponse: CreateHandoverLinkResponse = await getHandoverLink(request, planVersion, oasysPk);
 
   return handoverResponse.handoverLink;
 };
