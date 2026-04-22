@@ -141,7 +141,7 @@ export async function browserTest() {
     const sanPage = pages[pages.length - 1];
 
     await sanPage.bringToFront();
-    console.log('Current URL after switching: ', sanPage.url())
+    console.log('Current URL after switching: ', sanPage.url());
     console.log(sanPage.title());
     console.log("=========================");
 

@@ -18,10 +18,13 @@ export const getCoordinatorUrl = (baseUrl: string): string => {
   return 'https://arns-coordinator-api-dev.hmpps.service.justice.gov.uk';
 };
 
-export const oasysPk = Math.floor(Math.random() * 1000000000).toString();
 export const name = 'Test';
 
-export const createOasysAssociation = async (request: APIRequestContext, crn: string): Promise<OasysCreateResponse> => {
+export const createOasysAssociation = async (
+  request: APIRequestContext,
+  crn: string,
+  oasysPk: string
+): Promise<OasysCreateResponse> => {
   const create: OasysCreateRequest = {
     oasysAssessmentPk: oasysPk,
     planType: 'INITIAL',
@@ -76,7 +79,7 @@ export const getVersionDate = (): string => {
   return today.toISOString().split('T')[0];
 };
 
-export const lock = async (request: APIRequestContext) => {
+export const lock = async (request: APIRequestContext, oasysPk: string) => {
   const userDetails: UserDetails = {
     userDetails: {
       id: oasysPk,
