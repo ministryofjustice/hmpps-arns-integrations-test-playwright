@@ -5,9 +5,10 @@ import {
   entityVersions,
   getCoordinatorUrl,
   getVersionDate,
+  lock,
 } from '../../../../../utils/coordinator/coordinatorClient';
 import { updateAnswers } from '../../../../../utils/aap/sentencePlan/assessmentCommands';
-import { PreviousVersionsResponse } from '../../../../../utils/coordinator/coordinatorTypes';
+import { OasysCreateResponse, PreviousVersionsResponse } from '../../../../../utils/coordinator/coordinatorTypes';
 import { GroupCommandResult } from '../../../../../utils/aap/assessmentTypes';
 
 let apiContext: APIRequestContext;
@@ -42,7 +43,7 @@ let planVersion: number;
 
 test.beforeEach(async () => {
   sentencePlanId = await test.step('OAsys association', async () => {
-    const oasysResponse = await createOasysAssociation(coordinatorContext, crn);
+    const oasysResponse: OasysCreateResponse = await createOasysAssociation(coordinatorContext, crn);
     expect(oasysResponse).toBeTruthy();
 
     return oasysResponse.sentencePlanId;
@@ -55,11 +56,12 @@ test.beforeEach(async () => {
     expect(queryResponse).toHaveProperty('allVersions');
     expect(queryResponse.allVersions[today].planVersion.entityType).toBe('AAP_PLAN');
     expect(queryResponse.allVersions[today].planVersion.status).toBe('CREATED');
+
     return queryResponse.allVersions[today].planVersion.version;
   });
 });
 
-test('Coordinator get previous versions', async () => {
+test('Coordinator statuses', async () => {
   await test.step('Update answers', async () => {
     const updateResponse: GroupCommandResult = await updateAnswers(apiContext, sentencePlanId, crn);
 
@@ -73,5 +75,14 @@ test('Coordinator get previous versions', async () => {
     expect(queryResponse).toBeTruthy();
     expect(queryResponse.allVersions[today].planVersion.status).toBe('UNSIGNED');
     expect(queryResponse.allVersions[today].planVersion.version).not.toBe(planVersion);
+  });
+
+  await test.step('Lock plan', async () => {
+    await lock(coordinatorContext);
+
+    const queryResponse: PreviousVersionsResponse = await entityVersions(coordinatorContext, sentencePlanId);
+
+    expect(queryResponse).toBeTruthy();
+    expect(queryResponse.allVersions[today].planVersion.status).toBe('LOCKED');
   });
 });
