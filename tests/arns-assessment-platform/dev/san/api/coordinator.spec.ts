@@ -17,6 +17,7 @@ let apiContext: APIRequestContext;
 let coordinatorContext: APIRequestContext;
 const today = getVersionDate();
 const crn = Math.random().toString().substring(2, 7);
+export const oasysPk = Math.floor(Math.random() * 1000000000).toString();
 
 test.beforeAll(async ({ playwright, baseURL }) => {
   apiContext = await playwright.request.newContext({
@@ -45,7 +46,7 @@ let planVersion: number;
 
 test.beforeEach(async () => {
   sentencePlanId = await test.step('OAsys association', async () => {
-    const oasysResponse: OasysCreateResponse = await createOasysAssociation(coordinatorContext, crn);
+    const oasysResponse: OasysCreateResponse = await createOasysAssociation(coordinatorContext, crn, oasysPk);
     expect(oasysResponse).toBeTruthy();
 
     return oasysResponse.sentencePlanId;
@@ -86,7 +87,7 @@ test('Coordinator statuses', async () => {
   });
 
   await test.step('Lock plan', async () => {
-    await lock(coordinatorContext);
+    await lock(coordinatorContext, oasysPk);
 
     const queryResponse: PreviousVersionsResponses = (await entityVersions(
       coordinatorContext,

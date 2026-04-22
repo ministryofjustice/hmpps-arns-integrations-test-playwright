@@ -38,10 +38,11 @@ test.afterAll(async () => {
 
 let planVersion: number;
 const crn = Math.random().toString().substring(2, 7);
+const oasysPk = Math.floor(Math.random() * 1000000000).toString();
 
 test.beforeEach(async () => {
   const sentencePlanId: string = await test.step('OAsys association', async () => {
-    const oasysResponse = await createOasysAssociation(coordinatorContext, crn);
+    const oasysResponse = await createOasysAssociation(coordinatorContext, crn, oasysPk);
     expect(oasysResponse).toBeTruthy();
 
     return oasysResponse.sentencePlanId;
@@ -59,7 +60,7 @@ test.beforeEach(async () => {
 });
 
 test('Get Handover link', async () => {
-  const handoverResponse: CreateHandoverLinkResponse = await getHandoverLink(handoverContext, planVersion);
+  const handoverResponse: CreateHandoverLinkResponse = await getHandoverLink(handoverContext, planVersion, oasysPk);
 
   expect(handoverResponse).toBeTruthy();
   expect(handoverResponse.handoverLink).toContain('/handover/');
