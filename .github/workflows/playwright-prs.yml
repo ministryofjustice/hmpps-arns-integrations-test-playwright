@@ -23,7 +23,9 @@ jobs:
         with:
           app-id: ${{ secrets.INTEGRATION_TESTS_TRIGGER_APP_ID }}
           private-key: ${{ secrets.INTEGRATION_TESTS_TRIGGER_PRIVATE_KEY }}
-          permission-actions: write
+          owner: ${{ github.repository_owner }}
+          permission-issues: write
+          repositories: hmpps-arns-integrations-test-playwright
       - name: Comment PR Failure
         if: failure()
         uses: actions/github-script@v8
