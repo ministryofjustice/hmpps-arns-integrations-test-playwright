@@ -9,3 +9,4 @@ jobs:
     secrets: inherit
     with:
       environment: test
+      url: 'https://arns-assessment-platform-test.hmpps.service.justice.gov.uk'

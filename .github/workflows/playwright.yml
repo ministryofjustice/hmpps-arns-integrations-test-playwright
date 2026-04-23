@@ -17,6 +17,11 @@ on:
         required: false
         default: 'all'
         type: string
+      url:
+        description: 'Base url'
+        required: false
+        default: 'https://arns-assessment-platform-dev.hmpps.service.justice.gov.uk'
+        type: string
 
 jobs:
   test:
@@ -49,6 +54,7 @@ jobs:
           MPOP_USERNAME: ${{ secrets.E2E_MPOP_USERNAME }}
           DELIUS_USERNAME: ${{ secrets.E2E_DELIUS_USERNAME }}
           DELIUS_PASSWORD: ${{ secrets.E2E_DELIUS_PASSWORD }}
+          BASE_URL: ${{ inputs.url }}
 
       - name: Publish Test Summary
         uses: ctrf-io/github-test-reporter@v1

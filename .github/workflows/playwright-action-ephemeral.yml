@@ -1,4 +1,4 @@
-name: Integration tests
+name: Ephemeral Integration tests
 on:
   workflow_dispatch:
     inputs:
@@ -10,17 +10,16 @@ on:
       url:
         description: 'Ephemeral url'
         required: false
-        default: 'https://arns-assessment-platform-dev.hmpps.service.justice.gov.uk'
+        default: 'https://google.com'
         type: string
-  schedule:
-    - cron: '30 7,13,18 * * 1-5'
+
 jobs:
-  send-notification:
+  int-tests:
     name: Integration tests
     uses: ./.github/workflows/playwright.yml
     with:
-      channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
+      channel_id: 'NO_SLACK'
       environment: dev
       source: ${{ inputs.source || 'all' }}
-      url: ${{ inputs.url || 'https://arns-assessment-platform-dev.hmpps.service.justice.gov.uk' }}
+      url: ${{ inputs.url || 'https://google.com' }}
     secrets: inherit
