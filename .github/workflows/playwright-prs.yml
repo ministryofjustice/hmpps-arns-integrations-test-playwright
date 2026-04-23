@@ -10,3 +10,67 @@ jobs:
     with:
       environment: test
       url: 'https://arns-assessment-platform-test.hmpps.service.justice.gov.uk'
+
+  pr-comment-success:
+    name: Comment PR
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Generate Token
+        if: always()
+        uses: actions/create-github-app-token@v3
+        id: generate-token
+        with:
+          app-id: ${{ secrets.INTEGRATION_TESTS_TRIGGER_APP_ID }}
+          private-key: ${{ secrets.INTEGRATION_TESTS_TRIGGER_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          permission-actions: write
+          repositories: hmpps-arns-integrations-test-playwright
+      - name: Comment PR Failure
+        if: failure()
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ steps.generate-token.outputs.token }}
+          script: |
+            // Build comment
+            const marker = '<!-- playwright-int-tests-config -->';
+            const lines = [
+              marker,
+              '## 🤖 E2E Ephemeral Tests',
+              '',
+              '🚨 Ephemeral Playwright Tests Failed',
+              'Test results: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+            ];
+
+            lines.push('', '<!-- /ephemeral-config -->');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: 'hmpps-arns-integrations-test-playwright',
+              issue_number: context.payload.pull_request?.number,
+              body: lines.join('\n')
+            });
+      - name: Comment PR Success
+        if: success()
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ steps.generate-token.outputs.token }}
+          script: |
+            // Build comment
+            const marker = '<!-- playwright-int-tests-config -->';
+            const lines = [
+              marker,
+              '## 🤖 E2E Ephemeral Tests',
+              '',
+              '✅  Ephemeral Playwright Tests Passed',
+              'Test results: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+            ];
+
+            lines.push('', '<!-- /ephemeral-config -->');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: 'hmpps-arns-integrations-test-playwright',
+              issue_number: context.payload.pull_request?.number,
+              body: lines.join('\n')
+            });
