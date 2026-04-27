@@ -40,39 +40,41 @@ async function globalSetup() {
     fs.writeFileSync(TOKEN_PATH_AAP, JSON.stringify(tokenDataAap, null, 2), 'utf-8');
 
     const assessments = [];
-    const BASE_URL = 'https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk';
-      for (let i = 0; i < 10; i++) {
-        const commandPayload = JSON.stringify({
-          commands: [
-            {
-              type: "CreateAssessmentCommand",
-              assessmentType: 'TEST',
-              formVersion: "1.0",
-              properties: {},
-              user: { id: "test-user", name: "Test User" },
-            },
-          ],
-        });
-    
-        const commandResponse = await fetch(`${BASE_URL}/command`, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${tokenDataAap.access_token}`,
-            "Content-Type": "application/json",
-          },
-          body: commandPayload
-        });
-    
-        if (!commandResponse.ok) {
-            throw new Error(`Assessment command request failed: ${commandResponse.status} ${commandResponse.statusText}`);
-        }
-        const responseData: any = await commandResponse.json();
+    const BASE_URL = process.env.BASE_URL || 'https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk';
+    const vus = process.env.VUS ? parseInt(process.env.VUS) : 10;
 
-        assessments.push({
-          assessmentUuid: responseData.commands[0].result.assessmentUuid,
-        });
+    for (let i = 0; i < vus; i++) {
+      const commandPayload = JSON.stringify({
+        commands: [
+          {
+            type: "CreateAssessmentCommand",
+            assessmentType: 'TEST',
+            formVersion: "1.0",
+            properties: {},
+            user: { id: "test-user", name: "Test User" },
+          },
+        ],
+      });
+  
+      const commandResponse = await fetch(`${BASE_URL}/command`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${tokenDataAap.access_token}`,
+          "Content-Type": "application/json",
+        },
+        body: commandPayload
+      });
+  
+      if (!commandResponse.ok) {
+          throw new Error(`Assessment command request failed: ${commandResponse.status} ${commandResponse.statusText}`);
       }
-      fs.writeFileSync(ASSESSMENTS_PATH_AAP, JSON.stringify(assessments), 'utf-8');
+      const responseData: any = await commandResponse.json();
+
+      assessments.push({
+        assessmentUuid: responseData.commands[0].result.assessmentUuid,
+      });
+    }
+    fs.writeFileSync(ASSESSMENTS_PATH_AAP, JSON.stringify(assessments), 'utf-8');
 
     console.log('All tokens fetched and saved successfully.');
   } catch (err) {

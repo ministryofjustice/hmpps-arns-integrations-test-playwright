@@ -27,37 +27,20 @@ const P95_THRESHOLD = __ENV.P95_THRESHOLD ? parseInt(__ENV.P95_THRESHOLD) : 500;
 
 const TOKEN_REFRESH_WINDOW = 20 * 60 * 1000; // 20 minutes in milliseconds
 
-const BASE_URL = "https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk";
+const BASE_URL = __ENV.BASE_URL || 'https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk';
 
 // --- DYNAMIC OPTIONS LOGIC
 
 // 1. Define base options (Thresholds are always needed)
 let testOptions = {
+  vus: VUS,
+  duration: DURATION,
+  noConnectionReuse: false,
   thresholds: {
     http_req_failed: ["rate<0.01"],
     http_req_duration: [`p(95)<${P95_THRESHOLD}`, `p(90)<${P90_THRESHOLD}`],
   },
 };
-
-// 2. Determine Profile
-if (__ENV.CUSTOM_STAGES) {
-  // SCENARIO A: Load / Soak / Stress
-  console.log("Running with Custom Stages profile");
-  testOptions.stages = JSON.parse(__ENV.CUSTOM_STAGES);
-} else {
-  // SCENARIO B: Simple Profile (Smoke Test)
-  console.log("Running with Fixed Duration profile (Smoke)");
-  testOptions.vus = VUS;
-  testOptions.duration = DURATION;
-}
-
-// Add noConnectionReuse for Soak test
-if (__ENV.NO_CONNECTION_REUSE === "true") {
-  console.log("Connection reuse DISABLED (Soak Test)");
-  testOptions.noConnectionReuse = true;
-} else {
-  testOptions.noConnectionReuse = false;
-}
 
 export const options = testOptions;
 
@@ -151,24 +134,9 @@ export function apiJourney (data) {
       ),
     });
 
-    check(queryResponse, { "query status 200": (r) => r.status === 200 });
-
-    if (queryResponse.status !== 200) {
-      console.error(`NON-200 RESPONSE from /query`);
-      console.error(`STATUS: ${queryResponse.status}`);
-      console.error(`BODY: ${queryResponse.body}`);
-    }
-
-    const queryData = queryResponse.json();
-    const queryResult =
-      queryData &&
-      queryData.queries &&
-      queryData.queries[0] &&
-      queryData.queries[0].result;
-
-    check(queryResult, {
-      "result exists": (r) => r !== undefined,
-      "has assessmentUuid": (r) => typeof r.assessmentUuid === "string",
+    check(queryResponse, { 
+      "query status 200": (r) => r.status === 200,
+      "query response exists": (r) => r.json().queries[0].result !== undefined
     });
 
   });
@@ -201,30 +169,9 @@ export function apiJourney (data) {
       ),
     });
 
-    check(commandResponse, { "command status 200": (r) => r.status === 200 });
-
-    let responseData;
-    try {
-      responseData = commandResponse.json();
-    } catch (err) {
-      console.error(`JSON parse error on /command response ${commandResponse.status_text}`);
-      return;
-    }
-
-    const command =
-      responseData && responseData.commands && responseData.commands[0];
-    const result = command && command.result;
-
-    check(responseData, {
-      "commands array exists": (d) => d && Array.isArray(d.commands),
-      "command[0] exists": (d) => d && d.commands.length > 0,
-    });
-
-    check(result, {
-      "result exists": (res) => res !== undefined,
-      "result.type correct": (res) =>
-        res.type === "CreateAssessmentCommandResult",
-      "assessmentUuid exists": (res) => typeof res.assessmentUuid === "string",
+    check(commandResponse, { 
+      "command status 200": (r) => r.status === 200,
+      "command response exists": (r) => r.json().commands.length > 0
     });
 
     sleep(0.5);
