@@ -2,8 +2,6 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import fetch from 'node-fetch';
-import { loadEnvFile } from 'node:process';
-loadEnvFile('./.env');
 
 const TOKEN_PATH_AAP = path.resolve(__dirname, 'aapToken.json'); // AAP token
 const ASSESSMENTS_PATH_AAP = path.resolve(__dirname, 'assessments.json'); // Assessments
@@ -47,7 +45,7 @@ async function globalSetup() {
 
     const assessments = [];
     const BASE_URL = process.env.BASE_URL || 'https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk';
-    const vus = process.env.VUS ? parseInt(process.env.VUS) : 10;
+    const vus = process.env.VUS ? parseInt(process.env.VUS) : 5;
 
     for (let i = 0; i < vus; i++) {
       const commandPayload = JSON.stringify({

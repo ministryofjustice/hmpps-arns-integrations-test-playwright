@@ -30,6 +30,7 @@ jobs:
           AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
           AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
           TOKEN_URL: ${{ secrets.TOKEN_URL }}
+          VUS: "5"
 
       - name: Run k6 AAP smoke performance test
         env:
