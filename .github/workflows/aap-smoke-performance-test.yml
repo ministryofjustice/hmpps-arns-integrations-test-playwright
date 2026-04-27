@@ -25,7 +25,11 @@ jobs:
         uses: grafana/setup-k6-action@v1
 
       - name: Set up test data
-        script: npx ts-node performance/setup/env.ts
+        run: npx ts-node performance/setup/env.ts
+        env:
+          AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
+          AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
+          TOKEN_URL: ${{ secrets.TOKEN_URL }}
 
       - name: Run k6 AAP smoke performance test
         env:

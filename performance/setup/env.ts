@@ -13,9 +13,15 @@ let clientSecretAap;
 
 async function globalSetup() {
   try {
-    // Fetch AAP token
-    clientIdAap = execSync(process.env.AAP_CLIENT_ID_SCRIPT!).toString().trim();
-    clientSecretAap = execSync(process.env.AAP_CLIENT_SECRET_SCRIPT!).toString().trim();
+    if (process.env.CI) {
+      // running in GitHub Actions
+      clientIdAap = process.env.AAP_CLIENT_ID!;
+      clientSecretAap = process.env.AAP_CLIENT_SECRET!;
+    } else {
+      // running locally with kubectl
+      clientIdAap = execSync(process.env.AAP_CLIENT_ID_SCRIPT!).toString().trim();
+      clientSecretAap = execSync(process.env.AAP_CLIENT_SECRET_SCRIPT!).toString().trim();
+    }
 
     const tokenUrlAap = process.env.TOKEN_URL!;
     const paramsAap = new URLSearchParams();
