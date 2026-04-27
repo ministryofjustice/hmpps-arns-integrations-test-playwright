@@ -14,8 +14,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
+      - uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Set up k6
         uses: grafana/setup-k6-action@v1
+
+      - name: Set up test data
+        script: npx ts-node performance/setup/env.ts
 
       - name: Run k6 AAP smoke performance test
         env:
@@ -33,7 +43,7 @@ jobs:
           K6_WEB_DASHBOARD: "true"
           K6_WEB_DASHBOARD_EXPORT: "aap-smoke-report.html"
 
-        run: k6 run performance/tests/aapApi.js
+        run: k6 run performance/tests/aapApi-smoke.js
 
       - name: Upload Smoke Report
         if: always()
