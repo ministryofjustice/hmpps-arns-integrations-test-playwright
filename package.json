@@ -20,7 +20,8 @@
     "prettier": "prettier . --check",
     "prettier:fix": "prettier . --write",
     "prepare": "husky install",
-    "k6:local": "./performance/run-local.sh"
+    "k6:aap:local": "./performance/utils/run_k6_aap_local.sh",
+    "k6:smoke:local": "./performance/utils/run_k6_aap_smoke_local.sh"
   },
   "keywords": [],
   "author": "",
