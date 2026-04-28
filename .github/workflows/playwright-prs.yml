@@ -52,14 +52,7 @@ jobs:
               repo: 'hmpps-arns-integrations-test-playwright',
               workflow_id: 'playwright-action-test.yml',
               ref: 'main'
-            })
-
-            # await github.rest.issues.createComment({
-            #   owner: context.repo.owner,
-            #   repo: 'hmpps-arns-integrations-test-playwright',
-            #   issue_number: context.payload.pull_request?.number,
-            #   body: lines.join('\n')
-            # });
+            });
       - name: Comment PR Success
         if: success()
         uses: actions/github-script@v8
@@ -82,10 +75,4 @@ jobs:
               repo: 'hmpps-arns-integrations-test-playwright',
               workflow_id: 'playwright-action-test.yml',
               ref: 'main'
-            })
-            # await github.rest.issues.createComment({
-            #   owner: context.repo.owner,
-            #   repo: 'hmpps-arns-integrations-test-playwright',
-            #   issue_number: context.payload.pull_request?.number,
-            #   body: lines.join('\n')
-            # });
+            });
