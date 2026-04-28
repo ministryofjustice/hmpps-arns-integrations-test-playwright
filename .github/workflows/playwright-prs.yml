@@ -34,7 +34,6 @@ jobs:
         if: failure()
         uses: actions/github-script@v8
         with:
-          github-token: ${{ steps.generate-token.outputs.token }}
           script: |
             // Build comment
             const marker = '<!-- playwright-int-tests-config -->';
@@ -65,7 +64,6 @@ jobs:
         if: success()
         uses: actions/github-script@v8
         with:
-          github-token: ${{ steps.generate-token.outputs.token }}
           script: |
             // Build comment
             const marker = '<!-- playwright-int-tests-config -->';
