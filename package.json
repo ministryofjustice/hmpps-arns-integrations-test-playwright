@@ -19,7 +19,9 @@
     "lint:fix": "eslint tests/** page-objects/** utils/** --fix",
     "prettier": "prettier . --check",
     "prettier:fix": "prettier . --write",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "k6:aap:local": "./performance/utils/run_k6_aap_local.sh",
+    "k6:smoke:local": "./performance/utils/run_k6_aap_smoke_local.sh"
   },
   "keywords": [],
   "author": "",
@@ -33,7 +35,7 @@
     "@types/node": "^22.19.9",
     "@types/oracledb": "^6.10.1",
     "audit-ci": "^7.1.0",
-    "dotenv": "^17.2.4",
+    "dotenv": "^17.4.2",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
