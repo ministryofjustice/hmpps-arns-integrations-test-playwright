@@ -42,6 +42,32 @@ jobs:
           name: k6-smoke-report
           path: aap-smoke-report.html
           retention-days: 1
+      
+      - name: Run k6 Coordinator smoke performance test
+        env:
+          AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
+          AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
+          TOKEN_URL: ${{ secrets.TOKEN_URL }}
+
+          VUS: "5"
+          DURATION: "30s"
+
+          MIN_THINK_TIME: "1"
+          MAX_THINK_TIME: "5"
+
+          # Environment variables for the Web Dashboard
+          K6_WEB_DASHBOARD: "true"
+          K6_WEB_DASHBOARD_EXPORT: "coordinator-smoke-report.html"
+
+        run: k6 run performance/tests/coordinatorApi.js
+
+      - name: Upload Smoke Report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: k6-smoke-coordinator-report
+          path: coordinator-smoke-report.html
+          retention-days: 1
 
       - name: Slack notification
         if: failure()
