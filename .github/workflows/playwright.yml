@@ -32,7 +32,7 @@ jobs:
       - name: Install Playwright
         run: npx playwright install --only-shell
       - name: Install Edge
-        run: npx playwright install --with-deps msedge
+        run: npx playwright install msedge
       - name: Run Playwright tests
         id: playwright-tests
         run: npm run ${{ inputs.environment }}:${{ inputs.source }}:ci
