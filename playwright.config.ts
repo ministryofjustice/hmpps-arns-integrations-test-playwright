@@ -11,7 +11,7 @@ if (!process.env.CI) {
 export default defineConfig({
   globalSetup: require.resolve('./utils/global-setup.ts'),
   /* Maximum time one test can run for. */
-  timeout: 300 * 1000,
+  timeout: 600 * 100,
   expect: {
     /**
      * Maximum time expect() should wait for the condition to be met.
@@ -38,6 +38,8 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'on-first-retry',
   },
 
   /* Configure projects for major browsers */
