@@ -62,7 +62,7 @@ jobs:
         with:
           name: screenshots-playwright
           path: |
-            test_results/**/*
+            test-results/**/*
       
       - name: Slack notification
         if: failure()
