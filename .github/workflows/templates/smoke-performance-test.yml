@@ -1,0 +1,72 @@
+name: Playwright Tests
+on:
+  workflow_call:
+    inputs:
+      channel_id:
+        description: 'The slack channel ID to send a message on failure. If this is not provided then no message is sent.'
+        required: false
+        default: 'NO_SLACK'
+        type: string
+      test_name:
+        description: 'API name to run tests'
+        required: false
+        default: 'aap'
+        type: string
+
+jobs:
+  performance_smoke_test:
+    name: Run k6 with Dashboard
+    runs-on: [ self-hosted, hmpps-github-actions-runner ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up k6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Run k6 ${{ inputs.test_name }} smoke performance test
+        env:
+          AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
+          AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
+          TOKEN_URL: ${{ secrets.TOKEN_URL }}
+
+          VUS: "5"
+          DURATION: "30s"
+
+          MIN_THINK_TIME: "1"
+          MAX_THINK_TIME: "5"
+
+          # Environment variables for the Web Dashboard
+          K6_WEB_DASHBOARD: "true"
+          K6_WEB_DASHBOARD_EXPORT: "${{ inputs.test_name }}-smoke-report.html"
+
+        run: k6 run performance/tests/${{ inputs.test_name }}Api.js
+
+      - name: Upload ${{ inputs.test_name }} Smoke Report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: k6-smoke-${{ inputs.test_name }}-report
+          path: ${{ inputs.test_name }}-smoke-report.html
+          retention-days: 1
+
+      - name: Slack notification
+        if: failure()
+        uses: slackapi/slack-github-action@v3.0.1
+        env:
+          SLACK_CHANNEL: ${{ inputs.channel_id }}
+          REPO_NAME: ${{ github.repository }}
+          SLACK_BOT_TOKEN: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
+        with:
+          method: chat.postMessage
+          token: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
+          payload: |
+            {
+              "channel": "${{ env.SLACK_CHANNEL }}",
+              "attachments": [
+                {
+                  "color": "#FF0000",
+                  "text": ":x: *${{ inputs.test_name }} API Smoke Performance test notification*\nWorkflow failed for ${{ env.REPO_NAME }}"
+                }
+              ]
+            }

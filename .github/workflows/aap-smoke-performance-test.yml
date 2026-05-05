@@ -18,100 +18,19 @@ jobs:
         uses: grafana/setup-k6-action@v1
 
       - name: Run k6 AAP smoke performance test
-        env:
-          AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
-          AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
-          TOKEN_URL: ${{ secrets.TOKEN_URL }}
-
-          VUS: "5"
-          DURATION: "30s"
-
-          MIN_THINK_TIME: "1"
-          MAX_THINK_TIME: "5"
-
-          # Environment variables for the Web Dashboard
-          K6_WEB_DASHBOARD: "true"
-          K6_WEB_DASHBOARD_EXPORT: "aap-smoke-report.html"
-
-        run: k6 run performance/tests/aapApi.js
-
-      - name: Upload Smoke Report
-        if: always()
-        uses: actions/upload-artifact@v7
+        uses: ./.github/workflows/templates/smoke-performance-test.yml
         with:
-          name: k6-smoke-report
-          path: aap-smoke-report.html
-          retention-days: 1
-
-      - name: Run k6 Coordinator smoke performance test
-        env:
-          AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
-          AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
-          TOKEN_URL: ${{ secrets.TOKEN_URL }}
-
-          VUS: "5"
-          DURATION: "30s"
-
-          MIN_THINK_TIME: "1"
-          MAX_THINK_TIME: "5"
-
-          # Environment variables for the Web Dashboard
-          K6_WEB_DASHBOARD: "true"
-          K6_WEB_DASHBOARD_EXPORT: "coordinator-smoke-report.html"
-
-        run: k6 run performance/tests/coordinatorApi.js
-
-      - name: Upload Coordinator Smoke Report
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: k6-smoke-coordinator-report
-          path: coordinator-smoke-report.html
-          retention-days: 1
+          test_name: aap
+          channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
 
       - name: Run k6 Handover smoke performance test
-        env:
-          AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
-          AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
-          TOKEN_URL: ${{ secrets.TOKEN_URL }}
-
-          VUS: "5"
-          DURATION: "30s"
-
-          MIN_THINK_TIME: "1"
-          MAX_THINK_TIME: "5"
-
-          # Environment variables for the Web Dashboard
-          K6_WEB_DASHBOARD: "true"
-          K6_WEB_DASHBOARD_EXPORT: "handover-smoke-report.html"
-
-        run: k6 run performance/tests/handoverApi.js
-
-      - name: Upload Handover Smoke Report
-        if: always()
-        uses: actions/upload-artifact@v7
+        uses: ./.github/workflows/templates/smoke-performance-test.yml
         with:
-          name: k6-smoke-handover-report
-          path: handover-smoke-report.html
-          retention-days: 1
+          test_name: handover
+          channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
 
-      - name: Slack notification
-        if: failure()
-        uses: slackapi/slack-github-action@v3.0.1
-        env:
-          SLACK_CHANNEL: ${{ inputs.channel_id }}
-          REPO_NAME: ${{ github.repository }}
-          SLACK_BOT_TOKEN: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
+      - name: Run k6 Coordinator smoke performance test
+        uses: ./.github/workflows/templates/smoke-performance-test.yml
         with:
-          method: chat.postMessage
-          token: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
-          payload: |
-            {
-              "channel": "${{ env.SLACK_CHANNEL }}",
-              "attachments": [
-               {
-                 "color": "#FF0000",
-                 "text": ":x: *AAP API Smoke Performance test notification*\nWorkflow failed for ${{ env.REPO_NAME }}"
-                }
-              ]
-            }
+          test_name: coordinator
+          channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
