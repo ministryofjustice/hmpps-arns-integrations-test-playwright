@@ -23,7 +23,7 @@ jobs:
       channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
 
   coordinator_smoke_test:
-    name: Run Handover k6 with Dashboard
+    name: Run Coordinator k6 with Dashboard
     uses: ./.github/workflows/smoke-performance-test.yml
     secrets: inherit
     with:
