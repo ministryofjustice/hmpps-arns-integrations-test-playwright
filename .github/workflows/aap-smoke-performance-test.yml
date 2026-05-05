@@ -1,4 +1,4 @@
-name: K6 AAP Smoke Test
+name: K6 Smoke Tests
 
 on:
   schedule:
@@ -6,31 +6,26 @@ on:
   workflow_dispatch:
 
 jobs:
-  performance_smoke_test:
-    name: Run k6 with Dashboard
-    runs-on: [ self-hosted, hmpps-github-actions-runner ]
+  aap_smoke_test:
+    name: Run AAP k6 with Dashboard
+    uses: ./.github/workflows/templates/smoke-performance-test.yml
+    secrets: inherit
+    with:
+      test_name: aap
+      channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
+  handover_smoke_test:
+    name: Run Handover k6 with Dashboard
+    uses: ./.github/workflows/templates/smoke-performance-test.yml
+    secrets: inherit
+    with:
+      test_name: handover
+      channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
 
-      - name: Set up k6
-        uses: grafana/setup-k6-action@v1
-
-      - name: Run k6 AAP smoke performance test
-        uses: ./.github/workflows/templates/smoke-performance-test.yml
-        with:
-          test_name: aap
-          channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
-
-      - name: Run k6 Handover smoke performance test
-        uses: ./.github/workflows/templates/smoke-performance-test.yml
-        with:
-          test_name: handover
-          channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
-
-      - name: Run k6 Coordinator smoke performance test
-        uses: ./.github/workflows/templates/smoke-performance-test.yml
-        with:
-          test_name: coordinator
-          channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
+  coordinator_smoke_test:
+    name: Run Handover k6 with Dashboard
+    uses: ./.github/workflows/templates/smoke-performance-test.yml
+    secrets: inherit
+    with:
+      test_name: coordinator
+      channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}

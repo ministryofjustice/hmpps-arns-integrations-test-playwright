@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: Performance Smoke Tests
 on:
   workflow_call:
     inputs:
