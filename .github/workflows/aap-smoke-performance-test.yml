@@ -8,7 +8,7 @@ on:
 jobs:
   aap_smoke_test:
     name: Run AAP k6 with Dashboard
-    uses: ./.github/workflows/templates/smoke-performance-test.yml
+    uses: ./.github/workflows/smoke-performance-test.yml
     secrets: inherit
     with:
       test_name: aap
@@ -16,7 +16,7 @@ jobs:
 
   handover_smoke_test:
     name: Run Handover k6 with Dashboard
-    uses: ./.github/workflows/templates/smoke-performance-test.yml
+    uses: ./.github/workflows/smoke-performance-test.yml
     secrets: inherit
     with:
       test_name: handover
@@ -24,7 +24,7 @@ jobs:
 
   coordinator_smoke_test:
     name: Run Handover k6 with Dashboard
-    uses: ./.github/workflows/templates/smoke-performance-test.yml
+    uses: ./.github/workflows/smoke-performance-test.yml
     secrets: inherit
     with:
       test_name: coordinator
