@@ -14,8 +14,8 @@ export function simulateThinkingTime() {
   sleep(MIN_THINK + Math.random() * range);
 }
 
-// Track handover failures
-const createFailures = new Counter("handover_failures");
+// Track assessment creation failures
+const createFailures = new Counter("create_assessment_failures");
 
 // Default config
 const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 5;
@@ -25,12 +25,10 @@ const P95_THRESHOLD = __ENV.P95_THRESHOLD ? parseInt(__ENV.P95_THRESHOLD) : 500;
 
 const TOKEN_REFRESH_WINDOW = 20 * 60 * 1000; // 20 minutes in milliseconds
 
-const COORDINATOR_URL = "https://arns-coordinator-api-dev.hmpps.service.justice.gov.uk";
-const BASE_URL = "https://arns-handover-service-dev.hmpps.service.justice.gov.uk";
-const OASYS_RETURN_URL = 'https://t2.oasys.service.justice.gov.uk';
+const BASE_URL = "https://arns-coordinator-api-dev.hmpps.service.justice.gov.uk";
 const crn = Math.random().toString().substring(2, 7);
 const oasysPk = Math.floor(Math.random() * 1000000000).toString();
-const name = 'Handover Perf';
+const name = 'Perf Test'
 
 // --- DYNAMIC OPTIONS LOGIC
 
@@ -107,6 +105,7 @@ function fetchNewToken() {
 export function apiSetup() {
   console.log("Starting AAP initial authentication check...");
   const token = fetchNewToken();
+
   const create = {
     oasysAssessmentPk: oasysPk,
     planType: 'INITIAL',
@@ -130,15 +129,12 @@ export function apiSetup() {
       "Content-Type": "application/json",
     },
   };
-  const oasysResponse = http.post(`${COORDINATOR_URL}/oasys/create`, JSON.stringify(create), options);
-  const association = oasysResponse.json();
+  const oasysResponse = http.post(`${BASE_URL}/oasys/create`, JSON.stringify(create), options);
+  const association = oasysResponse.json()
 
-  const versionsResponse = http.get(`${COORDINATOR_URL}/entity/versions/${association.sentencePlanId}`, options);
-  const date = new Date();
-  const today = date.toISOString().split('T')[0];
-
+  console.log("Association: " + JSON.stringify(association));
   console.log("Initial AAP Token retrieved successfully");
-  return { initialToken: token, oasysPk: oasysPk, planVersion: versionsResponse.json().allVersions[today].planVersion.version };
+  return { initialToken: token, sentencePlanId: association.sentencePlanId };
 }
 
 // --- VU STATE ---
@@ -177,100 +173,30 @@ export function apiJourney (data) {
 
   const TOKEN = cachedToken;
 
-  // Step 1 — Get Handover
-  const timestamp = Date.now();
-  const random = Math.floor(Math.random() * 10000)
-    .toString()
-    .padStart(4, '0');
-
-  const userId = `perf-test-${timestamp}-${random}`;
-
-  const criminogenicNeedsData = {
-    accommodation: {
-      accLinkedToHarm: 'YES',
-      accLinkedToReoffending: 'YES',
-      accStrengths: 'NO',
-      accOtherWeightedScore: '4',
-    },
-    educationTrainingEmployability: {
-      eteLinkedToHarm: 'NO',
-      eteLinkedToReoffending: 'YES',
-      eteStrengths: 'NO',
-      eteOtherWeightedScore: '2',
-    },
-    drugMisuse: {
-      drugLinkedToHarm: 'YES',
-      drugLinkedToReoffending: 'YES',
-      drugStrengths: 'NO',
-      drugOtherWeightedScore: '3',
-    },
-    alcoholMisuse: {
-      alcoholLinkedToHarm: 'YES',
-      alcoholLinkedToReoffending: 'NO',
-      alcoholStrengths: 'NO',
-      alcoholOtherWeightedScore: '3',
-    },
-    personalRelationshipsAndCommunity: {
-      relLinkedToHarm: 'NO',
-      relLinkedToReoffending: 'NO',
-      relStrengths: 'YES',
-      relOtherWeightedScore: '0',
-    },
-    thinkingBehaviourAndAttitudes: {
-      thinkLinkedToHarm: 'YES',
-      thinkLinkedToReoffending: 'YES',
-      thinkStrengths: 'NO',
-      thinkOtherWeightedScore: '4',
-    },
-  };
-
-  const subjectDetails = {
-    crn: crn,
-    pnc: 'UNKNOWN',
-    givenName: 'Perf',
-    familyName: 'User',
-    gender: '1',
-    dateOfBirth: '1988-01-01',
-    location: 'COMMUNITY',
-  };
-
-  const createRequest = {
-    user: {
-      identifier: userId,
-      displayName: 'Perf User',
-      accessMode: 'READ_WRITE',
-      planAccessMode: 'READ_WRITE',
-      returnUrl: OASYS_RETURN_URL,
-    },
-    subjectDetails,
-    oasysAssessmentPk: data.oasysPk,
-    criminogenicNeedsData: criminogenicNeedsData,
-    sentencePlanVersion: data.planVersion,
-  };
-  
-  const handoverResponse = http.post(`${BASE_URL}/handover`, JSON.stringify(createRequest), {
+  // Step 1 — Get previous versions
+  const versionsResponse = http.get(`${BASE_URL}/entity/versions/${data.sentencePlanId}`, {
     headers: {
       Authorization: `Bearer ${TOKEN}`,
       "Content-Type": "application/json",
     },
   });
 
-  if (handoverResponse.status !== 200) {
-    console.error(`NON-200 RESPONSE from /command`);
-    console.error(`STATUS: ${handoverResponse.status}`);
-    console.error(`BODY: ${handoverResponse.body}`);
+  if (versionsResponse.status !== 200) {
+    console.error(`NON-200 RESPONSE from /entity/versions`);
+    console.error(`STATUS: ${versionsResponse.status}`);
+    console.error(`BODY: ${versionsResponse.body}`);
   }
 
-  check(handoverResponse, { 
-    "command status 200": (r) => r.status === 200,
-    "body contains handover link": (r) => r.json().handoverLink.includes('handover')
+  check(versionsResponse, { 
+    "versions status 200": (r) => r.status === 200,
+    "versions body not empty": (r) => "allVersions" in r.json()
   });
 
   // Log failures
-  if (!handoverResponse.json().handoverLink.includes('handover')) {
+  if (!"allVersions" in versionsResponse.json()) {
     createFailures.add(1);
     console.error(
-      `Failed to get handover link | status: ${handoverResponse.status} | body: ${handoverResponse.body}`
+      `Failed to get previous versions | status: ${versionsResponse.status} | body: ${versionsResponse.body}`
     );
 
     simulateThinkingTime();
@@ -278,13 +204,12 @@ export function apiJourney (data) {
   }
 
   sleep(0.5);
-
-  simulateThinkingTime();
 }
 export function setup() {
   return apiSetup();
 }
 
 export default function (data) {
-  apiJourney(data);
+  //console.log("data: " + JSON.stringify(data));
+  //apiJourney(data);
 }
