@@ -12,9 +12,9 @@ function validateStepStructure(step: any) {
     expect(isNaN(Date.parse(step.statusDate))).toBeFalsy(); 
 }
 
-test.beforeAll(async ({ playwright }) => {
+test.beforeAll(async ({ playwright, baseURL }) => {
   apiContext = await playwright.request.newContext({
-    baseURL: getBaseUrl(),
+    baseURL: getBaseUrl(baseURL),
     extraHTTPHeaders: {
       Authorization: `Bearer ${getToken()}`,
       'Content-Type': 'application/json',

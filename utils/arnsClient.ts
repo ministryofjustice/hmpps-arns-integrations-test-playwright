@@ -7,8 +7,11 @@ export const getToken = () => {
   return JSON.parse(fs.readFileSync(tokenPath, 'utf8')).access_token;
 };
 
-export const getBaseUrl = (): string => {
+export const getBaseUrl = (baseUrl: string): string => {
+    if (baseUrl.includes('test')) {
   return 'https://arns-assessment-view-api-dev.hmpps.service.justice.gov.uk';
+    }
+  return 'https://arns-assessment-view-api-test.hmpps.service.justice.gov.uk';
   };
 
 export async function viewAssessment(request: APIRequestContext, crn: string): Promise<any> {
