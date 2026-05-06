@@ -8,9 +8,7 @@ function validateStepStructure(step: any) {
     expect(step.description).toEqual(expect.any(String));
     expect(step.status).toEqual(expect.any(String));
     expect(step.actor).toEqual(expect.any(String));
-    
     expect(step.statusDate).toEqual(expect.any(String));
-    // Removed the double negative (!) and used toBeFalsy
     expect(isNaN(Date.parse(step.statusDate))).toBeFalsy(); 
 }
 
