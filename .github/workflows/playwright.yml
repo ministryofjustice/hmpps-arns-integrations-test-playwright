@@ -42,6 +42,8 @@ jobs:
           SP_CLIENT_SECRET: ${{ secrets.SP_CLIENT_SECRET }}
           AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
           AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
+          ARNS_ASSESSMENT_CLIENT_ID: ${{ secrets.ARNS_ASSESSMENT_CLIENT_ID }}
+          ARNS_ASSESSMENT_CLIENT_SECRET: ${{ secrets.ARNS_ASSESSMENT_CLIENT_SECRET }}
           # URLs
           DELIUS_URL: https://ndelius.test.probation.service.justice.gov.uk
           TOKEN_URL: ${{ secrets.TOKEN_URL }}
