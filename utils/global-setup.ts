@@ -39,7 +39,6 @@ async function fetchAndSaveToken(
     throw new Error(`${tokenName} token request failed: ${resp.status} ${resp.statusText}`);
   }
 
-  // 4. Save to disk
   const tokenData = await resp.json();
   fs.writeFileSync(tokenPath, JSON.stringify(tokenData, null, 2), 'utf-8');
   console.log(`${tokenName} access token received and saved.`);
