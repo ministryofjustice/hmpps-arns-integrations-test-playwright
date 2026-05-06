@@ -12,7 +12,7 @@ export const getBaseUrl = (): string => {
   };
 
 export async function viewAssessment(request: APIRequestContext, crn: string): Promise<any> {
-  const response = await request.get('/sentence-plan/${crn}');
+  const response = await request.get(`/sentence-plan/${crn}`);
 
   if (!response.ok()) {
     throw new Error(`ARNSViewAssessment failed: ${response.status()}`);
