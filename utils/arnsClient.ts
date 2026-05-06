@@ -11,8 +11,8 @@ export const getBaseUrl = (): string => {
   return 'https://arns-assessment-view-api-dev.hmpps.service.justice.gov.uk';
   };
 
-export async function viewAssessment(request: APIRequestContext): Promise<any> {
-  const response = await request.get('/sentence-plan/C912155');
+export async function viewAssessment(request: APIRequestContext, crn: string): Promise<any> {
+  const response = await request.get('/sentence-plan/${crn}');
 
   if (!response.ok()) {
     throw new Error(`ARNSViewAssessment failed: ${response.status()}`);
