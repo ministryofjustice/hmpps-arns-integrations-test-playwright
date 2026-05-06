@@ -34,7 +34,7 @@ test('view ARNS assessment successfully returns correct data structure', async (
 
     const assessment = responseBody[0];
 
-    expect(assessment.crn).toEqual(expect.any(String));
+    expect(assessment.crn).toEqual(TEST_CRN);
     
     expect(assessment.nomis).toBeNull();
     expect(assessment.planStatus).toEqual(expect.any(String));
