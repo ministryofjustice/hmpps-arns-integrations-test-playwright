@@ -1,0 +1,21 @@
+import { APIRequestContext, APIResponse } from '@playwright/test';
+import fs from 'fs';
+import path from 'path';
+
+export const getToken = () => {
+  const tokenPath = path.join(__dirname, 'arnsAssessmentToken.json');
+  return JSON.parse(fs.readFileSync(tokenPath, 'utf8')).access_token;
+};
+
+export const getBaseUrl = (): string => {
+  return 'https://arns-assessment-view-api-dev.hmpps.service.justice.gov.uk';
+  };
+
+export async function viewAssessment(request: APIRequestContext): Promise<any> {
+  const response = await request.get('/sentence-plan/C912155');
+
+  if (!response.ok()) {
+    throw new Error(`ARNSViewAssessment failed: ${response.status()}`);
+  }
+  return await response.json();
+}
