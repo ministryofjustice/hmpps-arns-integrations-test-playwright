@@ -1,8 +1,6 @@
 name: Playwright Tests PR
 on:
   pull_request:
-    paths:
-      - '**.ts'
     paths-ignore:
       - 'performance/**'
 
