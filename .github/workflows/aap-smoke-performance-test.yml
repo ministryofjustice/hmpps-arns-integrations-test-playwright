@@ -1,4 +1,4 @@
-name: K6 AAP Smoke Test
+name: K6 Smoke Tests
 
 on:
   schedule:
@@ -6,75 +6,27 @@ on:
   workflow_dispatch:
 
 jobs:
-  performance_smoke_test:
-    name: Run k6 with Dashboard
-    runs-on: [ self-hosted, hmpps-github-actions-runner ]
+  aap_smoke_test:
+    name: Run AAP k6 with Dashboard
+    uses: ./.github/workflows/smoke-performance-test.yml
+    secrets: inherit
+    with:
+      test_name: aapApi-smoke
+      channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
+  handover_smoke_test:
+    name: Run Handover k6 with Dashboard
+    uses: ./.github/workflows/smoke-performance-test.yml
+    secrets: inherit
+    with:
+      test_name: handoverApi
+      channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
 
-      - uses: actions/setup-node@v6
-        with:
-          node-version: lts/*
+  coordinator_smoke_test:
+    name: Run Coordinator k6 with Dashboard
+    uses: ./.github/workflows/smoke-performance-test.yml
+    secrets: inherit
+    with:
+      test_name: coordinatorApi
+      channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Set up k6
-        uses: grafana/setup-k6-action@v1
-
-      - name: Set up test data
-        run: npx ts-node performance/setup/env.ts
-        env:
-          AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
-          AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
-          TOKEN_URL: ${{ secrets.TOKEN_URL }}
-          VUS: "5"
-
-      - name: Run k6 AAP smoke performance test
-        env:
-          AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
-          AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
-          TOKEN_URL: ${{ secrets.TOKEN_URL }}
-
-          VUS: "5"
-          DURATION: "30s"
-
-          MIN_THINK_TIME: "1"
-          MAX_THINK_TIME: "5"
-
-          # Environment variables for the Web Dashboard
-          K6_WEB_DASHBOARD: "true"
-          K6_WEB_DASHBOARD_EXPORT: "aap-smoke-report.html"
-
-        run: k6 run performance/tests/aapApi-smoke.js
-
-      - name: Upload Smoke Report
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: k6-smoke-report
-          path: aap-smoke-report.html
-          retention-days: 1
-
-      - name: Slack notification
-        if: failure()
-        uses: slackapi/slack-github-action@v3.0.1
-        env:
-          SLACK_CHANNEL: ${{ inputs.channel_id }}
-          REPO_NAME: ${{ github.repository }}
-          SLACK_BOT_TOKEN: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
-        with:
-          method: chat.postMessage
-          token: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
-          payload: |
-            {
-              "channel": "${{ env.SLACK_CHANNEL }}",
-              "attachments": [
-               {
-                 "color": "#FF0000",
-                 "text": ":x: *AAP API Smoke Performance test notification*\nWorkflow failed for ${{ env.REPO_NAME }}"
-                }
-              ]
-            }

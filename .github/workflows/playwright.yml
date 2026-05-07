@@ -42,6 +42,8 @@ jobs:
           SP_CLIENT_SECRET: ${{ secrets.SP_CLIENT_SECRET }}
           AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
           AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
+          ARNS_ASSESSMENT_CLIENT_ID: ${{ secrets.ARNS_ASSESSMENT_CLIENT_ID }}
+          ARNS_ASSESSMENT_CLIENT_SECRET: ${{ secrets.ARNS_ASSESSMENT_CLIENT_SECRET }}
           # URLs
           DELIUS_URL: https://ndelius.test.probation.service.justice.gov.uk
           TOKEN_URL: ${{ secrets.TOKEN_URL }}
@@ -56,9 +58,17 @@ jobs:
           report-path: 'ctrf/ctrf-report.json'
         if: always()
       
+      - name: Archive screenshots & trace
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: screenshots-playwright
+          path: |
+            test-results/**/*
+      
       - name: Slack notification
         if: failure()
-        uses: slackapi/slack-github-action@v3.0.1
+        uses: slackapi/slack-github-action@v3.0.3
         env:
           SLACK_CHANNEL: ${{ inputs.channel_id }}
           REPO_NAME: ${{ github.repository }}
