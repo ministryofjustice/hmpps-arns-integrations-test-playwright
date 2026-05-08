@@ -21,8 +21,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
+      - uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Set up k6
         uses: grafana/setup-k6-action@v1
+
+      - name: Set up test data
+        if: ${{ inputs.test_name == 'aapApi-smoke' }}
+        run: npx ts-node performance/setup/data.ts
+        env:
+          AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
+          AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
+          TOKEN_URL: ${{ secrets.TOKEN_URL }}
+          VUS: "5"
 
       - name: Run k6 ${{ inputs.test_name }} smoke performance test
         env:
@@ -40,7 +56,7 @@ jobs:
           K6_WEB_DASHBOARD: "true"
           K6_WEB_DASHBOARD_EXPORT: "${{ inputs.test_name }}-smoke-report.html"
 
-        run: k6 run performance/tests/${{ inputs.test_name }}Api.js
+        run: k6 run performance/tests/${{ inputs.test_name }}.js
 
       - name: Upload ${{ inputs.test_name }} Smoke Report
         if: always()
