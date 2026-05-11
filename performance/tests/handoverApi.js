@@ -30,7 +30,7 @@ const BASE_URL = "https://arns-handover-service-dev.hmpps.service.justice.gov.uk
 const OASYS_RETURN_URL = 'https://t2.oasys.service.justice.gov.uk';
 const crn = Math.random().toString().substring(2, 7);
 const oasysPk = Math.floor(Math.random() * 1000000000).toString();
-const name = 'Handover Perf';
+const name = 'Handover Performance';
 
 // --- DYNAMIC OPTIONS LOGIC
 
@@ -183,7 +183,7 @@ export function apiJourney (data) {
     .toString()
     .padStart(4, '0');
 
-  const userId = `perf-test-${timestamp}-${random}`;
+  const userId = `performance-test-${timestamp}-${random}`;
 
   const criminogenicNeedsData = {
     accommodation: {
@@ -227,7 +227,7 @@ export function apiJourney (data) {
   const subjectDetails = {
     crn: crn,
     pnc: 'UNKNOWN',
-    givenName: 'Perf',
+    givenName: 'Performance',
     familyName: 'User',
     gender: '1',
     dateOfBirth: '1988-01-01',
@@ -237,7 +237,7 @@ export function apiJourney (data) {
   const createRequest = {
     user: {
       identifier: userId,
-      displayName: 'Perf User',
+      displayName: 'Performance User',
       accessMode: 'READ_WRITE',
       planAccessMode: 'READ_WRITE',
       returnUrl: OASYS_RETURN_URL,

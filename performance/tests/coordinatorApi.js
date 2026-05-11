@@ -28,7 +28,7 @@ const TOKEN_REFRESH_WINDOW = 20 * 60 * 1000; // 20 minutes in milliseconds
 const BASE_URL = "https://arns-coordinator-api-dev.hmpps.service.justice.gov.uk";
 const crn = Math.random().toString().substring(2, 7);
 const oasysPk = Math.floor(Math.random() * 1000000000).toString();
-const name = 'Perf Test'
+const name = 'Performance Test'
 
 // --- DYNAMIC OPTIONS LOGIC
 
