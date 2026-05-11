@@ -52,24 +52,30 @@ async function globalSetup() {
     await fetchAndSaveToken(
       'SP',
       path.resolve(__dirname, 'token.json'),
-      process.env.SP_CLIENT_ID, process.env.SP_CLIENT_SECRET,
-      process.env.CLIENT_ID_SCRIPT, process.env.CLIENT_SECRET_SCRIPT
+      process.env.SP_CLIENT_ID,
+      process.env.SP_CLIENT_SECRET,
+      process.env.CLIENT_ID_SCRIPT,
+      process.env.CLIENT_SECRET_SCRIPT
     );
 
     // Fetch AAP Token
     await fetchAndSaveToken(
       'AAP',
       path.resolve(__dirname, 'aapToken.json'),
-      process.env.AAP_CLIENT_ID, process.env.AAP_CLIENT_SECRET,
-      process.env.AAP_CLIENT_ID_SCRIPT, process.env.AAP_CLIENT_SECRET_SCRIPT
+      process.env.AAP_CLIENT_ID,
+      process.env.AAP_CLIENT_SECRET,
+      process.env.AAP_CLIENT_ID_SCRIPT,
+      process.env.AAP_CLIENT_SECRET_SCRIPT
     );
 
     // Fetch ARNS Assessment Token
     await fetchAndSaveToken(
       'ARNS Assessment',
       path.resolve(__dirname, 'arnsAssessmentToken.json'),
-      process.env.ARNS_ASSESSMENT_CLIENT_ID, process.env.ARNS_ASSESSMENT_CLIENT_SECRET,
-      process.env.ARNS_ASSESSMENT_CLIENT_ID_SCRIPT, process.env.ARNS_ASSESSMENT_CLIENT_SECRET_SCRIPT
+      process.env.ARNS_ASSESSMENT_CLIENT_ID,
+      process.env.ARNS_ASSESSMENT_CLIENT_SECRET,
+      process.env.ARNS_ASSESSMENT_CLIENT_ID_SCRIPT,
+      process.env.ARNS_ASSESSMENT_CLIENT_SECRET_SCRIPT
     );
 
     console.log('All tokens fetched and saved successfully.');
