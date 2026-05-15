@@ -30,9 +30,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Install Playwright
-        run: npx playwright install --only-shell
-      - name: Install Edge
-        run: npx playwright install msedge
+        run: npx playwright install
+      # - name: Install Edge
+      #   run: npx playwright install msedge
       - name: Run Playwright tests
         id: playwright-tests
         run: npm run ${{ inputs.environment }}:${{ inputs.source }}:ci
@@ -68,24 +68,24 @@ jobs:
           path: |
             test-results/**/*
       
-      - name: Slack notification
-        if: failure()
-        uses: slackapi/slack-github-action@v3.0.3
-        env:
-          SLACK_CHANNEL: ${{ inputs.channel_id }}
-          REPO_NAME: ${{ github.repository }}
-          SLACK_BOT_TOKEN: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
-        with:
-          method: chat.postMessage
-          token: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
-          payload: |
-            {
-              "channel": "${{ env.SLACK_CHANNEL }}",
-              "text": "🚨 ${{ inputs.environment }} - Integration Playwright Tests Failed",
-              "attachments": [
-               {
-                 "color": "#FF0000",
-                 "text": ":x: *Playwright Integration tests notification*\nWorkflow failed on ${{ inputs.environment }} environment for ${{ env.REPO_NAME }}"
-                }
-              ]
-            }
+      # - name: Slack notification
+      #   if: failure()
+      #   uses: slackapi/slack-github-action@v3.0.3
+      #   env:
+      #     SLACK_CHANNEL: ${{ inputs.channel_id }}
+      #     REPO_NAME: ${{ github.repository }}
+      #     SLACK_BOT_TOKEN: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
+      #   with:
+      #     method: chat.postMessage
+      #     token: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
+      #     payload: |
+      #       {
+      #         "channel": "${{ env.SLACK_CHANNEL }}",
+      #         "text": "🚨 ${{ inputs.environment }} - Integration Playwright Tests Failed",
+      #         "attachments": [
+      #          {
+      #            "color": "#FF0000",
+      #            "text": ":x: *Playwright Integration tests notification*\nWorkflow failed on ${{ inputs.environment }} environment for ${{ env.REPO_NAME }}"
+      #           }
+      #         ]
+      #       }
