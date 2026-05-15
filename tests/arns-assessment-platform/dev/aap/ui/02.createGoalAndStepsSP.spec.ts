@@ -28,6 +28,7 @@ test.describe('National rollout', () => {
     await sentencePlan.createGoal.click();
     await expect(page).toHaveTitle('Create a goal - Sentence plan');
     await createGoal.searchGoal.fill(goalTitle);
+    await createGoal.searchGoal.blur();
     await createGoal.relatedGoalYes.click();
     await createGoal.relatedAreaAlcohol.click();
     await createGoal.startWorkingOnThisGoalYes.click();
@@ -82,6 +83,7 @@ test.describe('Private beta', () => {
     await sentencePlan.createGoal.click();
     await expect(page).toHaveTitle('Create a goal - Sentence plan');
     await createGoal.searchGoal.fill(goalTitle);
+    await createGoal.searchGoal.blur();
     await createGoal.relatedGoalYes.click();
     await createGoal.relatedAreaAlcohol.click();
     await createGoal.startWorkingOnThisGoalYes.click();
