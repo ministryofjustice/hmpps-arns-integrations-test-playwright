@@ -30,9 +30,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Install Playwright
-        run: npx playwright install
-      # - name: Install Edge
-      #   run: npx playwright install msedge
+        run: npx playwright install --only-shell
+      - name: Install Edge
+        run: npx playwright install msedge-beta
       - name: Run Playwright tests
         id: playwright-tests
         run: npm run ${{ inputs.environment }}:${{ inputs.source }}:ci
