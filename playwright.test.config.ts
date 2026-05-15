@@ -46,32 +46,32 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'], channel: 'chromium' },
       testDir: './tests/arns-assessment-platform',
     },
     {
       name: 'edge',
-      use: { ...devices['Desktop Edge'], channel: 'msedge' },
+      use: { ...devices['Desktop Edge'] },
       testDir: './tests/arns-assessment-platform',
     },
     {
       name: 'chromium_aap',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'], channel: 'chromium' },
       testMatch: '*aap/**/*.spec.ts',
     },
     {
       name: 'edge_aap',
-      use: { ...devices['Desktop Edge'], channel: 'msedge' },
+      use: { ...devices['Desktop Edge'] },
       testMatch: '*aap/**/*.spec.ts',
     },
     {
       name: 'chromium_san',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'], channel: 'chromium' },
       testMatch: '*san/**/*.spec.ts',
     },
     {
       name: 'edge_san',
-      use: { ...devices['Desktop Edge'], channel: 'msedge' },
+      use: { ...devices['Desktop Edge'] },
       testDir: '*san/**/*.spec.ts',
     },
   ],
