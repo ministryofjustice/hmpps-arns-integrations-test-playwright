@@ -51,7 +51,7 @@ export default defineConfig({
     },
     {
       name: 'edge',
-      use: { ...devices['Desktop Edge'], channel: 'msedge-dev' },
+      use: { ...devices['Desktop Edge'], channel: 'msedge' },
       testDir: './tests/arns-assessment-platform',
     },
     {
@@ -61,7 +61,7 @@ export default defineConfig({
     },
     {
       name: 'edge_aap',
-      use: { ...devices['Desktop Edge'], channel: 'msedge-dev' },
+      use: { ...devices['Desktop Edge'], channel: 'msedge' },
       testMatch: '*aap/**/*.spec.ts',
     },
     {
@@ -71,7 +71,7 @@ export default defineConfig({
     },
     {
       name: 'edge_san',
-      use: { ...devices['Desktop Edge'], channel: 'msedge-dev' },
+      use: { ...devices['Desktop Edge'], channel: 'msedge' },
       testDir: '*san/**/*.spec.ts',
     },
   ],

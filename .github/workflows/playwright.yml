@@ -30,12 +30,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Install Playwright
-        run: npx playwright install --only-shell
+        run: PLAYWRIGHT_BROWSERS_PATH=/usr/pw-browsers npx playwright install --only-shell
       - name: Install Edge
-        run: npx playwright install msedge-dev
+        run: PLAYWRIGHT_BROWSERS_PATH=/usr/pw-browsers npx playwright install msedge
       - name: Run Playwright tests
         id: playwright-tests
-        run: npm run ${{ inputs.environment }}:${{ inputs.source }}:ci
+        run: PLAYWRIGHT_BROWSERS_PATH=/usr/pw-browsers npm run ${{ inputs.environment }}:${{ inputs.source }}:ci
         env:
           ORACLE_DB_USER: ${{ secrets.ORACLE_DB_USER }}
           ORACLE_DB_PASSWORD: ${{ secrets.ORACLE_DB_PASSWORD }}
@@ -53,6 +53,7 @@ jobs:
           MPOP_USERNAME: ${{ secrets.E2E_MPOP_USERNAME }}
           DELIUS_USERNAME: ${{ secrets.E2E_DELIUS_USERNAME }}
           DELIUS_PASSWORD: ${{ secrets.E2E_DELIUS_PASSWORD }}
+          PLAYWRIGHT_BROWSERS_PATH: /usr/pw-browsers
 
       - name: Publish Test Summary
         uses: ctrf-io/github-test-reporter@v1
