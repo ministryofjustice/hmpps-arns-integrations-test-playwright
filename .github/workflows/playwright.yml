@@ -29,10 +29,6 @@ jobs:
           node-version: lts/*
       - name: Install dependencies
         run: npm ci
-      - name: Install Playwright
-        run: npx playwright install chromium --no-shell
-      - name: Install Edge
-        run: npx playwright install msedge
       - name: Run Playwright tests
         id: playwright-tests
         run: npm run ${{ inputs.environment }}:${{ inputs.source }}:ci
