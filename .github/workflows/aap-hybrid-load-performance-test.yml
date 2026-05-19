@@ -1,0 +1,58 @@
+name: K6 AAP Hybrid Load Test 
+
+on:
+  workflow_dispatch: # Manual trigger only
+
+jobs:
+  load_test:
+    name: Run k6 Hybrid Load Test
+    runs-on: [ self-hosted, hmpps-github-actions-runner ]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up k6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Setup Chrome for k6
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@v2
+        with:
+          chrome-version: stable
+
+      - name: Run k6 AAP Hybrid Load Test
+        env:
+          K6_BROWSER_EXECUTABLE_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          K6_BROWSER_ENABLED: "true"
+          K6_BROWSER_HEADLESS: "true"
+          K6_BROWSER_ARGS: "no-sandbox,disable-setuid-sandbox,disable-dev-shm-usage,disable-gpu"
+          UI_DURATION: "20m" 
+          DURATION: "20m"
+          
+          AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
+          AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
+          TOKEN_URL: ${{ secrets.TOKEN_URL }}
+          
+          CUSTOM_STAGES: '[{"duration":"5m","target":400},{"duration":"5m","target":800},{"duration":"5m","target":1200},{"duration":"5m","target":1600}]'
+          
+          MIN_THINK_TIME: "5"
+          MAX_THINK_TIME: "10"
+
+          # Adjust thresholds for heavier load
+          P95_THRESHOLD: "1000" 
+          P90_THRESHOLD: "700"
+
+          # Environment variables for the Web Dashboard
+          K6_WEB_DASHBOARD: "true"
+          K6_WEB_DASHBOARD_EXPORT: "aap-hybrid-load-report.html"
+          
+        run: k6 run performance/tests/aapApiAndUi.js
+
+      - name: Upload Hybrid Load Test Report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: k6-hybrid-load-report
+          path: aap-hybrid-load-report.html
+          retention-days: 1

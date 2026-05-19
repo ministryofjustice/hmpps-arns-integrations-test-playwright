@@ -8,22 +8,14 @@ on:
 jobs:
   aggregate_logic_test:
     name: Run Aggregate Test
-    runs-on:
-      labels: moj-cloud-platform
+    runs-on: [ self-hosted, hmpps-github-actions-runner ]
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Set up Go
-        uses: actions/setup-go@v6
-        with:
-          go-version: "1.26"
-
-      - name: Build xk6 dashboard-enabled k6
-        run: |
-          go install go.k6.io/xk6/cmd/xk6@latest
-          xk6 build --with github.com/grafana/xk6-dashboard@latest
+      - name: Set up k6
+        uses: grafana/setup-k6-action@v1
 
       - name: Run k6 Aggregate Test
         env:
@@ -40,11 +32,15 @@ jobs:
           P95_THRESHOLD: "600" 
           P90_THRESHOLD: "400"
           
-        run: ./k6 run performance/tests/aapAggregate.js --out web-dashboard=export=aap-aggregate-report.html
+          # Environment variables for the Web Dashboard
+          K6_WEB_DASHBOARD: "true"
+          K6_WEB_DASHBOARD_EXPORT: "aap-aggregate-report.html"
+          
+        run: k6 run performance/tests/aapAggregate.js
 
       - name: Upload Aggregate Report
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: k6-aggregate-report
           path: aap-aggregate-report.html
@@ -52,7 +48,7 @@ jobs:
 
       - name: Slack notification
         if: failure()
-        uses: slackapi/slack-github-action@v2.1.1
+        uses: slackapi/slack-github-action@v3.0.3
         env:
           SLACK_CHANNEL: ${{ inputs.channel_id }}
           REPO_NAME: ${{ github.repository }}

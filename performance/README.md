@@ -56,6 +56,12 @@ Other tests (load, stress, soak) are setup as separate workflows that can be man
 
 Note: for these tests the AAP token is fetched in isolation withink the K6 tests.
 
+if you want to run the performance tests locally, cd into the utils folder and run: 
+
+`./run_k6_aap_local.sh`
+
+Custom stages in the bash script are for the smoke tests, if you'd like to view the UI journeys run in parallel update the last line of the file to: `tests/aapApiAndUi.js`. The default smoke tests configuration will be overriden. 
+
 ## The report
 
 At the end of the test a report is generated with an array of different metrics that have been captured during the tests. 
