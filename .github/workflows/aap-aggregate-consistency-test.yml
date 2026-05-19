@@ -1,0 +1,68 @@
+name: K6 AAP Aggregate Test
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 19 * * 1,5"
+
+jobs:
+  aggregate_logic_test:
+    name: Run Aggregate Test
+    runs-on: [ self-hosted, hmpps-github-actions-runner ]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up k6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Run k6 Aggregate Test
+        env:
+          AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
+          AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
+          TOKEN_URL: ${{ secrets.TOKEN_URL }}
+
+          MIN_THINK_TIME: "1"
+          MAX_THINK_TIME: "5"
+          
+          VUS: "10"
+          DURATION: "5m"
+
+          P95_THRESHOLD: "600" 
+          P90_THRESHOLD: "400"
+          
+          # Environment variables for the Web Dashboard
+          K6_WEB_DASHBOARD: "true"
+          K6_WEB_DASHBOARD_EXPORT: "aap-aggregate-report.html"
+          
+        run: k6 run performance/tests/aapAggregate.js
+
+      - name: Upload Aggregate Report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: k6-aggregate-report
+          path: aap-aggregate-report.html
+          retention-days: 1
+
+      - name: Slack notification
+        if: failure()
+        uses: slackapi/slack-github-action@v3.0.3
+        env:
+          SLACK_CHANNEL: ${{ inputs.channel_id }}
+          REPO_NAME: ${{ github.repository }}
+          SLACK_BOT_TOKEN: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
+        with:
+          method: chat.postMessage
+          token: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
+          payload: |
+            {
+              "channel": "${{ env.SLACK_CHANNEL }}",
+              "attachments": [
+               {
+                 "color": "#FF0000",
+                 "text": ":x: *AAP API Aggregate consistency Performance test notification*\nWorkflow failed for ${{ env.REPO_NAME }}"
+                }
+              ]
+            }

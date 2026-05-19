@@ -6,7 +6,7 @@ To run the tests head/headless you will need chromium installed - to install chr
 `brew install --force chromium --no-quarantine ` 
 
 ## Test Configuration
-Tests are designed to allow running browser and API tests independently or in parallel. You can monitor the UI while applying different API load scenarios.
+Tests are designed to allow running browser and API tests independently or in parallel for SAN assessments. You can monitor the UI while applying different API load scenarios.
 
 Set the SCENARIO environment variable to control what test(s) are executed.
 
@@ -47,6 +47,20 @@ To run the browser tests in head mode and see the browser (HEADLESS:FALSE)
 
 NOTE: you may want to adjust the `duration` value in the Browser test to match which API scenario you're running, but not necessarily.
 
+The tests also cover the AAP API.
+
+- AAP API tests
+Smoke and Aggregate consistency tests run on the pipeline as scheduled jobs. 
+Dashboards and graphs of various metrics report can be downloaded when they run.
+Other tests (load, stress, soak) are setup as separate workflows that can be manually triggered.
+
+Note: for these tests the AAP token is fetched in isolation withink the K6 tests.
+
+if you want to run the performance tests locally, cd into the utils folder and run: 
+
+`./run_k6_aap_local.sh`
+
+Custom stages in the bash script are for the smoke tests, if you'd like to view the UI journeys run in parallel update the last line of the file to: `tests/aapApiAndUi.js`. The default smoke tests configuration will be overriden. 
 
 ## The report
 

@@ -1,6 +1,12 @@
-name: Integration tests
+name: Dev - Integration tests
 on:
   workflow_dispatch:
+    inputs:
+      source:
+        description: 'Repo triggering tests'
+        required: false
+        default: 'all'
+        type: string
   schedule:
     - cron: '30 7,13,18 * * 1-5'
 jobs:
@@ -9,4 +15,6 @@ jobs:
     uses: ./.github/workflows/playwright.yml
     with:
       channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
+      environment: dev
+      source: ${{ inputs.source || 'all' }}
     secrets: inherit
