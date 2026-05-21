@@ -7,6 +7,7 @@ import {
   getVersionDate,
   lock,
   PreviousVersionsResponses,
+  getModsecError,
 } from '../../../../../utils/coordinator/coordinatorClient';
 import { updateAnswers } from '../../../../../utils/aap/sentencePlan/assessmentCommands';
 import { OasysCreateResponse, PreviousVersionsResponse } from '../../../../../utils/coordinator/coordinatorTypes';
@@ -120,4 +121,11 @@ test('Coordinator statuses', async () => {
     expect(queryResponse).toBeTruthy();
     expect(queryResponse.allVersions[today].planVersion.status).toBe('LOCKED');
   });
+});
+
+// https://dsdmoj.atlassian.net/wiki/spaces/ARN/pages/6150881391/ModSec+-+AAP+Team+Guide#Testing
+test('Modsec coordinator', async () => {
+  const modSecResponse: number = await getModsecError(coordinatorContext);
+
+  expect(modSecResponse).toBe(406);
 });

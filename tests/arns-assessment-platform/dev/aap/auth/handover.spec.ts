@@ -7,7 +7,7 @@ import {
   getVersionDate,
 } from '../../../../../utils/coordinator/coordinatorClient';
 import { PreviousVersionsResponse } from '../../../../../utils/coordinator/coordinatorTypes';
-import { getHandoverLink, getHandoverUrl } from '../../../../../utils/handover/handoverClient';
+import { getHandoverLink, getHandoverUrl, getModsecError } from '../../../../../utils/handover/handoverClient';
 import { CreateHandoverLinkResponse } from '../../../../../utils/handover/handoverTypes';
 
 let handoverContext: APIRequestContext;
@@ -64,4 +64,11 @@ test('Get Handover link', async () => {
 
   expect(handoverResponse).toBeTruthy();
   expect(handoverResponse.handoverLink).toContain('/handover/');
+});
+
+// https://dsdmoj.atlassian.net/wiki/spaces/ARN/pages/6150881391/ModSec+-+AAP+Team+Guide#Testing
+test('Modsec handover', async () => {
+  const modSecResponse: number = await getModsecError(handoverContext);
+
+  expect(modSecResponse).toBe(406);
 });
