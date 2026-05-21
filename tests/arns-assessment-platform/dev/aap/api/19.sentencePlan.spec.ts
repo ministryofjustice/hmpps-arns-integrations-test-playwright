@@ -81,8 +81,14 @@ test('create and query AAP sentence plan', async () => {
 });
 
 // https://dsdmoj.atlassian.net/wiki/spaces/ARN/pages/6150881391/ModSec+-+AAP+Team+Guide#Testing
-test('Modsec aap', async () => {
-  const modSecResponse: number = await getModsecError(apiContext);
+test(
+  'Modsec aap',
+  {
+    tag: '@dev',
+  },
+  async () => {
+    const modSecResponse: number = await getModsecError(apiContext);
 
-  expect(modSecResponse).toBe(406);
-});
+    expect(modSecResponse).toBe(406);
+  }
+);
