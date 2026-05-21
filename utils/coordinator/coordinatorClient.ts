@@ -99,3 +99,9 @@ export const lock = async (request: APIRequestContext, oasysPk: string): Promise
 
   return await response.json();
 };
+
+export const getModsecError = async (request: APIRequestContext): Promise<number> => {
+  const response: APIResponse = await request.get(`?q=<script>>alert(1)</script>`);
+
+  return response.status();
+};

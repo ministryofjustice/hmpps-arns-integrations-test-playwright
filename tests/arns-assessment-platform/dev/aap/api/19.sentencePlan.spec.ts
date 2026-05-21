@@ -1,5 +1,5 @@
 import { test, expect, APIRequestContext } from '@playwright/test';
-import { getBaseUrl, getToken, queryAssessment } from '../../../../../utils/aapClient';
+import { getBaseUrl, getModsecError, getToken, queryAssessment } from '../../../../../utils/aapClient';
 import { createGoalsCollection } from '../../../../../utils/aap/sentencePlan/goalsCommands';
 import { AssessmentQueryResponse, CreateAssessmentResult } from '../../../../../utils/aap/assessmentTypes';
 import { createAssessmentSP } from '../../../../../utils/aap/sentencePlan/assessmentCommands';
@@ -79,3 +79,16 @@ test('create and query AAP sentence plan', async () => {
     expect(queryResult.assessmentUuid).toBe(spAssessmentUuid);
   });
 });
+
+// https://dsdmoj.atlassian.net/wiki/spaces/ARN/pages/6150881391/ModSec+-+AAP+Team+Guide#Testing
+test(
+  'Modsec aap',
+  {
+    tag: '@dev',
+  },
+  async () => {
+    const modSecResponse: number = await getModsecError(apiContext);
+
+    expect(modSecResponse).toBe(406);
+  }
+);
