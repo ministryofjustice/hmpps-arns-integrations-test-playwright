@@ -42,94 +42,100 @@ test.afterAll(async () => {
   await coordinatorContext.dispose();
 });
 
-test.describe('Coordinator API ', () => {
-  let sentencePlanId: string;
-  let planVersion: number;
+test.describe(
+  'Coordinator API ',
+  {
+    tag: '@dev',
+  },
+  () => {
+    let sentencePlanId: string;
+    let planVersion: number;
 
-  test.beforeEach(async () => {
-    sentencePlanId = await test.step('OAsys association', async () => {
-      const oasysResponse: OasysCreateResponse = await createOasysAssociation(coordinatorContext, crn, oasysPk);
-      expect(oasysResponse).toBeTruthy();
+    test.beforeEach(async () => {
+      sentencePlanId = await test.step('OAsys association', async () => {
+        const oasysResponse: OasysCreateResponse = await createOasysAssociation(coordinatorContext, crn, oasysPk);
+        expect(oasysResponse).toBeTruthy();
 
-      return oasysResponse.sentencePlanId;
+        return oasysResponse.sentencePlanId;
+      });
+
+      planVersion = await test.step('Get previous versions', async () => {
+        const queryResponse: PreviousVersionsResponses = (await entityVersions(
+          coordinatorContext,
+          sentencePlanId
+        )) as PreviousVersionsResponse;
+
+        expect(queryResponse).toBeTruthy();
+        expect(queryResponse).toHaveProperty('allVersions');
+        expect(queryResponse.allVersions[today].planVersion.entityType).toBe('AAP_PLAN');
+        expect(queryResponse.allVersions[today].planVersion.status).toBe('CREATED');
+
+        return queryResponse.allVersions[today].planVersion.version;
+      });
     });
 
-    planVersion = await test.step('Get previous versions', async () => {
-      const queryResponse: PreviousVersionsResponses = (await entityVersions(
-        coordinatorContext,
-        sentencePlanId
-      )) as PreviousVersionsResponse;
+    test('Coordinator statuses', async () => {
+      await test.step('Update answers', async () => {
+        const updateResponse: GroupCommandResult = await updateAnswers(apiContext, sentencePlanId, crn);
 
-      expect(queryResponse).toBeTruthy();
-      expect(queryResponse).toHaveProperty('allVersions');
-      expect(queryResponse.allVersions[today].planVersion.entityType).toBe('AAP_PLAN');
-      expect(queryResponse.allVersions[today].planVersion.status).toBe('CREATED');
+        expect(updateResponse).toBeTruthy();
+        expect(updateResponse.commands[0].result.success).toBeTruthy();
+      });
 
-      return queryResponse.allVersions[today].planVersion.version;
+      await test.step('Get plan versions', async () => {
+        const queryResponse: PreviousVersionsResponses = (await entityVersions(
+          coordinatorContext,
+          sentencePlanId
+        )) as PreviousVersionsResponse;
+
+        expect(queryResponse).toBeTruthy();
+        expect(queryResponse.allVersions[today].planVersion.status).toBe('UNSIGNED');
+        expect(queryResponse.allVersions[today].planVersion.version).not.toBe(planVersion);
+      });
+
+      await test.step('Lock plan', async () => {
+        await lock(coordinatorContext, oasysPk);
+
+        const queryResponse: PreviousVersionsResponses = (await entityVersions(
+          coordinatorContext,
+          sentencePlanId
+        )) as PreviousVersionsResponse;
+
+        expect(queryResponse).toBeTruthy();
+        expect(queryResponse.allVersions[today].planVersion.status).toBe('LOCKED');
+      });
+
+      await test.step('Soft delete plan', async () => {
+        await softDelete(coordinatorContext, oasysPk);
+
+        const queryResponse: PreviousVersionsResponses = (await entityVersions(
+          coordinatorContext,
+          sentencePlanId
+        )) as string;
+
+        expect(queryResponse).toBe('No associations found for the provided entityUuid');
+      });
+
+      await test.step('Undelete plan', async () => {
+        await undelete(coordinatorContext, oasysPk);
+
+        const queryResponse: PreviousVersionsResponses = (await entityVersions(
+          coordinatorContext,
+          sentencePlanId
+        )) as PreviousVersionsResponse;
+
+        expect(queryResponse).toBeTruthy();
+        expect(queryResponse.allVersions[today].planVersion.status).toBe('LOCKED');
+      });
     });
-  });
-
-  test('Coordinator statuses', async () => {
-    await test.step('Update answers', async () => {
-      const updateResponse: GroupCommandResult = await updateAnswers(apiContext, sentencePlanId, crn);
-
-      expect(updateResponse).toBeTruthy();
-      expect(updateResponse.commands[0].result.success).toBeTruthy();
-    });
-
-    await test.step('Get plan versions', async () => {
-      const queryResponse: PreviousVersionsResponses = (await entityVersions(
-        coordinatorContext,
-        sentencePlanId
-      )) as PreviousVersionsResponse;
-
-      expect(queryResponse).toBeTruthy();
-      expect(queryResponse.allVersions[today].planVersion.status).toBe('UNSIGNED');
-      expect(queryResponse.allVersions[today].planVersion.version).not.toBe(planVersion);
-    });
-
-    await test.step('Lock plan', async () => {
-      await lock(coordinatorContext, oasysPk);
-
-      const queryResponse: PreviousVersionsResponses = (await entityVersions(
-        coordinatorContext,
-        sentencePlanId
-      )) as PreviousVersionsResponse;
-
-      expect(queryResponse).toBeTruthy();
-      expect(queryResponse.allVersions[today].planVersion.status).toBe('LOCKED');
-    });
-
-    await test.step('Soft delete plan', async () => {
-      await softDelete(coordinatorContext, oasysPk);
-
-      const queryResponse: PreviousVersionsResponses = (await entityVersions(
-        coordinatorContext,
-        sentencePlanId
-      )) as string;
-
-      expect(queryResponse).toBe('No associations found for the provided entityUuid');
-    });
-
-    await test.step('Undelete plan', async () => {
-      await undelete(coordinatorContext, oasysPk);
-
-      const queryResponse: PreviousVersionsResponses = (await entityVersions(
-        coordinatorContext,
-        sentencePlanId
-      )) as PreviousVersionsResponse;
-
-      expect(queryResponse).toBeTruthy();
-      expect(queryResponse.allVersions[today].planVersion.status).toBe('LOCKED');
-    });
-  });
-});
+  }
+);
 
 // https://dsdmoj.atlassian.net/wiki/spaces/ARN/pages/6150881391/ModSec+-+AAP+Team+Guide#Testing
 test(
   'Modsec coordinator',
   {
-    tag: '@dev',
+    tag: '@security',
   },
   async () => {
     const modSecResponse: number = await getModsecError(coordinatorContext);

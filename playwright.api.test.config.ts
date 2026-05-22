@@ -7,6 +7,7 @@ if (!process.env.CI) {
 
 export default defineConfig({
   testMatch: '*api/*.spec.ts',
+  grep: /@dev|@test/,
   globalSetup: require.resolve('./utils/global-setup.ts'),
   use: {
     baseURL: process.env.BASE_URL || 'https://arns-assessment-platform-test.hmpps.service.justice.gov.uk',
