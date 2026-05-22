@@ -48,16 +48,6 @@ async function globalSetup() {
   try {
     console.log('Starting global setup: Fetching API tokens...');
 
-    // Fetch SP Token
-    await fetchAndSaveToken(
-      'SP',
-      path.resolve(__dirname, 'token.json'),
-      process.env.SP_CLIENT_ID,
-      process.env.SP_CLIENT_SECRET,
-      process.env.CLIENT_ID_SCRIPT,
-      process.env.CLIENT_SECRET_SCRIPT
-    );
-
     // Fetch AAP Token
     await fetchAndSaveToken(
       'AAP',
