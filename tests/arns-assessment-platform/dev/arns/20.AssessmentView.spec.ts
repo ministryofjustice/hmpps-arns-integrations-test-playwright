@@ -5,11 +5,16 @@ let apiContext: APIRequestContext;
 const TEST_CRN = 'C912155';
 
 function validateStepStructure(step: AssessmentStep) {
-  expect(step.description).toEqual(expect.any(String));
-  expect(step.status).toEqual(expect.any(String));
-  expect(step.actor).toEqual(expect.any(String));
-  expect(step.statusDate).toEqual(expect.any(String));
-  expect(isNaN(Date.parse(step.statusDate))).toBeFalsy();
+  expect(step).toEqual(
+    expect.objectContaining({
+      description: expect.any(String),
+      status: expect.any(String),
+      actor: expect.any(String),
+      statusDate: expect.any(String),
+    })
+  );
+
+  expect(new Date(step.statusDate).toString()).not.toBe('Invalid Date');
 }
 
 test.beforeAll(async ({ playwright, baseURL }) => {
@@ -39,23 +44,31 @@ test(
 
     const assessment = responseBody[0];
 
-    expect(assessment.crn).toEqual(TEST_CRN);
-
-    expect(assessment.nomis).toBeNull();
-    expect(assessment.planStatus).toEqual(expect.any(String));
-
-    expect(Array.isArray(assessment.goals)).toBeTruthy();
+    expect(assessment).toEqual(
+      expect.objectContaining({
+        crn: TEST_CRN,
+        nomis: null,
+        planStatus: expect.any(String),
+        goals: expect.any(Array),
+      })
+    );
 
     for (const goal of assessment.goals) {
-      expect(goal.titleLength).toEqual(expect.any(Number));
-      expect(goal.titleHash).toEqual(expect.any(String));
-      expect(goal.areaOfNeed).toEqual(expect.any(String));
-      expect(goal.goalStatus).toEqual(expect.any(String));
+      expect(goal).toEqual(
+        expect.objectContaining({
+          titleLength: expect.any(Number),
+          titleHash: expect.any(String),
+          areaOfNeed: expect.any(String),
+          goalStatus: expect.any(String),
+          relatedAreasOfNeed: expect.any(Array),
+          steps: expect.any(Array),
+        })
+      );
 
-      expect(goal.targetDate === null || typeof goal.targetDate === 'string').toBeTruthy();
-
-      expect(Array.isArray(goal.relatedAreasOfNeed)).toBeTruthy();
-      expect(Array.isArray(goal.steps)).toBeTruthy();
+      expect(
+        goal.targetDate === null || typeof goal.targetDate === 'string',
+        `Type Error: Expected goal.targetDate to be 'string' or 'null', but received type '${typeof goal.targetDate}' with value: ${goal.targetDate}`
+      ).toBeTruthy();
 
       for (const step of goal.steps) {
         validateStepStructure(step);
