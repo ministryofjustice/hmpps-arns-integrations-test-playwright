@@ -36,8 +36,6 @@ jobs:
           ORACLE_DB_USER: ${{ secrets.ORACLE_DB_USER }}
           ORACLE_DB_PASSWORD: ${{ secrets.ORACLE_DB_PASSWORD }}
           ORACLE_DB_CONNECT_STRING: ${{ secrets.ORACLE_DB_CONNECT_STRING }}
-          SP_CLIENT_ID: ${{ secrets.SP_CLIENT_ID }}
-          SP_CLIENT_SECRET: ${{ secrets.SP_CLIENT_SECRET }}
           AAP_CLIENT_ID: ${{ secrets.AAP_CLIENT_ID }}
           AAP_CLIENT_SECRET: ${{ secrets.AAP_CLIENT_SECRET }}
           ARNS_ASSESSMENT_CLIENT_ID: ${{ secrets.ARNS_ASSESSMENT_CLIENT_ID }}
