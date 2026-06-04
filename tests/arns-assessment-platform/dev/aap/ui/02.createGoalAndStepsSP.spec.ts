@@ -36,6 +36,7 @@ test.describe('National rollout', () => {
     await createGoal.addSteps.click();
     await addSteps.whoWillDoTheStep('Probation practitioner');
     await addSteps.whatShouldTheyDo.fill('Step 1');
+    await addSteps.addStatus('Not started');
     await addSteps.saveAndContinue.click();
 
     await expect(sentencePlan.goalTitle).toHaveText(goalTitle);
@@ -91,6 +92,7 @@ test.describe('Private beta', () => {
     await createGoal.addSteps.click();
     await addSteps.whoWillDoTheStep('Probation practitioner');
     await addSteps.whatShouldTheyDo.fill('Step 1');
+    await addSteps.addStatus('Not started');
     await addSteps.saveAndContinue.click();
 
     await expect(sentencePlan.goalTitle).toHaveText(goalTitle);
