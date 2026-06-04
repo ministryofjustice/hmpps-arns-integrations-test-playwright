@@ -1,4 +1,4 @@
-import { test, expect, APIRequestContext } from '@playwright/test';
+import { test, expect, APIRequestContext, APIResponse } from '@playwright/test';
 import { getBaseUrl, getToken } from '../../../../../utils/aapClient';
 import {
   createOasysAssociation,
@@ -8,9 +8,10 @@ import {
   lock,
   PreviousVersionsResponses,
   getModsecError,
+  createOasysResponse,
 } from '../../../../../utils/coordinator/coordinatorClient';
 import { updateAnswers } from '../../../../../utils/aap/sentencePlan/assessmentCommands';
-import { OasysCreateResponse, PreviousVersionsResponse } from '../../../../../utils/coordinator/coordinatorTypes';
+import { OasysCreateResponse } from '../../../../../utils/coordinator/coordinatorTypes';
 import { GroupCommandResult } from '../../../../../utils/aap/assessmentTypes';
 import { softDelete, undelete } from '../../../../../utils/coordinator/client/deleting';
 
@@ -60,10 +61,7 @@ test.describe(
       });
 
       planVersion = await test.step('Get previous versions', async () => {
-        const queryResponse: PreviousVersionsResponses = (await entityVersions(
-          coordinatorContext,
-          sentencePlanId
-        )) as PreviousVersionsResponse;
+        const queryResponse: PreviousVersionsResponses = await entityVersions(coordinatorContext, sentencePlanId);
 
         expect(queryResponse).toBeTruthy();
         expect(queryResponse).toHaveProperty('allVersions');
@@ -83,10 +81,7 @@ test.describe(
       });
 
       await test.step('Get plan versions', async () => {
-        const queryResponse: PreviousVersionsResponses = (await entityVersions(
-          coordinatorContext,
-          sentencePlanId
-        )) as PreviousVersionsResponse;
+        const queryResponse: PreviousVersionsResponses = await entityVersions(coordinatorContext, sentencePlanId);
 
         expect(queryResponse).toBeTruthy();
         expect(queryResponse.allVersions[today].planVersion.status).toBe('UNSIGNED');
@@ -96,10 +91,7 @@ test.describe(
       await test.step('Lock plan', async () => {
         await lock(coordinatorContext, oasysPk);
 
-        const queryResponse: PreviousVersionsResponses = (await entityVersions(
-          coordinatorContext,
-          sentencePlanId
-        )) as PreviousVersionsResponse;
+        const queryResponse: PreviousVersionsResponses = await entityVersions(coordinatorContext, sentencePlanId);
 
         expect(queryResponse).toBeTruthy();
         expect(queryResponse.allVersions[today].planVersion.status).toBe('LOCKED');
@@ -108,10 +100,7 @@ test.describe(
       await test.step('Soft delete plan', async () => {
         await softDelete(coordinatorContext, oasysPk);
 
-        const queryResponse: PreviousVersionsResponses = (await entityVersions(
-          coordinatorContext,
-          sentencePlanId
-        )) as string;
+        const queryResponse: PreviousVersionsResponses = await entityVersions(coordinatorContext, sentencePlanId);
 
         expect(queryResponse).toBe('No associations found for the provided entityUuid');
       });
@@ -119,10 +108,7 @@ test.describe(
       await test.step('Undelete plan', async () => {
         await undelete(coordinatorContext, oasysPk);
 
-        const queryResponse: PreviousVersionsResponses = (await entityVersions(
-          coordinatorContext,
-          sentencePlanId
-        )) as PreviousVersionsResponse;
+        const queryResponse: PreviousVersionsResponses = await entityVersions(coordinatorContext, sentencePlanId);
 
         expect(queryResponse).toBeTruthy();
         expect(queryResponse.allVersions[today].planVersion.status).toBe('LOCKED');
@@ -138,8 +124,17 @@ test(
     tag: '@security',
   },
   async () => {
-    const modSecResponse: number = await getModsecError(coordinatorContext);
+    await test.step('CRS violation', async () => {
+      const modSecResponse: number = await getModsecError(coordinatorContext);
 
-    expect(modSecResponse).toBe(406);
+      expect(modSecResponse).toBe(406);
+    });
+
+    await test.step('SQL injection', async () => {
+      const query = `SELECT * FROM assessments WHERE user_id = ${oasysPk}`;
+      const apiResponse: APIResponse = await createOasysResponse(coordinatorContext, crn, query);
+
+      expect(apiResponse.status()).toBe(406);
+    });
   }
 );

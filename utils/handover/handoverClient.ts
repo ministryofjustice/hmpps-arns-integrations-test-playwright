@@ -76,11 +76,11 @@ export function generateUserId(prefix: string = 'int-test'): string {
   return `${prefix}-${timestamp}-${random}`;
 }
 
-export const getHandoverLink = async (
+export const getHandoverResponse = async (
   request: APIRequestContext,
   planVersion: number,
   oasysPk: string
-): Promise<CreateHandoverLinkResponse> => {
+): Promise<APIResponse> => {
   const createRequest: CreateHandoverLinkRequest = {
     user: {
       identifier: generateUserId(),
@@ -96,6 +96,15 @@ export const getHandoverLink = async (
   };
 
   const response: APIResponse = await request.post(`/handover`, { data: createRequest });
+  return response;
+};
+
+export const getHandoverLink = async (
+  request: APIRequestContext,
+  planVersion: number,
+  oasysPk: string
+): Promise<CreateHandoverLinkResponse> => {
+  const response: APIResponse = await getHandoverResponse(request, planVersion, oasysPk);
 
   if (!response.ok()) {
     throw new Error(`Handover failed: ${response.status()} ${response.statusText()}`);
@@ -112,6 +121,30 @@ export const createHandoverLink = async (request: APIRequestContext, planVersion
 
 export const getModsecError = async (request: APIRequestContext): Promise<number> => {
   const response: APIResponse = await request.get(`?q=<script>>alert(1)</script>`);
+
+  return response.status();
+};
+
+export const postHandoverWithUserAgent = async (
+  request: APIRequestContext,
+  oasysPk: string,
+  planVersion: number
+): Promise<number> => {
+  const createRequest: CreateHandoverLinkRequest = {
+    user: {
+      identifier: generateUserId(),
+      displayName: 'Test User',
+      accessMode: 'READ_WRITE',
+      planAccessMode: 'READ_WRITE',
+      returnUrl: OasysReturnUrl,
+    },
+    subjectDetails,
+    oasysAssessmentPk: oasysPk,
+    criminogenicNeedsData: criminogenicNeedsData,
+    sentencePlanVersion: planVersion,
+  };
+
+  const response: APIResponse = await request.post(`/handover`, { data: createRequest });
 
   return response.status();
 };
