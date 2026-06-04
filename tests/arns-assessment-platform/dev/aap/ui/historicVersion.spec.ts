@@ -39,20 +39,26 @@ const oasysPk = Math.floor(Math.random() * 1000000000).toString();
 const today = getVersionDate();
 let planVersion: number;
 
-test.describe('Private beta', () => {
-  test.beforeEach(async () => {
-    const oasysResponse = await createOasysAssociation(coordinatorContext, crn, oasysPk);
-    const queryResponse = await entityVersions(coordinatorContext, oasysResponse.sentencePlanId);
-    planVersion = queryResponse.allVersions[today].planVersion.version;
-  });
+test.describe(
+  'Private beta',
+  {
+    tag: '@dev',
+  },
+  () => {
+    test.beforeEach(async () => {
+      const oasysResponse = await createOasysAssociation(coordinatorContext, crn, oasysPk);
+      const queryResponse = await entityVersions(coordinatorContext, oasysResponse.sentencePlanId);
+      planVersion = queryResponse.allVersions[today].planVersion.version;
+    });
 
-  test('should navigate directly to historic version', async ({ page }) => {
-    const handoverLink = await createHandoverLink(apiContext, planVersion, oasysPk);
-    const privacy = new PrivacyPage(page);
+    test('should navigate directly to historic version', async ({ page }) => {
+      const handoverLink = await createHandoverLink(apiContext, planVersion, oasysPk);
+      const privacy = new PrivacyPage(page);
 
-    await page.goto(`${handoverLink}?clientId=sentence-plan`);
-    await privacy.toHistoricPlan();
+      await page.goto(`${handoverLink}?clientId=sentence-plan`);
+      await privacy.toHistoricPlan();
 
-    await expect(page.getByText('This version is from')).toBeVisible();
-  });
-});
+      await expect(page.getByText('This version is from')).toBeVisible();
+    });
+  }
+);

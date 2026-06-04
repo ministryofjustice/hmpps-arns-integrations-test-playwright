@@ -70,28 +70,34 @@ test.beforeEach(async () => {
   });
 });
 
-test('Coordinator self signing', async () => {
-  await test.step('Rollback plan', async () => {
-    await rollback(coordinatorContext, oasysPk, name, versions.assessmentVersion, versions.planVersion);
+test(
+  'Coordinator self signing',
+  {
+    tag: '@test',
+  },
+  async () => {
+    await test.step('Rollback plan', async () => {
+      await rollback(coordinatorContext, oasysPk, name, versions.assessmentVersion, versions.planVersion);
 
-    const queryResponse: PreviousVersionsResponses = (await entityVersions(
-      coordinatorContext,
-      association.sentencePlanId
-    )) as PreviousVersionsResponse;
+      const queryResponse: PreviousVersionsResponses = (await entityVersions(
+        coordinatorContext,
+        association.sentencePlanId
+      )) as PreviousVersionsResponse;
 
-    expect(queryResponse).toBeTruthy();
-    expect(queryResponse.allVersions[today].planVersion.status).toBe('ROLLED_BACK');
-  });
+      expect(queryResponse).toBeTruthy();
+      expect(queryResponse.allVersions[today].planVersion.status).toBe('ROLLED_BACK');
+    });
 
-  await test.step('Sign plan', async () => {
-    await sign(coordinatorContext, oasysPk);
+    await test.step('Sign plan', async () => {
+      await sign(coordinatorContext, oasysPk);
 
-    const queryResponse: PreviousVersionsResponses = await entityVersions(
-      coordinatorContext,
-      association.sentencePlanId
-    );
+      const queryResponse: PreviousVersionsResponses = await entityVersions(
+        coordinatorContext,
+        association.sentencePlanId
+      );
 
-    expect(queryResponse).toBeTruthy();
-    expect(queryResponse.allVersions[today].planVersion.status).toBe('SELF_SIGNED');
-  });
-});
+      expect(queryResponse).toBeTruthy();
+      expect(queryResponse.allVersions[today].planVersion.status).toBe('SELF_SIGNED');
+    });
+  }
+);

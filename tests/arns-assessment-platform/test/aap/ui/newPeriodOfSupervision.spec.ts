@@ -19,34 +19,40 @@ test.beforeEach(async ({ page }) => {
   await privacy.confirm.click();
 });
 
-test('should view sentence plan as new period of supervision', async ({ page }) => {
-  await expect(page).toHaveTitle('Plan - Sentence plan');
-  const sentencePlan = new SentencePlanPage(page);
-  const goalTitle = 'new period of supervision';
+test(
+  'should view sentence plan as new period of supervision',
+  {
+    tag: '@test',
+  },
+  async ({ page }) => {
+    await expect(page).toHaveTitle('Plan - Sentence plan');
+    const sentencePlan = new SentencePlanPage(page);
+    const goalTitle = 'new period of supervision';
 
-  await test.step('create goal', async () => {
-    const createGoal = new CreateGoalPage(page);
-    await sentencePlan.createGoal.click();
-    await expect(page).toHaveTitle('Create a goal - Sentence plan');
-    await createGoal.createGoal(goalTitle);
-  });
-  await test.step('add steps', async () => {
-    const addSteps = new AddStepsPage(page);
-    await addSteps.addStep();
-    await expect(sentencePlan.goalTitle).toHaveText(goalTitle);
-  });
+    await test.step('create goal', async () => {
+      const createGoal = new CreateGoalPage(page);
+      await sentencePlan.createGoal.click();
+      await expect(page).toHaveTitle('Create a goal - Sentence plan');
+      await createGoal.createGoal(goalTitle);
+    });
+    await test.step('add steps', async () => {
+      const addSteps = new AddStepsPage(page);
+      await addSteps.addStep();
+      await expect(sentencePlan.goalTitle).toHaveText(goalTitle);
+    });
 
-  await test.step('agree plan', async () => {
-    await sentencePlan.agreePlan.click();
-    await sentencePlan.yesIAgree.click();
-    await sentencePlan.save.click();
-    await expect(page.getByText('agreed to their plan')).toBeVisible();
-  });
+    await test.step('agree plan', async () => {
+      await sentencePlan.agreePlan.click();
+      await sentencePlan.yesIAgree.click();
+      await sentencePlan.save.click();
+      await expect(page.getByText('agreed to their plan')).toBeVisible();
+    });
 
-  await test.step('removed goals', async () => {
-    await sentencePlan.removedGoals.click();
-    await expect(sentencePlan.goalTitle).toHaveText(
-      'I will work towards finding accommodation, so that I am no longer homeless'
-    );
-  });
-});
+    await test.step('removed goals', async () => {
+      await sentencePlan.removedGoals.click();
+      await expect(sentencePlan.goalTitle).toHaveText(
+        'I will work towards finding accommodation, so that I am no longer homeless'
+      );
+    });
+  }
+);

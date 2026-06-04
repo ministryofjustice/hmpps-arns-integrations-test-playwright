@@ -7,7 +7,7 @@ import {
   getVersionDate,
 } from '../../../../../utils/coordinator/coordinatorClient';
 import { PreviousVersionsResponse } from '../../../../../utils/coordinator/coordinatorTypes';
-import { getHandoverLink, getHandoverUrl } from '../../../../../utils/handover/handoverClient';
+import { getHandoverLink, getHandoverUrl, getModsecError } from '../../../../../utils/handover/handoverClient';
 import { CreateHandoverLinkResponse } from '../../../../../utils/handover/handoverTypes';
 
 let handoverContext: APIRequestContext;
@@ -36,32 +36,53 @@ test.afterAll(async () => {
   await coordinatorContext.dispose();
 });
 
-let planVersion: number;
-const crn = Math.random().toString().substring(2, 7);
-const oasysPk = Math.floor(Math.random() * 1000000000).toString();
+test.describe(
+  'Handover API',
+  {
+    tag: '@dev',
+  },
+  () => {
+    let planVersion: number;
+    const crn = Math.random().toString().substring(2, 7);
+    const oasysPk = Math.floor(Math.random() * 1000000000).toString();
 
-test.beforeEach(async () => {
-  const sentencePlanId: string = await test.step('OAsys association', async () => {
-    const oasysResponse = await createOasysAssociation(coordinatorContext, crn, oasysPk);
-    expect(oasysResponse).toBeTruthy();
+    test.beforeEach(async () => {
+      const sentencePlanId: string = await test.step('OAsys association', async () => {
+        const oasysResponse = await createOasysAssociation(coordinatorContext, crn, oasysPk);
+        expect(oasysResponse).toBeTruthy();
 
-    return oasysResponse.sentencePlanId;
-  });
+        return oasysResponse.sentencePlanId;
+      });
 
-  planVersion = await test.step('Get previous versions', async () => {
-    const queryResponse: PreviousVersionsResponse = await entityVersions(coordinatorContext, sentencePlanId);
+      planVersion = await test.step('Get previous versions', async () => {
+        const queryResponse: PreviousVersionsResponse = await entityVersions(coordinatorContext, sentencePlanId);
 
-    expect(queryResponse).toBeTruthy();
-    expect(queryResponse).toHaveProperty('allVersions');
-    expect(queryResponse.allVersions[today].planVersion.entityType).toBe('AAP_PLAN');
-    expect(queryResponse.allVersions[today].planVersion.status).toBe('CREATED');
-    return queryResponse.allVersions[today].planVersion.version;
-  });
-});
+        expect(queryResponse).toBeTruthy();
+        expect(queryResponse).toHaveProperty('allVersions');
+        expect(queryResponse.allVersions[today].planVersion.entityType).toBe('AAP_PLAN');
+        expect(queryResponse.allVersions[today].planVersion.status).toBe('CREATED');
+        return queryResponse.allVersions[today].planVersion.version;
+      });
+    });
 
-test('Get Handover link', async () => {
-  const handoverResponse: CreateHandoverLinkResponse = await getHandoverLink(handoverContext, planVersion, oasysPk);
+    test('Get Handover link', async () => {
+      const handoverResponse: CreateHandoverLinkResponse = await getHandoverLink(handoverContext, planVersion, oasysPk);
 
-  expect(handoverResponse).toBeTruthy();
-  expect(handoverResponse.handoverLink).toContain('/handover/');
-});
+      expect(handoverResponse).toBeTruthy();
+      expect(handoverResponse.handoverLink).toContain('/handover/');
+    });
+  }
+);
+
+// https://dsdmoj.atlassian.net/wiki/spaces/ARN/pages/6150881391/ModSec+-+AAP+Team+Guide#Testing
+test(
+  'Modsec handover',
+  {
+    tag: '@security',
+  },
+  async () => {
+    const modSecResponse: number = await getModsecError(handoverContext);
+
+    expect(modSecResponse).toBe(406);
+  }
+);

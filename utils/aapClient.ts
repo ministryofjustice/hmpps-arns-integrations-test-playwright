@@ -66,3 +66,9 @@ export async function queryAssessment(request: APIRequestContext, assessmentUuid
 
   return response.json();
 }
+
+export const getModsecError = async (request: APIRequestContext): Promise<number> => {
+  const response: APIResponse = await request.get(`?q=<script>>alert(1)</script>`);
+
+  return response.status();
+};
