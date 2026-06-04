@@ -39,17 +39,25 @@ test(
   async () => {
     const responseBody = await viewAssessment(apiContext, TEST_CRN);
 
-    expect(Array.isArray(responseBody)).toBeTruthy();
-    expect(responseBody.length).toBeGreaterThan(0);
+  expect(responseBody).toEqual(
+    expect.objectContaining({
+      crn: TEST_CRN,
+      nomis: null,
+      planStatus: expect.any(String),
+      goals: expect.any(Array),
+    })
+  );
 
-    const assessment = responseBody[0];
+  expect(responseBody.goals.length).toBeGreaterThan(0);
 
-    expect(assessment).toEqual(
+  for (const goal of responseBody.goals) {
+    expect(goal).toEqual(
       expect.objectContaining({
-        crn: TEST_CRN,
-        nomis: null,
-        planStatus: expect.any(String),
-        goals: expect.any(Array),
+        goalTitle: expect.any(String),
+        areaOfNeed: expect.any(String),
+        goalStatus: expect.any(String),
+        relatedAreasOfNeed: expect.any(Array),
+        steps: expect.any(Array),
       })
     );
 
