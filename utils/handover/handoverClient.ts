@@ -124,27 +124,3 @@ export const getModsecError = async (request: APIRequestContext): Promise<number
 
   return response.status();
 };
-
-export const postHandoverWithUserAgent = async (
-  request: APIRequestContext,
-  oasysPk: string,
-  planVersion: number
-): Promise<number> => {
-  const createRequest: CreateHandoverLinkRequest = {
-    user: {
-      identifier: generateUserId(),
-      displayName: 'Test User',
-      accessMode: 'READ_WRITE',
-      planAccessMode: 'READ_WRITE',
-      returnUrl: OasysReturnUrl,
-    },
-    subjectDetails,
-    oasysAssessmentPk: oasysPk,
-    criminogenicNeedsData: criminogenicNeedsData,
-    sentencePlanVersion: planVersion,
-  };
-
-  const response: APIResponse = await request.post(`/handover`, { data: createRequest });
-
-  return response.status();
-};
