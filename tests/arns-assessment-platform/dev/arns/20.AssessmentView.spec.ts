@@ -48,7 +48,7 @@ test('view ARNS assessment successfully returns correct data structure', async (
   for (const goal of responseBody.goals) {
     expect(goal).toEqual(
       expect.objectContaining({
-        goalTitle: expect.any(String), // Updated from titleLength/titleHash
+        goalTitle: expect.any(String),
         areaOfNeed: expect.any(String),
         goalStatus: expect.any(String),
         relatedAreasOfNeed: expect.any(Array),
