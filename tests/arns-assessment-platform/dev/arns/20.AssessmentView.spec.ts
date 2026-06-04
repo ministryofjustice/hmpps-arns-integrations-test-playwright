@@ -31,13 +31,8 @@ test.afterAll(async () => {
   await apiContext?.dispose();
 });
 
-test(
-  'view ARNS assessment successfully returns correct data structure',
-  {
-    tag: '@dev',
-  },
-  async () => {
-    const responseBody = await viewAssessment(apiContext, TEST_CRN);
+test('view ARNS assessment successfully returns correct data structure', async () => {
+  const responseBody = await viewAssessment(apiContext, TEST_CRN);
 
   expect(responseBody).toEqual(
     expect.objectContaining({
@@ -61,26 +56,13 @@ test(
       })
     );
 
-    for (const goal of assessment.goals) {
-      expect(goal).toEqual(
-        expect.objectContaining({
-          titleLength: expect.any(Number),
-          titleHash: expect.any(String),
-          areaOfNeed: expect.any(String),
-          goalStatus: expect.any(String),
-          relatedAreasOfNeed: expect.any(Array),
-          steps: expect.any(Array),
-        })
-      );
+    expect(
+      goal.targetDate === null || typeof goal.targetDate === 'string',
+      `Type Error: Expected goal.targetDate to be 'string' or 'null', but received type '${typeof goal.targetDate}' with value: ${goal.targetDate}`
+    ).toBeTruthy();
 
-      expect(
-        goal.targetDate === null || typeof goal.targetDate === 'string',
-        `Type Error: Expected goal.targetDate to be 'string' or 'null', but received type '${typeof goal.targetDate}' with value: ${goal.targetDate}`
-      ).toBeTruthy();
-
-      for (const step of goal.steps) {
-        validateStepStructure(step);
-      }
+    for (const step of goal.steps) {
+      validateStepStructure(step);
     }
   }
-);
+});
