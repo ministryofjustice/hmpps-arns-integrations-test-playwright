@@ -34,12 +34,7 @@ test.afterAll(async () => {
 test('view ARNS assessment successfully returns correct data structure', async () => {
   const responseBody = await viewAssessment(apiContext, TEST_CRN);
 
-  expect(Array.isArray(responseBody)).toBeTruthy();
-  expect(responseBody.length).toBeGreaterThan(0);
-
-  const assessment = responseBody[0];
-
-  expect(assessment).toEqual(
+  expect(responseBody).toEqual(
     expect.objectContaining({
       crn: TEST_CRN,
       nomis: null,
@@ -48,11 +43,12 @@ test('view ARNS assessment successfully returns correct data structure', async (
     })
   );
 
-  for (const goal of assessment.goals) {
+  expect(responseBody.goals.length).toBeGreaterThan(0);
+
+  for (const goal of responseBody.goals) {
     expect(goal).toEqual(
       expect.objectContaining({
-        titleLength: expect.any(Number),
-        titleHash: expect.any(String),
+        goalTitle: expect.any(String),
         areaOfNeed: expect.any(String),
         goalStatus: expect.any(String),
         relatedAreasOfNeed: expect.any(Array),

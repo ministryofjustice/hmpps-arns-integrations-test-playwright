@@ -9,8 +9,7 @@ export interface AssessmentStep {
   statusDate: string;
 }
 export interface AssessmentGoal {
-  titleLength: number;
-  titleHash: string;
+  goalTitle: string;
   areaOfNeed: string;
   relatedAreasOfNeed: string[];
   targetDate: string | null;
@@ -37,7 +36,7 @@ export const getBaseUrl = (baseUrl: string): string => {
   return 'https://arns-assessment-view-api-dev.hmpps.service.justice.gov.uk';
 };
 
-export async function viewAssessment(request: APIRequestContext, crn: string): Promise<Assessment[]> {
+export async function viewAssessment(request: APIRequestContext, crn: string): Promise<Assessment> {
   const response = await request.get(`/sentence-plan/${crn}`);
 
   if (!response.ok()) {
