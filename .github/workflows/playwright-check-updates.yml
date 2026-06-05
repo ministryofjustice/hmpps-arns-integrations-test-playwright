@@ -13,10 +13,10 @@ jobs:
   check-npm-updates:
     env:
       pr_title: '[Automated] Update NPM dependencies'
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, hmpps-github-actions-runner]
     steps:
       - name: Gen GH API token
-        uses: actions/create-github-app-token@064492a9a1762067169d50c792a7dc02bc3d1254 #v2
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3
         id: generate-token
         with:
           repositories: ${{ github.event.repository.name }}
@@ -26,7 +26,7 @@ jobs:
           private-key: ${{ secrets.PLAYWRIGHT_APP_PRIVATE_KEY }}
 
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v5
       - uses: actions/setup-node@v6
         with:
           node-version: lts/*
@@ -43,17 +43,11 @@ jobs:
       
       - name: Create Pull Request
         if: steps.git-check.outputs.changes == 'true'
-        uses: peter-evans/create-pull-request@67f9e1be23d8e8265191f0c42c877a5f28be83ae # v6.0.0
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8
         with:
-          base: main
-          commit-message: "chore: Update npm dependencies"
-          branch: chore/automated-npm-update
+          commit-message: 'chore: Update npm dependencies'
+          branch: automated-npm-update
           delete-branch: true
-          title: "[Automated] Update NPM dependencies"
-          body: |
-            ### NPM Update
-            Automated changes by GitHub Actions
-          labels: |
-            npm
-            automated-pr
+          title: '[Automated] Update NPM dependencies'
+          body: 'Automated changes by GitHub Actions'
           token: ${{ steps.generate-token.outputs.token }}
