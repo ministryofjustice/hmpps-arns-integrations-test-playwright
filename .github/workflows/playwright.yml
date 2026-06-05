@@ -32,10 +32,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Install playwright
-        run:  |
-          npx playwright --version
-          npx playwright install --list
-          npm run playwright:install
+        run:  npx playwright install --list
       - name: Run Playwright tests
         id: playwright-tests
         run: npm run ${{ inputs.environment }}:${{ inputs.source }}:ci
