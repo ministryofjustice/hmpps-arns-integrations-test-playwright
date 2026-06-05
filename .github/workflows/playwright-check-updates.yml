@@ -1,0 +1,59 @@
+name: Check npm packages are up to date
+
+on:
+  schedule:
+    - cron: "10 16,04 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check-npm-updates:
+    env:
+      pr_title: '[Automated] Update NPM dependencies'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Gen GH API token
+        uses: actions/create-github-app-token
+        id: generate-token
+        with:
+          repositories: ${{ github.event.repository.name }}
+          owner: ministryofjustice
+          # Created by PGP following instructions in https://github.com/peter-evans/create-pull-request/blob/main/docs/concepts-guidelines.md#authenticating-with-github-app-generated-tokens
+          app-id: ${{ secrets.PLAYWRIGHT_APP_ID }}
+          private-key: ${{ secrets.PLAYWRIGHT_APP_PRIVATE_KEY }}
+
+
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        run: npm ci
+      - name: Update packages
+        run: npm update
+      
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
+      
+      - name: Create Pull Request
+        if: steps.git-check.outputs.changes == 'true'
+        uses: peter-evans/create-pull-request@67f9e1be23d8e8265191f0c42c877a5f28be83ae # v6.0.0
+        with:
+          base: main
+          commit-message: "chore: Update npm dependencies"
+          branch: chore/automated-npm-update
+          delete-branch: true
+          title: "[Automated] Update NPM dependencies"
+          body: |
+            ### NPM Update
+            Automated changes by GitHub Actions
+          labels: |
+            npm
+            automated-pr
+          token: ${{ steps.generate-token.outputs.token }}
