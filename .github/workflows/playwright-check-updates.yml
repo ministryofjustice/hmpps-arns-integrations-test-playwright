@@ -1,4 +1,4 @@
-name: Check npm packages are up to date
+name: Check npm packages
 
 on:
   schedule:
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Gen GH API token
-        uses: actions/create-github-app-token
+        uses: actions/create-github-app-token@064492a9a1762067169d50c792a7dc02bc3d1254 #v2
         id: generate-token
         with:
           repositories: ${{ github.event.repository.name }}
