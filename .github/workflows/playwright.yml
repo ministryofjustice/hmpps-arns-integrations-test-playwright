@@ -29,10 +29,10 @@ jobs:
           node-version: lts/*
       - name: Playwright version
         run:  npx playwright --version
+      - name: Install browsers
+        run:  npx playwright install
       - name: Install dependencies
         run: npm ci
-      - name: Install playwright
-        run:  npx playwright install --list
       - name: Run Playwright tests
         id: playwright-tests
         run: npm run ${{ inputs.environment }}:${{ inputs.source }}:ci
