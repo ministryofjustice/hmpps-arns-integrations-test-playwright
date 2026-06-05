@@ -23,7 +23,8 @@
     "prettier:fix": "prettier . --write",
     "prepare": "husky",
     "k6:aap:local": "./performance/utils/run_k6_aap_local.sh",
-    "k6:smoke:local": "./performance/utils/run_k6_aap_smoke_local.sh"
+    "k6:smoke:local": "./performance/utils/run_k6_aap_smoke_local.sh",
+    "update": "ncu -u"
   },
   "keywords": [],
   "author": "",
@@ -41,6 +42,7 @@
     "eslint": "^10.0.0",
     "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
+    "npm-check-updates": "^22.2.2",
     "playwright-ctrf-json-reporter": "^0.0.29",
     "prettier": "3.8.3",
     "tsx": "^4.21.0",
