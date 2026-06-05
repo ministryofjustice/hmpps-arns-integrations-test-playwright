@@ -29,7 +29,8 @@ jobs:
           node-version: lts/*
       - name: Install dependencies
         run: |
-          npm install --package-lock-only
+          npm set-script prepare ""
+          npm install --package-lock-only --ignore-scripts
           npm ci
       - name: Run Playwright tests
         id: playwright-tests
