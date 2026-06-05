@@ -27,10 +27,6 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: lts/*
-      - name: Playwright version
-        run:  npx playwright --version
-      - name: Install browsers
-        run:  npx playwright install
       - name: Install dependencies
         run: npm ci
       - name: Run Playwright tests
