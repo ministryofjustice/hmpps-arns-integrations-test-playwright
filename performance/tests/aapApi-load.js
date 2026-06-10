@@ -27,9 +27,9 @@ let testOptions = {
     viewPlan: {
       executor: 'constant-arrival-rate',
       exec: 'viewPlan',
-      rate: 4,
+      rate: 1,
       timeUnit: '1s',
-      preAllocatedVUs: 4,
+      preAllocatedVUs: 1,
       maxVUs: VUS,
       duration: '5s',
       //stages: JSON.parse(__ENV.CUSTOM_STAGES)
@@ -93,7 +93,7 @@ export function createGoal (data) {
     });
 
     check(commandResponse, { 
-      "command status 200": (r) => r.status === 200
+      "create assessment status 200": (r) => r.status === 200
     });
 
     const responseData = commandResponse.json();
@@ -132,7 +132,7 @@ export function createGoal (data) {
     });
 
     check(collectionResponse, { 
-      "command status 200": (r) => r.status === 200
+      "goal collection status 200": (r) => r.status === 200
     });
 
     sleep(0.2);
@@ -199,7 +199,7 @@ export function createGoal (data) {
     });
 
     check(goalResponse, { 
-      "command status 200": (r) => r.status === 200
+      "add goal status 200": (r) => r.status === 200
     });
 
     sleep(0.2);
@@ -272,7 +272,7 @@ export function viewPlan (data) {
     });
 
     check(queryResponse, { 
-      "query status 200": (r) => r.status === 200
+      "query plan status 200": (r) => r.status === 200
     });
   });
 };
