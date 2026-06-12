@@ -1,0 +1,55 @@
+name: Check npm packages
+
+on:
+  schedule:
+    - cron: "10 16,04 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check-npm-updates:
+    env:
+      pr_title: '[Automated] Update NPM dependencies'
+    runs-on: [self-hosted, hmpps-github-actions-runner]
+    steps:
+      - name: Gen GH API token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3
+        id: generate-token
+        with:
+          repositories: ${{ github.event.repository.name }}
+          owner: ministryofjustice
+          # Created by PGP following instructions in https://github.com/peter-evans/create-pull-request/blob/main/docs/concepts-guidelines.md#authenticating-with-github-app-generated-tokens
+          app-id: ${{ secrets.PLAYWRIGHT_APP_ID }}
+          private-key: ${{ secrets.PLAYWRIGHT_APP_PRIVATE_KEY }}
+
+
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        run: npm ci
+      - name: Update packages
+        run: |
+          npm run update
+          npm install
+      
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
+      
+      - name: Create Pull Request
+        if: steps.git-check.outputs.changes == 'true'
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8
+        with:
+          commit-message: 'chore: Update npm dependencies'
+          branch: automated-npm-update
+          delete-branch: true
+          title: '[Automated] Update NPM dependencies'
+          body: 'Automated changes by GitHub Actions'
+          token: ${{ steps.generate-token.outputs.token }}
