@@ -36,7 +36,7 @@ jobs:
       - name: Update packages
         run: |
           npm run update
-          npm update --save
+          npm install
       
       - name: Check for changes
         id: git-check
