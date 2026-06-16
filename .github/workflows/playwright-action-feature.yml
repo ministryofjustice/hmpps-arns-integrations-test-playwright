@@ -1,9 +1,5 @@
 name: Feature branch - Integration tests
 on:
-  push:
-    branches:
-      - main
-      - SP2-2258-area-of-need-feature
   workflow_dispatch:
     inputs:
       source:
