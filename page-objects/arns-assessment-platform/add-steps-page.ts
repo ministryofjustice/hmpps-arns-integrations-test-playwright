@@ -23,6 +23,7 @@ export class AddStepsPage {
   addStep = async () => {
     await this.whoWillDoTheStep('Probation practitioner');
     await this.whatShouldTheyDo.fill('Step 1');
+    await this.addStatus('Not started');
     await this.saveAndContinue.click();
   };
 
