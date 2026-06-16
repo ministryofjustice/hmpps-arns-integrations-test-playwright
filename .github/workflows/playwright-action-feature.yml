@@ -34,7 +34,7 @@ jobs:
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: 'hmpps-arns-assessment-platform-ui',
-              workflow_id: 'deploy_to_env.yml ',
+              workflow_id: 'deploy_to_env.yml',
               ref: '${{ inputs.branch }}'
             })
       - name: Sleep for 5 mins
