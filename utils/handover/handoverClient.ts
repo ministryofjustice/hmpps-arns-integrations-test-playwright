@@ -109,3 +109,9 @@ export const createHandoverLink = async (request: APIRequestContext, planVersion
 
   return handoverResponse.handoverLink;
 };
+
+export const getModsecError = async (request: APIRequestContext): Promise<number> => {
+  const response: APIResponse = await request.get(`?q=<script>>alert(1)</script>`);
+
+  return response.status();
+};

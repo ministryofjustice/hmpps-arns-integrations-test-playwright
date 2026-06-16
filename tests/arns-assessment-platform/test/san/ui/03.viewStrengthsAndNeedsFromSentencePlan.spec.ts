@@ -18,26 +18,38 @@ test.beforeEach(async ({ page }) => {
   await expect(page).toHaveTitle('Plan - Sentence plan');
 });
 
-test('should view Strengths and Needs assessment information as private beta user', async ({ page }) => {
-  const sentencePlan = new SentencePlanPage(page);
-  const createGoal = new CreateGoalPage(page);
+test(
+  'should view Strengths and Needs assessment information as private beta user',
+  {
+    tag: '@test',
+  },
+  async ({ page }) => {
+    const sentencePlan = new SentencePlanPage(page);
+    const createGoal = new CreateGoalPage(page);
 
-  await sentencePlan.createGoal.click();
-  await expect(page).toHaveTitle('Create a goal - Sentence plan');
-  await createGoal.viewInformation.click();
-  await expect(page.getByText('has already made positive changes and wants to maintain them.')).toBeVisible();
+    await sentencePlan.createGoal.click();
+    await expect(page).toHaveTitle('Create a goal - Sentence plan');
+    await createGoal.viewInformation.click();
+    await expect(page.getByText('has already made positive changes and wants to maintain them.')).toBeVisible();
 
-  await createGoal.employmentAndEducation.click();
-  await createGoal.viewInformation.click();
-  await expect(page.getByText('does not want to answer.')).toBeVisible();
-});
+    await createGoal.employmentAndEducation.click();
+    await createGoal.viewInformation.click();
+    await expect(page.getByText('does not want to answer.')).toBeVisible();
+  }
+);
 
-test('should view Strengths and Needs risks and needs scores as private beta user', async ({ page }) => {
-  const sentencePlan = new SentencePlanPage(page);
-  const about = new AboutPage(page);
+test(
+  'should view Strengths and Needs risks and needs scores as private beta user',
+  {
+    tag: '@test',
+  },
+  async ({ page }) => {
+    const sentencePlan = new SentencePlanPage(page);
+    const about = new AboutPage(page);
 
-  await sentencePlan.about.click();
-  await about.alcoholUse.click();
+    await sentencePlan.about.click();
+    await about.alcoholUse.click();
 
-  await expect(about.assessmentInfoAndScore.filter({ hasText: 'did not have to answer' })).toHaveCount(2);
-});
+    await expect(about.assessmentInfoAndScore.filter({ hasText: 'did not have to answer' })).toHaveCount(2);
+  }
+);

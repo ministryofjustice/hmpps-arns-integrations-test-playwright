@@ -75,51 +75,57 @@ test.beforeEach(async () => {
   });
 });
 
-test('Coordinator counter signing', async () => {
-  await test.step('Rollback plan', async () => {
-    await rollback(coordinatorContext, oasysPk, name, versions.assessmentVersion, versions.planVersion);
+test(
+  'Coordinator counter signing',
+  {
+    tag: '@test',
+  },
+  async () => {
+    await test.step('Rollback plan', async () => {
+      await rollback(coordinatorContext, oasysPk, name, versions.assessmentVersion, versions.planVersion);
 
-    const queryResponse: PreviousVersionsResponses = (await entityVersions(
-      coordinatorContext,
-      association.sentencePlanId
-    )) as PreviousVersionsResponse;
+      const queryResponse: PreviousVersionsResponses = (await entityVersions(
+        coordinatorContext,
+        association.sentencePlanId
+      )) as PreviousVersionsResponse;
 
-    expect(queryResponse).toBeTruthy();
-    expect(queryResponse.allVersions[today].planVersion.status).toBe('ROLLED_BACK');
-    versions = {
-      assessmentVersion: queryResponse.allVersions[today].assessmentVersion.version,
-      planVersion: queryResponse.allVersions[today].planVersion.version,
-    };
-  });
+      expect(queryResponse).toBeTruthy();
+      expect(queryResponse.allVersions[today].planVersion.status).toBe('ROLLED_BACK');
+      versions = {
+        assessmentVersion: queryResponse.allVersions[today].assessmentVersion.version,
+        planVersion: queryResponse.allVersions[today].planVersion.version,
+      };
+    });
 
-  await test.step('Sign plan', async () => {
-    await sign(coordinatorContext, oasysPk, name, 'COUNTERSIGN');
+    await test.step('Sign plan', async () => {
+      await sign(coordinatorContext, oasysPk, name, 'COUNTERSIGN');
 
-    const queryResponse: PreviousVersionsResponses = (await entityVersions(
-      coordinatorContext,
-      association.sentencePlanId
-    )) as PreviousVersionsResponse;
+      const queryResponse: PreviousVersionsResponses = (await entityVersions(
+        coordinatorContext,
+        association.sentencePlanId
+      )) as PreviousVersionsResponse;
 
-    expect(queryResponse).toBeTruthy();
-    expect(queryResponse.allVersions[today].planVersion.status).toBe('AWAITING_COUNTERSIGN');
-  });
+      expect(queryResponse).toBeTruthy();
+      expect(queryResponse.allVersions[today].planVersion.status).toBe('AWAITING_COUNTERSIGN');
+    });
 
-  await test.step('Counter-sign plan', async () => {
-    await counterSign(
-      coordinatorContext,
-      oasysPk,
-      name,
-      'COUNTERSIGNED',
-      versions.assessmentVersion,
-      versions.planVersion
-    );
+    await test.step('Counter-sign plan', async () => {
+      await counterSign(
+        coordinatorContext,
+        oasysPk,
+        name,
+        'COUNTERSIGNED',
+        versions.assessmentVersion,
+        versions.planVersion
+      );
 
-    const queryResponse: PreviousVersionsResponses = (await entityVersions(
-      coordinatorContext,
-      association.sentencePlanId
-    )) as PreviousVersionsResponse;
+      const queryResponse: PreviousVersionsResponses = (await entityVersions(
+        coordinatorContext,
+        association.sentencePlanId
+      )) as PreviousVersionsResponse;
 
-    expect(queryResponse).toBeTruthy();
-    expect(queryResponse.countersignedVersions[today].planVersion.status).toBe('COUNTERSIGNED');
-  });
-});
+      expect(queryResponse).toBeTruthy();
+      expect(queryResponse.countersignedVersions[today].planVersion.status).toBe('COUNTERSIGNED');
+    });
+  }
+);
