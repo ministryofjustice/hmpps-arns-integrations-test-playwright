@@ -4,12 +4,13 @@ import { PrivacyPage } from '../../../../../page-objects/arns-assessment-platfor
 import { SentencePlanPage } from '../../../../../page-objects/arns-assessment-platform/sentence-plan-page';
 import { CreateGoalPage } from '../../../../../page-objects/arns-assessment-platform/create-goal-page';
 import { AddStepsPage } from '../../../../../page-objects/arns-assessment-platform/add-steps-page';
-import { getBaseUrl, getToken, queryAssessment } from '../../../../../utils/aapClient';
+import { getBaseUrl, getToken } from '../../../../../utils/aapClient';
+import { AreaOfNeedPage } from '../../../../../page-objects/arns-assessment-platform/area-of-need-page';
 
 test.describe(
   'National rollout',
   {
-    tag: '@dev',
+    tag: ['@dev', '@local'],
   },
   () => {
     test.beforeEach(async ({ page }) => {
@@ -26,12 +27,15 @@ test.describe(
 
     test('should create goal and steps as national rollout user', async ({ page }) => {
       const sentencePlan = new SentencePlanPage(page);
+      const areaOfNeed = new AreaOfNeedPage(page);
       const createGoal = new CreateGoalPage(page);
       const addSteps = new AddStepsPage(page);
       const goalTitle = 'I will work towards finding accommodation, so that I am no longer homeless';
 
       await sentencePlan.createGoal.click();
       await expect(page).toHaveTitle('Create a goal - Sentence plan');
+      await areaOfNeed.finances.click();
+      await areaOfNeed.continue.click();
       await createGoal.searchGoal.fill(goalTitle);
       await createGoal.searchGoal.blur();
       await createGoal.relatedGoalYes.click();
@@ -67,7 +71,7 @@ test.afterAll(async () => {
 test.describe(
   'Private beta',
   {
-    tag: '@dev',
+    tag: ['@dev', '@local'],
   },
   () => {
     test.beforeEach(async ({ page }) => {
@@ -80,19 +84,19 @@ test.describe(
       await privacy.confirmPrivacy.click();
       await privacy.confirm.click();
       await expect(page).toHaveTitle('Plan - Sentence plan');
-      const info = await page.locator('pre').textContent();
-      const assessmentId = info.substring(info.lastIndexOf('Assessment ID:'), info.indexOf('OASys PK:')).substring(14);
-      await queryAssessment(apiContext, assessmentId);
     });
 
     test('should create goal and steps as private beta user', async ({ page }) => {
       const sentencePlan = new SentencePlanPage(page);
+      const areaOfNeed = new AreaOfNeedPage(page);
       const createGoal = new CreateGoalPage(page);
       const addSteps = new AddStepsPage(page);
       const goalTitle = 'I will work towards finding accommodation, so that I am no longer homeless';
 
       await sentencePlan.createGoal.click();
       await expect(page).toHaveTitle('Create a goal - Sentence plan');
+      await areaOfNeed.finances.click();
+      await areaOfNeed.continue.click();
       await createGoal.searchGoal.fill(goalTitle);
       await createGoal.searchGoal.blur();
       await createGoal.relatedGoalYes.click();
