@@ -8,3 +8,17 @@ export function simulate() {
   const waitTime = Math.random() * range + MIN_THINK;
   sleep(waitTime);
 }
+
+export function logNormal(mu, sigma) {
+    // Standard Box-Muller transform to get a normal distribution
+    let u1 = Math.random();
+    let u2 = Math.random();
+
+    // Ensure u1 is not exactly 0 to avoid Math.log(0) which is -Infinity
+    while (u1 <= 0) u1 = Math.random();
+
+    let z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
+
+    // Apply log-normal transformation
+    return Math.exp(mu + sigma * z0);
+}

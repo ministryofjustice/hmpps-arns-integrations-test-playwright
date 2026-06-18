@@ -5,6 +5,7 @@ import { b64encode } from "k6/encoding";
 import { SharedArray } from 'k6/data';
 import exec from 'k6/execution';
 import { apiSetup } from '../setup/api.js';
+import { logNormal, simulate } from "../helpers/thinking.js";
 
 // --- CONFIGURATION ---
 
@@ -12,7 +13,7 @@ import { apiSetup } from '../setup/api.js';
 const createFailures = new Counter("create_assessment_failures");
 
 // Default config
-const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 1;
+const VUS = __ENV.VUS ? parseInt(__ENV.VUS) : 5;
 const DURATION = __ENV.DURATION || "1s";
 
 const TOKEN_REFRESH_WINDOW = 20 * 60 * 1000; // 20 minutes in milliseconds
@@ -29,7 +30,7 @@ let testOptions = {
       exec: 'viewPlan',
       rate: 1,
       timeUnit: '1s',
-      preAllocatedVUs: 1,
+      preAllocatedVUs: 2,
       maxVUs: VUS,
       duration: '5s',
       //stages: JSON.parse(__ENV.CUSTOM_STAGES)
@@ -39,7 +40,7 @@ let testOptions = {
       exec: 'createGoal',
       rate: 1,
       timeUnit: '1s',
-      preAllocatedVUs: 1,
+      preAllocatedVUs: 2,
       maxVUs: VUS,
       duration: '5s',
       //stages: JSON.parse(__ENV.CUSTOM_STAGES)
@@ -99,8 +100,6 @@ export function createGoal (data) {
     const responseData = commandResponse.json();
     VARS.assessmentUuid = responseData.commands[0].result.assessmentUuid
 
-    sleep(0.2);
-
     // Step 2 — Create Goal Collection
     const collectionPayload = JSON.stringify({
       commands: [
@@ -134,8 +133,6 @@ export function createGoal (data) {
     check(collectionResponse, { 
       "goal collection status 200": (r) => r.status === 200
     });
-
-    sleep(0.2);
 
     // Step 2 — Create Goal Collection
     const goalsCollectionBody = collectionResponse.json();
@@ -201,11 +198,14 @@ export function createGoal (data) {
     check(goalResponse, { 
       "add goal status 200": (r) => r.status === 200
     });
-
-    sleep(0.2);
   });
 
-  group('02. query', function () {
+  // Median = 37.59 (Create a goal - Sentence plan)
+  // Spread = 0.5
+  let createGoalDelay = logNormal(Math.log(37.59), 0.5);
+  sleep(createGoalDelay);
+
+  group('02. query plan', function () {
     // Step 4 — Query Assessment
     const queryPayload = JSON.stringify({
       queries: [
@@ -236,6 +236,11 @@ export function createGoal (data) {
     });
 
   });
+
+  // Median = 5.2 (Plan - Sentence plan)
+  // Spread = 0.5
+  let queryPlanDelay = logNormal(Math.log(5.2), 0.5);
+  sleep(queryPlanDelay);
 }
 
 export function viewPlan (data) {
@@ -275,6 +280,11 @@ export function viewPlan (data) {
       "query plan status 200": (r) => r.status === 200
     });
   });
+
+  // Median = 5.2 (Plan - Sentence plan)
+  // Spread = 0.5
+  let viewPlanDelay = logNormal(Math.log(5.2), 0.5);
+  sleep(viewPlanDelay);
 };
 
 
