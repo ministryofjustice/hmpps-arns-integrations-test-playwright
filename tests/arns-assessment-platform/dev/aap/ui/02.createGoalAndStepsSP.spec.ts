@@ -45,7 +45,8 @@ test.describe(
       await createGoal.addSteps.click();
       await addSteps.whoWillDoTheStep('Probation practitioner');
       await addSteps.whatShouldTheyDo.fill('Step 1');
-      await addSteps.addStatus('Not started');
+      // Step status not merged into main yet
+      // await addSteps.addStatus('Not started');
       await addSteps.saveAndContinue.click();
 
       await expect(sentencePlan.goalTitle).toHaveText(goalTitle);
@@ -107,7 +108,8 @@ test.describe(
       await createGoal.addSteps.click();
       await addSteps.whoWillDoTheStep('Probation practitioner');
       await addSteps.whatShouldTheyDo.fill('Step 1');
-      await addSteps.addStatus('Not started');
+      // Step status not merged into main yet
+      // await addSteps.addStatus('Not started');
       await addSteps.saveAndContinue.click();
 
       await expect(sentencePlan.goalTitle).toHaveText(goalTitle);
