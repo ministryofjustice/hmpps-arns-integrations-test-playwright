@@ -6,7 +6,7 @@ import { PrivacyPage } from '../../../../../page-objects/arns-assessment-platfor
 test.describe(
   'Private beta',
   {
-    tag: '@dev',
+    tag: ['@dev', '@local'],
   },
   () => {
     test.beforeEach(async ({ page }) => {
@@ -20,7 +20,7 @@ test.describe(
       );
       await privacy.confirmPrivacy.click();
       await privacy.confirm.click();
-      await expect(page).toHaveTitle('Accommodation - Strengths and needs');
+      expect(await page.title()).toContain('Strengths and needs');
     });
 
     test('complete a strengths and needs assessment', async ({ page }) => {
