@@ -116,7 +116,7 @@ async function globalSetup() {
         throw new Error(`Goals collection command request failed: ${goalsResponse.status} ${goalsResponse.statusText}`);
       }
       
-      const goalsCollectionBody = await goalsResponse.json();
+      const goalsCollectionBody: any = await goalsResponse.json();
 
       const commandCreateGoalPayload = JSON.stringify({
         commands: [
@@ -175,7 +175,7 @@ async function globalSetup() {
         throw new Error(`Create Goals command request failed: ${createGoalResponse.status} ${createGoalResponse.statusText}`);
       }
 
-      const createGoalBody = await createGoalResponse.json();
+      const createGoalBody: any = await createGoalResponse.json();
 
       const commandStepsPayload = JSON.stringify({
         commands: [
@@ -206,7 +206,7 @@ async function globalSetup() {
         throw new Error(`Goals collection command request failed: ${stepsResponse.status} ${stepsResponse.statusText}`);
       }
       
-      const stepsCollectionBody = await stepsResponse.json();
+      const stepsCollectionBody: any = await stepsResponse.json();
 
       const commandCreateStepPayload = JSON.stringify({
         commands: [
