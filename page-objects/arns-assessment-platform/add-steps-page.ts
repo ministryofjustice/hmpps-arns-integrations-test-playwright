@@ -9,7 +9,7 @@ export class AddStepsPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.chooseSomeone = page.getByLabel('Who will do the step?');
+    this.chooseSomeone = page.locator('select', { hasText: 'Choose someone' });
     this.whatShouldTheyDo = page.getByRole('textbox', { name: 'What should they do to achieve the goal' });
     this.saveAndContinue = page.getByRole('button', { name: 'Save and continue' });
     this.chooseStatus = page.getByRole('button', { name: 'Choose status' });
