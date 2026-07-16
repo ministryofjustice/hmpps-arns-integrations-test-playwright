@@ -10,4 +10,9 @@ export class AreaOfNeedPage {
     this.finances = page.getByLabel('Finances');
     this.continue = page.getByRole('button', { name: 'Continue' });
   }
+
+  async select() {
+    await this.finances.click();
+    await this.continue.click();
+  }
 }
