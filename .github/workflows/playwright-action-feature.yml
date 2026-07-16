@@ -9,7 +9,7 @@ on:
         type: string
       branch:
         description: 'Feature branch'
-        required: false
+        required: true
         default: 'main'
         type: string
 jobs:
