@@ -10,6 +10,7 @@ export class CreateGoalPage {
   readonly addSteps: Locator;
   readonly viewInformation: Locator;
   readonly employmentAndEducation: Locator;
+  readonly changeAreaOfNeed: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -21,6 +22,7 @@ export class CreateGoalPage {
     this.addSteps = page.getByRole('button', { name: 'Add Steps' });
     this.viewInformation = page.locator('summary').filter({ hasText: 'View information' });
     this.employmentAndEducation = page.getByRole('link', { name: 'Employment and education' });
+    this.changeAreaOfNeed = page.getByRole('link', { name: 'Change area of need' });
   }
 
   createGoal = async (goalTitle: string) => {
