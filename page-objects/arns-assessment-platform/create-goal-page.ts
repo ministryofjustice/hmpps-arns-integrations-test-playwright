@@ -10,17 +10,19 @@ export class CreateGoalPage {
   readonly addSteps: Locator;
   readonly viewInformation: Locator;
   readonly employmentAndEducation: Locator;
+  readonly changeAreaOfNeed: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.searchGoal = page.locator('accessible-autocomplete-wrapper').getByRole('combobox');
-    this.relatedGoalYes = page.getByRole('group', { name: 'Is this goal related to any' }).getByLabel('Yes');
+    this.relatedGoalYes = page.getByRole('group', { name: 'Does this goal relate to any' }).getByLabel('Yes');
     this.relatedAreaAlcohol = page.getByRole('checkbox', { name: 'Alcohol use' });
     this.startWorkingOnThisGoalYes = page.getByRole('group', { name: 'start working on this goal' }).getByLabel('Yes');
     this.whenAimToAchieveGoal = page.getByRole('radio', { name: 'In 3 months' });
     this.addSteps = page.getByRole('button', { name: 'Add Steps' });
     this.viewInformation = page.locator('summary').filter({ hasText: 'View information' });
     this.employmentAndEducation = page.getByRole('link', { name: 'Employment and education' });
+    this.changeAreaOfNeed = page.getByRole('link', { name: 'Change area of need' });
   }
 
   createGoal = async (goalTitle: string) => {
