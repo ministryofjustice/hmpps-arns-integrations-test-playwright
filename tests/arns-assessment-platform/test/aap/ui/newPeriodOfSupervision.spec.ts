@@ -26,6 +26,7 @@ test(
     tag: '@test',
   },
   async ({ page }) => {
+    test.setTimeout(12_000);
     await expect(page).toHaveTitle('Plan - Sentence plan');
     const sentencePlan = new SentencePlanPage(page);
     const goalTitle = 'new period of supervision';

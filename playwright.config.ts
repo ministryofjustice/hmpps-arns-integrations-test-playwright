@@ -11,13 +11,13 @@ if (!process.env.CI) {
 export default defineConfig({
   globalSetup: require.resolve('./utils/global-setup.ts'),
   /* Maximum time one test can run for. */
-  timeout: 600 * 100,
+  timeout: 8000,
   expect: {
     /**
      * Maximum time expect() should wait for the condition to be met.
      * For example in `await expect(locator).toHaveText();`
      */
-    timeout: process.env.CI ? 30000 : 10000,
+    timeout: process.env.CI ? 3000 : 1000,
   },
   /* Run tests in files in parallel */
   fullyParallel: false,
