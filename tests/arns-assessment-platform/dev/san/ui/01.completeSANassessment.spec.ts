@@ -24,6 +24,7 @@ test.describe(
     });
 
     test('complete a strengths and needs assessment', async ({ page }) => {
+      test.setTimeout(60_000);
       const strengthsAndNeedsPage = new StrengthsAndNeedsPage(page);
 
       await strengthsAndNeedsPage.completeAccomodation();
