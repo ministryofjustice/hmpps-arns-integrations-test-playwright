@@ -10,7 +10,8 @@ export class AreaOfNeedPage {
   constructor(page: Page) {
     this.page = page;
     this.accommodation = page.getByLabel('Accommodation');
-    this.finances = page.getByLabel('Finances');
+    // this.finances = page.getByLabel('Finances');
+    this.finances = page.getByRole('link', { name: 'Finances' });
     this.continue = page.getByRole('button', { name: 'Continue' });
     this.employmentAndEducation = page.getByLabel('Employment and education');
   }

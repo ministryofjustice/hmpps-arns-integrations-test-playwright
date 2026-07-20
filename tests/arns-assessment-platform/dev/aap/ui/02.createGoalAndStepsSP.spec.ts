@@ -35,7 +35,6 @@ test.describe(
       await sentencePlan.createGoal.click();
       await expect(page).toHaveTitle('Create a goal - Sentence plan');
       await areaOfNeed.finances.click();
-      await areaOfNeed.continue.click();
       await createGoal.searchGoal.fill(goalTitle);
       await createGoal.searchGoal.blur();
       await createGoal.relatedGoalYes.click();
@@ -97,7 +96,6 @@ test.describe(
       await sentencePlan.createGoal.click();
       await expect(page).toHaveTitle('Create a goal - Sentence plan');
       await areaOfNeed.finances.click();
-      await areaOfNeed.continue.click();
       await createGoal.searchGoal.fill(goalTitle);
       await createGoal.searchGoal.blur();
       await createGoal.relatedGoalYes.click();
