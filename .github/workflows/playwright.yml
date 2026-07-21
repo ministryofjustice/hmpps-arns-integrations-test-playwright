@@ -17,11 +17,6 @@ on:
         required: false
         default: 'all'
         type: string
-      branch:
-        description: 'Branch name'
-        required: false
-        default: 'main'
-        type: string
 
 jobs:
   test:
@@ -29,8 +24,6 @@ jobs:
     runs-on: [ self-hosted, hmpps-github-actions-runner ]
     steps:
       - uses: actions/checkout@v6
-        with:
-          ref: ${{ inputs.branch || 'main' }}
       - uses: actions/setup-node@v6
         with:
           node-version: lts/*

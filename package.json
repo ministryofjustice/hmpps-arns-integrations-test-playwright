@@ -13,7 +13,6 @@
     "dev:aap:ci": "playwright test --project=chromium_aap --project=edge_aap",
     "dev:san:ci": "playwright test --project=chromium_san --project=edge_san",
     "dev:ui": "playwright test --project=chromium --ui",
-    "local:ui": "playwright test --config=playwright.local.config.ts --project=chromium --ui",
     "test:ui": "playwright test --config=playwright.test.config.ts --project=chromium --ui",
     "test:all:ci": "playwright test --config=playwright.test.config.ts --project=chromium --project=edge --grep '@dev|@test'",
     "test:aap:ci": "playwright test --config=playwright.test.config.ts --project=chromium_aap --project=edge_aap --grep '@dev|@test'",

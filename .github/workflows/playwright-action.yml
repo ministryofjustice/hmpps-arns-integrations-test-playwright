@@ -40,7 +40,6 @@ jobs:
         shell: bash
   send-notification:
     name: Integration tests
-    needs: trigger_deploy
     uses: ./.github/workflows/playwright.yml
     with:
       channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
