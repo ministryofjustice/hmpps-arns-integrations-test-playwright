@@ -4,6 +4,7 @@ import { PrivacyPage } from '../../../../../page-objects/arns-assessment-platfor
 import { SentencePlanPage } from '../../../../../page-objects/arns-assessment-platform/sentence-plan-page';
 import { CreateGoalPage } from '../../../../../page-objects/arns-assessment-platform/create-goal-page';
 import { AddStepsPage } from '../../../../../page-objects/arns-assessment-platform/add-steps-page';
+import { AreaOfNeedPage } from '../../../../../page-objects/arns-assessment-platform/area-of-need-page';
 
 test.beforeEach(async ({ page }) => {
   const trainingLauncher = new TrainingLauncherPage(page);
@@ -32,8 +33,10 @@ test(
 
     await test.step('create goal', async () => {
       const createGoal = new CreateGoalPage(page);
+      const areaOfNeed = new AreaOfNeedPage(page);
       await sentencePlan.createGoal.click();
       await expect(page).toHaveTitle('Create a goal - Sentence plan');
+      await areaOfNeed.select();
       await createGoal.createGoal(goalTitle);
     });
     await test.step('add steps', async () => {
