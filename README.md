@@ -22,16 +22,42 @@ Test runs on the pipeline are configured dto run on Chrome for runtime speed pur
 These can be later expanded in the playwright.config file.
 
 ## Running the tests
-`npx playwright test --project=chromium`
-Runs the tests only on Desktop Chrome.
 
-`npx playwright test --project=chromium --debug tests/01.userCompletesS&NAssessment.spec.ts` 
-Runs only the specified test in debug mode.
+### CI
 
-`npx playwright test --project=chromium --debug` 
-Runs the tests in debug mode.
+#### AAP Only
 
-For other browsers available in the config, pass the desired browser in your command.
+Dev: `npm run dev:aap:ci`    
+Test: `npm run test:aap:ci`
+
+#### SAN Only
+
+Dev: `npm run dev:san:ci`    
+Test: `npm run test:san:ci`
+
+#### All
+
+Dev: `npm run dev:all:ci`    
+Test: `npm run test:all:ci`
+
+#### API
+
+Dev: `npm run dev:api`    
+Security: `npm run dev:api:security`    
+Test: `npm run test:api`
+
+### UI
+
+#### All
+
+Dev: `npm run dev:ui`   
+Test: `npm run test:ui`
+
+#### API
+
+Security: `npm run dev:api:security:ui`    
+Dev: `npm run dev:api:ui`    
+Test: `npm run test:api:ui`
 
 NOTE: a .env file is required to run certain test features locally. This file is available upon request as and when needed.
 
