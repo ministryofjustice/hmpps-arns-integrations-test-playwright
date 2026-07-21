@@ -7,8 +7,13 @@ on:
         required: false
         default: 'all'
         type: string
-  # schedule:
-  #   - cron: '30 7,13,18 * * 1-5'
+      branch:
+        description: 'Feature branch'
+        required: false
+        default: 'main'
+        type: string
+  schedule:
+    - cron: '00 7 * * 1-5' # At 07:00 AM, Monday through Friday
 jobs:
   trigger_deploy:
     name: Trigger deploy
@@ -46,4 +51,5 @@ jobs:
       channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
       environment: dev
       source: ${{ inputs.source || 'all' }}
+      branch: ${{ inputs.branch || 'main' }}
     secrets: inherit
