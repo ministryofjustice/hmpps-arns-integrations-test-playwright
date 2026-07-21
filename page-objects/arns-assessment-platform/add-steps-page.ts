@@ -9,14 +9,15 @@ export class AddStepsPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.chooseSomeone = page.locator('select', { hasText: 'Choose someone' });
+    this.chooseSomeone = page.getByRole('button', { name: 'Choose someone' });
     this.whatShouldTheyDo = page.getByRole('textbox', { name: 'What should they do to achieve the goal' });
     this.saveAndContinue = page.getByRole('button', { name: 'Save and continue' });
     this.chooseStatus = page.getByRole('button', { name: 'Choose status' });
   }
 
   whoWillDoTheStep = async (who: string) => {
-    await this.chooseSomeone.selectOption(who);
+    await this.chooseSomeone.click();
+    await this.page.getByRole('option', { name: who }).click();
   };
 
   addStep = async () => {
