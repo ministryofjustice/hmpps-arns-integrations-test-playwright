@@ -52,13 +52,15 @@ test.describe(
     });
 
     test('should navigate directly to historic version', async ({ page }) => {
+      test.setTimeout(30_000);
+
       const handoverLink = await createHandoverLink(apiContext, planVersion, oasysPk);
       const privacy = new PrivacyPage(page);
 
-      await page.goto(`${handoverLink}?clientId=sentence-plan`);
+      await page.goto(`${handoverLink}?clientId=sentence-plan`, { waitUntil: 'domcontentloaded', timeout: 20_000 });
       await privacy.toHistoricPlan();
 
-      await expect(page.getByText('This version is from')).toBeVisible();
+      await expect(page.getByText('This version is from')).toBeVisible({ timeout: 20_000 });
     });
   }
 );

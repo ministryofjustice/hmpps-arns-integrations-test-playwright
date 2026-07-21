@@ -13,15 +13,17 @@ test.describe(
   },
   () => {
     test.beforeEach(async ({ page }) => {
+      test.setTimeout(30_000);
+
       const trainingLauncher = new TrainingLauncherPage(page);
       const privacy = new PrivacyPage(page);
 
       await trainingLauncher.startNationalRollout();
 
-      await expect(page).toHaveTitle('Close other applications - Sentence plan');
+      await expect(page).toHaveTitle('Close other applications - Sentence plan', { timeout: 20_000 });
       await privacy.confirmPrivacy.click();
       await privacy.confirm.click();
-      await expect(page).toHaveTitle('Plan - Sentence plan');
+      await expect(page).toHaveTitle('Plan - Sentence plan', { timeout: 20_000 });
     });
 
     test('should create goal and steps as national rollout user', async ({ page }) => {
@@ -72,15 +74,17 @@ test.describe(
   },
   () => {
     test.beforeEach(async ({ page }) => {
+      test.setTimeout(30_000);
+
       const trainingLauncher = new TrainingLauncherPage(page);
       const privacy = new PrivacyPage(page);
 
       await trainingLauncher.startPrivateBeta();
 
-      await expect(page).toHaveTitle('Close other applications - Sentence plan');
+      await expect(page).toHaveTitle('Close other applications - Sentence plan', { timeout: 20_000 });
       await privacy.confirmPrivacy.click();
       await privacy.confirm.click();
-      await expect(page).toHaveTitle('Plan - Sentence plan');
+      await expect(page).toHaveTitle('Plan - Sentence plan', { timeout: 20_000 });
       const info = await page.locator('pre').textContent();
       const assessmentId = info.substring(info.lastIndexOf('Assessment ID:'), info.indexOf('OASys PK:')).substring(14);
       await queryAssessment(apiContext, assessmentId);

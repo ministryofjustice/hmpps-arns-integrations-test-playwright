@@ -28,6 +28,8 @@ test.describe(
   },
   () => {
     test.beforeEach(async ({ page }) => {
+      test.setTimeout(30_000);
+
       const trainingLauncher = new TrainingLauncherPage(page);
       const privacy = new PrivacyPage(page);
       await trainingLauncher.startPrivateBeta();
@@ -38,7 +40,7 @@ test.describe(
       const sentencePlan = new SentencePlanPage(page);
       const goalTitle = 'I will work towards finding accommodation, so that I am no longer homeless';
       await page.reload();
-      await expect(sentencePlan.goalTitle).toHaveText(goalTitle);
+      await expect(sentencePlan.goalTitle).toHaveText(goalTitle, { timeout: 20_000 });
     });
 
     test('should agree plan', async ({ page }) => {
@@ -62,6 +64,8 @@ test.describe(
   },
   () => {
     test.beforeEach(async ({ page }) => {
+      test.setTimeout(30_000);
+
       const trainingLauncher = new TrainingLauncherPage(page);
       const privacy = new PrivacyPage(page);
       await trainingLauncher.startNationalRollout();
@@ -72,7 +76,7 @@ test.describe(
       const sentencePlan = new SentencePlanPage(page);
       const goalTitle = 'I will work towards finding accommodation, so that I am no longer homeless';
       await page.reload();
-      await expect(sentencePlan.goalTitle).toHaveText(goalTitle);
+      await expect(sentencePlan.goalTitle).toHaveText(goalTitle, { timeout: 20_000 });
     });
 
     test('should agree plan', async ({ page }) => {

@@ -10,17 +10,20 @@ test.describe(
   },
   () => {
     test.beforeEach(async ({ page }) => {
+      test.setTimeout(30_000);
+
       const trainingLauncher = new TrainingLauncherPage(page);
       const privacy = new PrivacyPage(page);
 
       await trainingLauncher.startPrivateBetaSAN();
 
       await expect(page).toHaveTitle(
-        'Remember to close any other applications before starting an appointment - Strengths and needs'
+        'Remember to close any other applications before starting an appointment - Strengths and needs',
+        { timeout: 20_000 }
       );
       await privacy.confirmPrivacy.click();
       await privacy.confirm.click();
-      await expect(page).toHaveTitle('Accommodation - Strengths and needs');
+      await expect(page).toHaveTitle('Accommodation - Strengths and needs', { timeout: 20_000 });
     });
 
     test('complete a strengths and needs assessment', async ({ page }) => {

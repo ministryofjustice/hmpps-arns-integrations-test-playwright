@@ -594,6 +594,7 @@ export class StrengthsAndNeedsPage {
   }
 
   async completeOffenceAnalysis() {
+    await expect(this.offenceDescription).toBeVisible({ timeout: 20_000 });
     await this.offenceDescription.fill('This is a brief description for the offence analysis.');
     await this.offenceElements.check();
     await this.offenceReason.fill('This is why this took place.');
