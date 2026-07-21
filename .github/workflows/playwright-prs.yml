@@ -10,5 +10,5 @@ jobs:
     uses: ./.github/workflows/playwright.yml
     secrets: inherit
     with:
-      environment: test
+      environment: dev
       branch: ${{ github.head_ref }}
