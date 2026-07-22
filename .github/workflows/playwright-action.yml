@@ -46,6 +46,9 @@ jobs:
   send-notification:
     name: Integration tests
     needs: trigger_deploy
+    if: |
+      always() &&
+      (needs.trigger_deploy.result == 'success' || needs.trigger_deploy.result == 'skipped')
     uses: ./.github/workflows/playwright.yml
     with:
       channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
