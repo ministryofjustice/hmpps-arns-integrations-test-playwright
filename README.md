@@ -23,7 +23,9 @@ These can be later expanded in the playwright.config file.
 
 ## Running the tests
 
-Note: If you are running the tests from your local machine against Dev or Test, there may be timouts due to network latiency etc. If you append LOCAL_RUN=1 ahead of your npm command it will use longer timeouts e.g. LOCAL_RUN=1 npm run dev:ui
+Note: When running locally on to Dev or Test there have been some instances where the tests were failing due to "Test timeout while running "beforeEach" hook."
+These are not happeing in the pipeline. 
+We have added a LOCAL_RUN=1 flag which increases the timeout values. This has been added to test:ui and dev:ui, but you can prefix the other npm run varients as needed. 
 
 ### CI
 
