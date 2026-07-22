@@ -23,6 +23,8 @@ These can be later expanded in the playwright.config file.
 
 ## Running the tests
 
+Note: If you are running the tests from your local machine against Dev or Test, there may be timouts due to network latiency etc. If you append LOCAL_RUN=1 ahead of your npm command it will use longer timeouts e.g. LOCAL_RUN=1 npm run dev:ui
+
 ### CI
 
 #### AAP Only
