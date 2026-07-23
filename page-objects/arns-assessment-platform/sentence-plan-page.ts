@@ -13,6 +13,7 @@ export class SentencePlanPage {
   readonly about: Locator;
   readonly viewPreviousVersions: Locator;
   readonly removedGoals: Locator;
+  readonly printAllGoals: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -27,5 +28,6 @@ export class SentencePlanPage {
     this.about = page.getByRole('link', { name: 'About' });
     this.viewPreviousVersions = page.getByRole('link', { name: 'View previous versions' });
     this.removedGoals = page.getByRole('link', { name: 'Removed goals' });
+    this.printAllGoals = page.getByRole('button', { name: 'Print all goals' });
   }
 }
