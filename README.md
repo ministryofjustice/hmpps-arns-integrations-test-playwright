@@ -11,6 +11,10 @@ This framework is built using Playwright and Typescript. The idea is to start wi
 
 `npm install`
 
+- then
+
+`npx playwright install`
+
 ## Overview
 Initially, the config is set to have tests run on the following browsers:
 
