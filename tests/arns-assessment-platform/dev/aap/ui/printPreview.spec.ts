@@ -34,12 +34,12 @@ test.describe(
 
     test('add goals and view print preview', async ({ page }) => {
       const sentencePlan = new SentencePlanPage(page);
-
       await expect(sentencePlan.goalTitle).toHaveText(goalTitle);
-      const [newPage] = await Promise.all([page.waitForEvent('popup'), sentencePlan.printAllGoals.click()]);
-      await newPage.waitForLoadState();
-      await expect(newPage).toHaveURL(/print-preview/);
-      const printPage = new PrintPreviewPage(newPage);
+      const printPage = await PrintPreviewPage.openFrom(page, sentencePlan.printAllGoals);
+      /*
+       * TODO: The Print Prieview Page isn't ready yet - need more stuff here
+       * JIRA https://dsdmoj.atlassian.net/browse/SP2-2178
+       */
       await expect(printPage.printHeader).toBeVisible();
       await printPage.exportPDF.click();
     });
