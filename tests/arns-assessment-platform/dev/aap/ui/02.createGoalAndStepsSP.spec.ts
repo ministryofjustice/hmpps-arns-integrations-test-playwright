@@ -28,7 +28,7 @@ test.describe(
       const sentencePlan = new SentencePlanPage(page);
       const createGoal = new CreateGoalPage(page);
       const addSteps = new AddStepsPage(page);
-      const goalTitle = 'I will work towards finding accommodation, so that I am no longer homeless';
+      const goalTitle = 'I will work towards finding accommodation';
 
       await sentencePlan.createGoal.click();
       await expect(page).toHaveTitle('Create a goal - Sentence plan');
@@ -90,7 +90,7 @@ test.describe(
       const sentencePlan = new SentencePlanPage(page);
       const createGoal = new CreateGoalPage(page);
       const addSteps = new AddStepsPage(page);
-      const goalTitle = 'I will work towards finding accommodation, so that I am no longer homeless';
+      const goalTitle = 'I will work towards finding accommodation';
 
       await sentencePlan.createGoal.click();
       await expect(page).toHaveTitle('Create a goal - Sentence plan');
