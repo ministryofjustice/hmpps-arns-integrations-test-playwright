@@ -81,3 +81,9 @@ We use a mix of [Husky](https://github.com/typicode/husky), [ESLint](https://esl
 ```bash
 npm run prepare
 ```
+
+### AI Review
+
+Runs as part of Husky pre-commit hooks if AI_CLI variable set on the terminal (non-breaking command). Uses Playwright skill from Hippo Digital, AI Skills Catalogue (./agents/skills/playwright).
+
+1. Set environment variable `AI_CLI` (e.g. Google Antigravity `AI_CLI=agy`)
