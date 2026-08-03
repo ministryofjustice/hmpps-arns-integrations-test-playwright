@@ -6,7 +6,7 @@ import { PrivacyPage } from '../../../../../page-objects/arns-assessment-platfor
 test.describe(
   'Private beta',
   {
-    tag: '@dev',
+    // tag: '@dev',
   },
   () => {
     test.beforeEach(async ({ page }) => {
