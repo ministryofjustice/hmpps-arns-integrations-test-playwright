@@ -11,7 +11,7 @@ const goalTitle = 'I will work towards finding accommodation, so that I am no lo
 test.describe(
   'National rollout',
   {
-    tag: ['@dev'],
+    tag: '@dev',
   },
   () => {
     test.beforeEach(async ({ page }) => {
