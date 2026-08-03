@@ -16,7 +16,6 @@ export class AddStepsPage {
   }
 
   whoWillDoTheStep = async (who: string) => {
-    await this.page.waitForTimeout(1000);
     await this.chooseSomeone.click();
     await this.page.getByRole('option', { name: who }).click();
   };

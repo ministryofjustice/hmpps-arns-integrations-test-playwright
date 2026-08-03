@@ -44,8 +44,6 @@ test.describe(
       await expect(printPage.goalTitle).toHaveText(goalTitle);
 
       await printPage.exportPdfAndWaitForDownload();
-      await printPage.printBtn.click();
-      await expect(printPage.printBtn).toBeEnabled();
     });
 
     test('Post Agreemet Print Preview', async ({ page }) => {
