@@ -36,7 +36,7 @@ export class CreateGoalPage {
 
   createGoalNoAON = async (goalTitle: string) => {
     await this.searchGoal.fill(goalTitle);
-    await this.searchGoal.focus();
+    await this.searchGoal.blur();
     await this.relatedGoalYNo.click();
     await this.startWorkingOnThisGoalYes.click();
     await this.whenAimToAchieveGoal.click();
