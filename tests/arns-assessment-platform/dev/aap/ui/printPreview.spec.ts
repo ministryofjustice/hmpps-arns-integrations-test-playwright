@@ -15,7 +15,7 @@ test.describe(
   },
   () => {
     test.beforeEach(async ({ page }) => {
-      test.setTimeout(60_000);
+      test.setTimeout(10_000);
       const trainingLauncher = new TrainingLauncherPage(page);
       const privacy = new PrivacyPage(page);
       const sentencePlan = new SentencePlanPage(page);
