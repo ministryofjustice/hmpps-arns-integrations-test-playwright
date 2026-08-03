@@ -45,7 +45,7 @@ test.describe(
 
       await printPage.exportPdfAndWaitForDownload();
       await printPage.printBtn.click();
-      await expect(printPage.printBtn).toBeEnabled();
+      await expect(printPage.printBtn).toBeFocused();
     });
 
     test('Post Agreemet Print Preview', async ({ page }) => {
@@ -63,7 +63,7 @@ test.describe(
 
       await printPage.exportPdfAndWaitForDownload();
       await printPage.printBtn.click();
-      await expect(printPage.printBtn).toBeEnabled();
+      await expect(printPage.printBtn).toBeFocused();
       await expect(printPage.printHeader).toBeVisible();
     });
   }

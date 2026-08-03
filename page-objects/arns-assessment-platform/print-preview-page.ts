@@ -13,7 +13,7 @@ export class PrintPreviewPage {
     this.printBtn = page.getByRole('button', { name: 'Print' });
     this.printHeader = page.locator('[data-qa="print-goal-summary-card"]');
     this.exportPDF = page.getByRole('button', { name: 'Export as PDF' });
-    this.draftWaterMark = page.locator('.draft-plan-watermark');
+    this.draftWaterMark = page.getByText('DRAFT');
     this.goalTitle = page.locator('[data-qa="goal-title"]').first();
   }
 
