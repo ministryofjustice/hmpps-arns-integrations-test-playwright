@@ -10,3 +10,7 @@ aapToken.json
 ctrf/ctrf-report.json
 assessments.json
 arnsAssessmentToken.json
+
+# agent skills
+.agents/
+skills-lock.json

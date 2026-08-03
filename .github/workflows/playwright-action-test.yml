@@ -7,6 +7,11 @@ on:
         required: false
         default: 'all'
         type: string
+      branch:
+        description: 'Feature branch'
+        required: false
+        default: 'main'
+        type: string
   schedule:
     - cron: '45 7 * * 1-5'
 jobs:
@@ -17,4 +22,5 @@ jobs:
       channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
       environment: test
       source: ${{ inputs.source || 'all' }}
+      branch: ${{ inputs.branch || vars.FEATURE_BRANCH_IN_DEVELOPMENT }}
     secrets: inherit

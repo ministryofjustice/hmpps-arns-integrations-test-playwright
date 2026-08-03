@@ -9,15 +9,15 @@ if (!process.env.CI) {
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  //globalSetup: require.resolve('./utils/global-setup.ts'),
+  globalSetup: require.resolve('./utils/global-setup.ts'),
   /* Maximum time one test can run for. */
-  timeout: 600 * 100,
+  timeout: process.env.LOCAL_RUN ? 60_000 : 8000,
   expect: {
     /**
      * Maximum time expect() should wait for the condition to be met.
      * For example in `await expect(locator).toHaveText();`
      */
-    timeout: process.env.CI ? 30000 : 10000,
+    timeout: process.env.LOCAL_RUN ? 10_000 : process.env.CI ? 3000 : 1000,
   },
   /* Run tests in files in parallel */
   fullyParallel: false,
@@ -32,9 +32,9 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     permissions: ['clipboard-read', 'clipboard-write'],
-    // API https://arns-assessment-platform-api-test.hmpps.service.justice.gov.uk
+
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'http://localhost:3000',
+    baseURL: process.env.BASE_URL || 'http://localhost:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -46,8 +46,8 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-      testDir: './tests/arns-assessment-platform',
+      use: { ...devices['Desktop Chrome'], channel: 'chromium' },
+      testDir: './tests/arns-assessment-platform/dev',
       grep: /@local/,
     },
   ],

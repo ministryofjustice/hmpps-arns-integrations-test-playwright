@@ -1,24 +1,21 @@
-name: Dev - Integration tests
+name: Feature branch - Integration tests
 on:
   workflow_dispatch:
     inputs:
       source:
         description: 'Repo triggering tests'
         required: false
-        default: 'all'
+        default: 'aap'
         type: string
       branch:
         description: 'Feature branch'
         required: false
         default: 'main'
         type: string
-  schedule:
-    - cron: '00 7 * * 1-5' # At 07:00 AM, Monday through Friday
 jobs:
   trigger_deploy:
     name: Trigger deploy
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'schedule' }}
     steps:
       - name: Generate Token
         uses: actions/create-github-app-token@v3
@@ -38,17 +35,14 @@ jobs:
               owner: context.repo.owner,
               repo: 'hmpps-arns-assessment-platform-ui',
               workflow_id: 'deploy_to_env.yml',
-              ref: 'main'
+              ref: '${{ inputs.branch }}'
             })
       - name: Sleep for 5 mins
         run: sleep 300s
         shell: bash
-  send-notification:
+  integration-tests:
     name: Integration tests
     needs: trigger_deploy
-    if: |
-      always() &&
-      (needs.trigger_deploy.result == 'success' || needs.trigger_deploy.result == 'skipped')
     uses: ./.github/workflows/playwright.yml
     with:
       channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}

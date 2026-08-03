@@ -11,6 +11,10 @@ This framework is built using Playwright and Typescript. The idea is to start wi
 
 `npm install`
 
+- then
+
+`npx playwright install`
+
 ## Overview
 Initially, the config is set to have tests run on the following browsers:
 
@@ -22,16 +26,46 @@ Test runs on the pipeline are configured dto run on Chrome for runtime speed pur
 These can be later expanded in the playwright.config file.
 
 ## Running the tests
-`npx playwright test --project=chromium`
-Runs the tests only on Desktop Chrome.
 
-`npx playwright test --project=chromium --debug tests/01.userCompletesS&NAssessment.spec.ts` 
-Runs only the specified test in debug mode.
+Note: When running locally on to Dev or Test there have been some instances where the tests were failing due to "Test timeout while running "beforeEach" hook."
+These are not happeing in the pipeline. 
+We have added a LOCAL_RUN=1 flag which increases the timeout values. This has been added to test:ui and dev:ui, but you can prefix the other npm run varients as needed. 
 
-`npx playwright test --project=chromium --debug` 
-Runs the tests in debug mode.
+### CI
 
-For other browsers available in the config, pass the desired browser in your command.
+#### AAP Only
+
+Dev: `npm run dev:aap:ci`    
+Test: `npm run test:aap:ci`
+
+#### SAN Only
+
+Dev: `npm run dev:san:ci`    
+Test: `npm run test:san:ci`
+
+#### All
+
+Dev: `npm run dev:all:ci`    
+Test: `npm run test:all:ci`
+
+#### API
+
+Dev: `npm run dev:api`    
+Security: `npm run dev:api:security`    
+Test: `npm run test:api`
+
+### UI
+
+#### All
+
+Dev: `npm run dev:ui`   
+Test: `npm run test:ui`
+
+#### API
+
+Security: `npm run dev:api:security:ui`    
+Dev: `npm run dev:api:ui`    
+Test: `npm run test:api:ui`
 
 NOTE: a .env file is required to run certain test features locally. This file is available upon request as and when needed.
 

@@ -31,38 +31,44 @@ test.afterAll(async () => {
   await apiContext?.dispose();
 });
 
-test('view ARNS assessment successfully returns correct data structure', async () => {
-  const responseBody = await viewAssessment(apiContext, TEST_CRN);
+test(
+  'view ARNS assessment successfully returns correct data structure',
+  {
+    tag: '@dev',
+  },
+  async () => {
+    const responseBody = await viewAssessment(apiContext, TEST_CRN);
 
-  expect(responseBody).toEqual(
-    expect.objectContaining({
-      crn: TEST_CRN,
-      nomis: null,
-      planStatus: expect.any(String),
-      goals: expect.any(Array),
-    })
-  );
-
-  expect(responseBody.goals.length).toBeGreaterThan(0);
-
-  for (const goal of responseBody.goals) {
-    expect(goal).toEqual(
+    expect(responseBody).toEqual(
       expect.objectContaining({
-        goalTitle: expect.any(String),
-        areaOfNeed: expect.any(String),
-        goalStatus: expect.any(String),
-        relatedAreasOfNeed: expect.any(Array),
-        steps: expect.any(Array),
+        crn: TEST_CRN,
+        nomis: null,
+        planStatus: expect.any(String),
+        goals: expect.any(Array),
       })
     );
 
-    expect(
-      goal.targetDate === null || typeof goal.targetDate === 'string',
-      `Type Error: Expected goal.targetDate to be 'string' or 'null', but received type '${typeof goal.targetDate}' with value: ${goal.targetDate}`
-    ).toBeTruthy();
+    expect(responseBody.goals.length).toBeGreaterThan(0);
 
-    for (const step of goal.steps) {
-      validateStepStructure(step);
+    for (const goal of responseBody.goals) {
+      expect(goal).toEqual(
+        expect.objectContaining({
+          goalTitle: expect.any(String),
+          areaOfNeed: expect.any(String),
+          goalStatus: expect.any(String),
+          relatedAreasOfNeed: expect.any(Array),
+          steps: expect.any(Array),
+        })
+      );
+
+      expect(
+        goal.targetDate === null || typeof goal.targetDate === 'string',
+        `Type Error: Expected goal.targetDate to be 'string' or 'null', but received type '${typeof goal.targetDate}' with value: ${goal.targetDate}`
+      ).toBeTruthy();
+
+      for (const step of goal.steps) {
+        validateStepStructure(step);
+      }
     }
   }
-});
+);
