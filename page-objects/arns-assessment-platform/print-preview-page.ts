@@ -15,7 +15,6 @@ export class PrintPreviewPage {
     this.exportPDF = page.getByRole('button', { name: 'Export as PDF' });
     this.draftWaterMark = page.locator('.draft-plan-watermark');
     this.goalTitle = page.locator('[data-qa="goal-title"]').first();
-
   }
 
   static async openFrom(page: Page, trigger: Locator): Promise<PrintPreviewPage> {
@@ -24,7 +23,7 @@ export class PrintPreviewPage {
     await expect(newPage).toHaveURL(/print-preview/);
     return new PrintPreviewPage(newPage);
   }
-    async exportPdfAndWaitForDownload() {
+  async exportPdfAndWaitForDownload() {
     const downloadPromise = this.page.waitForEvent('download');
     await this.exportPDF.click();
     return await downloadPromise;

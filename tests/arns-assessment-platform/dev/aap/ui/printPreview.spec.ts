@@ -64,8 +64,6 @@ test.describe(
       await printPage.printBtn.click();
       await expect(printPage.printBtn).toBeEnabled();
       await expect(printPage.printHeader).toBeVisible();
-
-
     });
   }
 );
