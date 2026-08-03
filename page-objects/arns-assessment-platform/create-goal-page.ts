@@ -34,7 +34,7 @@ export class CreateGoalPage {
     await this.addSteps.click();
   };
 
-  createGoalNoRelatedArea = async (goalTitle: string) => {
+  createGoalNoAON = async (goalTitle: string) => {
     await this.searchGoal.fill(goalTitle);
     await this.relatedGoalYNo.click();
     await this.startWorkingOnThisGoalYes.click();
