@@ -30,7 +30,7 @@ test.describe(
       await expect(sentencePlan.printAllGoals).toHaveCount(0);
       await sentencePlan.createGoal.click();
       await expect(page).toHaveTitle('Create a goal - Sentence plan');
-      await createGoal.createGoal(goalTitle);
+      await createGoal.createGoalNoRelatedArea(goalTitle);
       await addSteps.addStep();
     });
 
