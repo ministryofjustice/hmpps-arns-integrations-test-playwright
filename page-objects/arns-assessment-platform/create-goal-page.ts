@@ -4,6 +4,7 @@ export class CreateGoalPage {
   readonly page: Page;
   readonly searchGoal: Locator;
   readonly relatedGoalYes: Locator;
+  readonly relatedGoalYNo: Locator;
   readonly relatedAreaAlcohol: Locator;
   readonly startWorkingOnThisGoalYes: Locator;
   readonly whenAimToAchieveGoal: Locator;
@@ -15,6 +16,7 @@ export class CreateGoalPage {
     this.page = page;
     this.searchGoal = page.locator('accessible-autocomplete-wrapper').getByRole('combobox');
     this.relatedGoalYes = page.getByRole('group', { name: 'Is this goal related to any' }).getByLabel('Yes');
+    this.relatedGoalYNo = page.getByRole('group', { name: 'Is this goal related to any' }).getByLabel('No');
     this.relatedAreaAlcohol = page.getByRole('checkbox', { name: 'Alcohol use' });
     this.startWorkingOnThisGoalYes = page.getByRole('group', { name: 'start working on this goal' }).getByLabel('Yes');
     this.whenAimToAchieveGoal = page.getByRole('radio', { name: 'In 3 months' });
@@ -25,8 +27,18 @@ export class CreateGoalPage {
 
   createGoal = async (goalTitle: string) => {
     await this.searchGoal.fill(goalTitle);
+    await this.searchGoal.blur();
     await this.relatedGoalYes.click();
     await this.relatedAreaAlcohol.click();
+    await this.startWorkingOnThisGoalYes.click();
+    await this.whenAimToAchieveGoal.click();
+    await this.addSteps.click();
+  };
+
+  createGoalNoAON = async (goalTitle: string) => {
+    await this.searchGoal.fill(goalTitle);
+    await this.searchGoal.blur();
+    await this.relatedGoalYNo.click();
     await this.startWorkingOnThisGoalYes.click();
     await this.whenAimToAchieveGoal.click();
     await this.addSteps.click();
