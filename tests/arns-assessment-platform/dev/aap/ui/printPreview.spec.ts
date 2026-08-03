@@ -32,8 +32,7 @@ test.describe(
       await expect(sentencePlan.printAllGoals).toHaveCount(0);
       await sentencePlan.createGoal.click();
       await expect(page).toHaveTitle('Create a goal - Sentence plan');
-      await areaOfNeed.select('Accommodation');
-      await createGoal.createGoalNoAON(goalTitle);
+      await createGoal.createGoalNoRelatedArea(goalTitle);
       await addSteps.addStep();
     });
 
