@@ -26,22 +26,46 @@ test.describe(
       await privacy.confirmPrivacy.click();
       await privacy.confirm.click();
       await expect(page).toHaveTitle('Plan - Sentence plan');
+      await expect(sentencePlan.printAllGoals).toHaveCount(0);
       await sentencePlan.createGoal.click();
       await expect(page).toHaveTitle('Create a goal - Sentence plan');
       await createGoal.createGoal(goalTitle);
       await addSteps.addStep();
     });
 
-    test('add goals and view print preview', async ({ page }) => {
+    test('Pre Agreement Print Preview', async ({ page }) => {
       const sentencePlan = new SentencePlanPage(page);
       await expect(sentencePlan.goalTitle).toHaveText(goalTitle);
       const printPage = await PrintPreviewPage.openFrom(page, sentencePlan.printAllGoals);
-      /*
-       * TODO: The Print Prieview Page isn't ready yet - need more stuff here
-       * JIRA https://dsdmoj.atlassian.net/browse/SP2-2178
-       */
+
       await expect(printPage.printHeader).toBeVisible();
-      await printPage.exportPDF.click();
+      await expect(printPage.draftWaterMark).toBeVisible();
+      await expect(printPage.goalTitle).toHaveText(goalTitle);
+
+      await printPage.exportPdfAndWaitForDownload();
+      await printPage.printBtn.click();
+      await expect(printPage.printBtn).toBeEnabled();
+    });
+
+    test('Post Agreemet Print Preview', async ({ page }) => {
+      const sentencePlan = new SentencePlanPage(page);
+      await expect(sentencePlan.goalTitle).toHaveText(goalTitle);
+      await sentencePlan.agreePlan.click();
+      await sentencePlan.yesIAgree.click();
+      await sentencePlan.save.click();
+      await expect(page.getByText('agreed to their plan')).toBeVisible();
+      const printPage = await PrintPreviewPage.openFrom(page, sentencePlan.printAllGoals);
+
+      await expect(printPage.printHeader).toBeVisible();
+      await expect(printPage.draftWaterMark).toBeHidden();
+      await expect(printPage.goalTitle).toHaveText(goalTitle);
+
+      await printPage.exportPdfAndWaitForDownload();
+      await printPage.printBtn.click();
+      await expect(printPage.printBtn).toBeEnabled();
+      await expect(printPage.printHeader).toBeVisible();
+
+
     });
   }
 );
