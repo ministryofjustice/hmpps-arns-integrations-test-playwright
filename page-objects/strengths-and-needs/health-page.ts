@@ -2,7 +2,6 @@ import { Locator, Page } from '@playwright/test';
 import { AapPage } from './aap-page';
 
 export default class HealthPage extends AapPage {
-  // Health and Wellbeing
   readonly physicalHealthCondition: Locator;
   readonly mentalHealthCondition: Locator;
   readonly psychiatricTreatment: Locator;
@@ -16,7 +15,6 @@ export default class HealthPage extends AapPage {
 
   constructor(page: Page) {
     super(page);
-    // Health and Wellbeing
     this.physicalHealthCondition = page.getByRole('radio', { name: 'Yes', exact: true });
     this.mentalHealthCondition = page.getByRole('radio', { name: 'Yes, ongoing - severe and' });
     this.psychiatricTreatment = page.getByRole('radio', { name: 'Pending treatment' });

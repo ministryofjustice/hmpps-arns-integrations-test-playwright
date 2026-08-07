@@ -2,7 +2,6 @@ import { Locator, Page } from '@playwright/test';
 import { AapPage } from './aap-page';
 
 export default class PersonalPage extends AapPage {
-  // Personal Relationships and Community
   readonly childrenDetails: Locator;
   readonly childrenDetailsChange: Locator;
   readonly childrenLivingWithPopDetails: Locator;
@@ -16,7 +15,6 @@ export default class PersonalPage extends AapPage {
 
   constructor(page: Page) {
     super(page);
-    // Personal Relationships and Community
     this.childrenDetails = page.getByRole('checkbox', { name: 'Yes, children that live with' });
     this.childrenDetailsChange = page.getByRole('link', { name: 'Change  value for Are there' });
     this.childrenLivingWithPopDetails = page.getByRole('textbox', { name: 'Include the name, age and sex' });

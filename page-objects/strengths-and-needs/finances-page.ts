@@ -2,7 +2,6 @@ import { Locator, Page } from '@playwright/test';
 import { AapPage } from './aap-page';
 
 export default class FinancesPage extends AapPage {
-  // Finances
   readonly financeIncome: Locator;
   readonly financeBankAccount: Locator;
   readonly financeMoneyManagement: Locator;
@@ -12,7 +11,6 @@ export default class FinancesPage extends AapPage {
 
   constructor(page: Page) {
     super(page);
-    // Finances
     this.financeIncome = page.getByRole('checkbox', { name: 'Carer’s allowance' });
     this.financeBankAccount = page.getByRole('radio', { name: 'Yes' });
     this.financeMoneyManagement = page.getByRole('radio', {

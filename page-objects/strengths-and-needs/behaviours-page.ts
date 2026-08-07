@@ -2,7 +2,6 @@ import { Locator, Page } from '@playwright/test';
 import { AapPage } from './aap-page';
 
 export default class BehavioursPage extends AapPage {
-  // Thinking, Behaviours and Attitudes
   readonly thinkingConsequences: Locator;
   readonly thinkingStableBehaviour: Locator;
   readonly thinkingOffendingActivities: Locator;
@@ -24,7 +23,6 @@ export default class BehavioursPage extends AapPage {
 
   constructor(page: Page) {
     super(page);
-    // Thinking, Behaviours and Attitudes
     this.thinkingConsequences = page.getByRole('radio', { name: 'Yes, is aware of the' });
     this.thinkingStableBehaviour = page.getByRole('radio', { name: 'Yes, shows stable behaviour' });
     this.thinkingOffendingActivities = page.getByRole('radio', { name: 'Engages in pro-social' });

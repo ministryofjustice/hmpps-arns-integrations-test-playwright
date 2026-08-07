@@ -2,7 +2,6 @@ import { Locator, Page } from '@playwright/test';
 import { AapPage } from './aap-page';
 
 export default class EmploymentPage extends AapPage {
-  // Employment
   readonly employmentStatus: Locator;
   readonly employmentType: Locator;
   readonly employmentHistory: Locator;
@@ -20,7 +19,6 @@ export default class EmploymentPage extends AapPage {
 
   constructor(page: Page) {
     super(page);
-    // Employment
     this.employmentStatus = page.getByRole('radio', { name: 'Employed', exact: true });
     this.employmentType = page.getByRole('radio', { name: 'Full-time' });
     this.employmentHistory = page.getByRole('radio', { name: 'Continuous employment history' });
