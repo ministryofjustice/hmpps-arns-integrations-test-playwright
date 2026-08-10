@@ -7,8 +7,13 @@ on:
         required: false
         default: 'all'
         type: string
-  # schedule:
-  #   - cron: '30 7,13,18 * * 1-5'
+      branch:
+        description: 'Feature branch'
+        required: false
+        default: 'main'
+        type: string
+  schedule:
+    - cron: '00 7 * * 1-5' # At 07:00 AM, Monday through Friday
 jobs:
   trigger_deploy:
     name: Trigger deploy
@@ -41,9 +46,13 @@ jobs:
   send-notification:
     name: Integration tests
     needs: trigger_deploy
+    if: |
+      always() &&
+      (needs.trigger_deploy.result == 'success' || needs.trigger_deploy.result == 'skipped')
     uses: ./.github/workflows/playwright.yml
     with:
       channel_id: ${{ vars.INTEGRATION_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
       environment: dev
       source: ${{ inputs.source || 'all' }}
+      branch: ${{ inputs.branch || 'main' }}
     secrets: inherit

@@ -11,6 +11,10 @@ This framework is built using Playwright and Typescript. The idea is to start wi
 
 `npm install`
 
+- then
+
+`npx playwright install`
+
 ## Overview
 Initially, the config is set to have tests run on the following browsers:
 
@@ -22,6 +26,10 @@ Test runs on the pipeline are configured dto run on Chrome for runtime speed pur
 These can be later expanded in the playwright.config file.
 
 ## Running the tests
+
+Note: When running locally on to Dev or Test there have been some instances where the tests were failing due to "Test timeout while running "beforeEach" hook."
+These are not happeing in the pipeline. 
+We have added a LOCAL_RUN=1 flag which increases the timeout values. This has been added to test:ui and dev:ui, but you can prefix the other npm run varients as needed. 
 
 ### CI
 
