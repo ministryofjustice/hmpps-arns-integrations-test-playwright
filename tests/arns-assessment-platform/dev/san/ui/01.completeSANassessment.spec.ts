@@ -33,9 +33,8 @@ test.describe(
       await strengthsAndNeedsPage.finances.click();
       await strengthsAndNeedsPage.finance.complete();
 
-      // Validation bug
-      // await strengthsAndNeedsPage.drugUse.click();
-      // await strengthsAndNeedsPage.drug.complete();
+      await strengthsAndNeedsPage.drugUse.click();
+      await strengthsAndNeedsPage.drug.complete();
 
       await strengthsAndNeedsPage.alcoholUse.click();
       await strengthsAndNeedsPage.alcohol.complete();

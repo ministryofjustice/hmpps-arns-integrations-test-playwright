@@ -9,6 +9,7 @@ export class AapPage {
   readonly noRiskOfHarm: Locator;
   readonly noRiskOfReoffending: Locator;
   readonly markAsComplete: Locator;
+  readonly unknown: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -19,6 +20,7 @@ export class AapPage {
     this.noRiskOfHarm = page.getByRole('group', { name: 'linked to risk of serious harm?' }).getByLabel('No');
     this.noRiskOfReoffending = page.getByRole('group', { name: 'linked to risk of reoffending?' }).getByLabel('No');
     this.markAsComplete = page.getByRole('button', { name: 'Mark as complete' });
+    this.unknown = page.getByRole('radio', { name: 'Unknown' });
   }
 
   async sectionComplete(section: string) {
@@ -31,9 +33,13 @@ export class AapPage {
 
   async completePractionerAnalysis() {
     await this.practitionerAnalysis.click();
+    await this.practionerAnalysisQuestions();
+    await this.markAsComplete.click();
+  }
+
+  async practionerAnalysisQuestions() {
     await this.noProtectiveFactors.check();
     await this.noRiskOfHarm.check();
     await this.noRiskOfReoffending.check();
-    await this.markAsComplete.click();
   }
 }
