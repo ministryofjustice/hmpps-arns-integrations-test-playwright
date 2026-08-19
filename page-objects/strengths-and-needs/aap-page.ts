@@ -2,6 +2,7 @@ import { expect, Locator, Page } from '@playwright/test';
 
 export class AapPage {
   readonly page: Page;
+  readonly continue: Locator;
   readonly saveAndContinue: Locator;
   readonly changesNotApplicable: Locator;
   readonly practitionerAnalysis: Locator;
@@ -13,6 +14,7 @@ export class AapPage {
 
   constructor(page: Page) {
     this.page = page;
+    this.continue = page.getByRole('button', { name: 'Continue', exact: true });
     this.saveAndContinue = page.getByRole('button', { name: 'Save and continue' });
     this.changesNotApplicable = page.getByRole('radio', { name: 'Not applicable' });
     this.practitionerAnalysis = page.getByRole('tab', { name: 'Practitioner analysis' });

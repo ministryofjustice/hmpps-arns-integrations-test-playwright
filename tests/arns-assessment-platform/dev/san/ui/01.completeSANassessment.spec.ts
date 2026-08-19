@@ -48,12 +48,10 @@ test.describe(
       await strengthsAndNeedsPage.behavioursAndAttitudes.click();
       await strengthsAndNeedsPage.behaviours.complete();
 
-      // Not implemented yet
-      // await strengthsAndNeedsPage.offenceAnalysis.click();
-      // await strengthsAndNeedsPage.offence.complete();
+      await strengthsAndNeedsPage.offenceAnalysis.click();
+      await strengthsAndNeedsPage.offence.complete();
 
-      // await expect(strengthsAndNeedsPage.offence.offenceAnalysisHeading).toBeVisible();
-      // await expect(strengthsAndNeedsPage.offence.offenceAnalysisComplete).toBeVisible();
+      await expect(strengthsAndNeedsPage.offence.offenceAnalysisHeading).toBeVisible();
     });
   }
 );

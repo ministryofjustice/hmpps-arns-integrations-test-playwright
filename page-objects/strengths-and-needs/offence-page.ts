@@ -12,6 +12,7 @@ export default class OffencePage extends AapPage {
   readonly offenceVictimSex: Locator;
   readonly offenceVictimRace: Locator;
   readonly offenceHowManyInvolved: Locator;
+  readonly offenceLeaderOfTheCurrentIndex: Locator;
   readonly offenceImpactOnVictims: Locator;
   readonly offenceAcceptResponsibility: Locator;
   readonly offencePatternsOfOffending: Locator;
@@ -25,25 +26,40 @@ export default class OffencePage extends AapPage {
 
   constructor(page: Page) {
     super(page);
-    this.offenceDescription = page.locator('#offence_analysis_description_of_offence');
-    this.offenceElements = page.locator('#offence_analysis_elements-9');
-    this.offenceReason = page.locator('#offence_analysis_reason');
-    this.offenceMotivations = page.locator('#offence_analysis_motivations-8');
-    this.offenceVictim = page.locator('#offence_analysis_who_was_the_victim');
-    this.offenceVictimRelationship = page.locator('#offence_analysis_victim_relationship');
-    this.offenceVictimAge = page.locator('#offence_analysis_victim_age-8');
-    this.offenceVictimSex = page.locator('#offence_analysis_victim_sex-4');
-    this.offenceVictimRace = page.locator('#offence_analysis_victim_race');
+    this.offenceDescription = page.getByRole('textbox', { name: 'Enter a brief description of' });
+    this.offenceElements = page.getByRole('checkbox', { name: 'Arson' });
+    this.offenceReason = page.getByRole('textbox', { name: 'Why did the current index' });
+    this.offenceMotivations = page.getByRole('checkbox', { name: 'Addictions or perceived needs' });
+    this.offenceVictim = page.getByRole('checkbox', { name: 'One or more people' });
+    this.offenceVictimRelationship = page.getByRole('radio', { name: 'A stranger' });
+    this.offenceVictimAge = page.getByRole('radio', { name: '0 to 4 years' });
+    this.offenceVictimSex = page.getByRole('radio', { name: 'Male', exact: true });
+    this.offenceVictimRace = page.getByLabel("What is the victim's ethnicity?");
     this.offenceHowManyInvolved = page.locator('#offence_analysis_how_many_involved');
-    this.offenceImpactOnVictims = page.locator('#offence_analysis_impact_on_victims');
-    this.offenceAcceptResponsibility = page.locator('#offence_analysis_accept_responsibility');
-    this.offencePatternsOfOffending = page.locator('#offence_analysis_patterns_of_offending');
-    this.offenceEscalation = page.locator('#offence_analysis_escalation-3');
-    this.offenceRisk = page.locator('#offence_analysis_risk-2');
-    this.offenceRiskDetails = page.locator('#offence_analysis_risk_no_details');
-    this.offencePerpetratorDomesticAbuse = page.locator('#offence_analysis_perpetrator_of_domestic_abuse-2');
-    this.offenceVictimDomesticAbuse = page.locator('#offence_analysis_victim_of_domestic_abuse-2');
-    this.offenceAnalysisHeading = page.getByRole('heading', { name: 'Offence analysis' });
+    this.offenceLeaderOfTheCurrentIndex = page
+      .getByRole('group', { name: /leader of the current index/ })
+      .getByLabel('No', { exact: true });
+    this.offenceImpactOnVictims = page
+      .getByRole('group', { name: /recognise the impact on the victims/ })
+      .getByLabel('No', { exact: true });
+    this.offenceAcceptResponsibility = page
+      .getByRole('group', { name: /accept responsibility for the current index/ })
+      .getByLabel('No', { exact: true });
+    this.offencePatternsOfOffending = page.getByRole('textbox', { name: 'What are the patterns of' });
+    this.offenceEscalation = page
+      .getByRole('group', { name: /Is there an escalation in/ })
+      .getByLabel('No', { exact: true });
+    this.offenceRisk = page
+      .getByRole('group', { name: /Are the current or previous offences linked to risk/ })
+      .getByLabel('No', { exact: true });
+    this.offenceRiskDetails = page.getByRole('textbox', { name: 'Give details', exact: true });
+    this.offencePerpetratorDomesticAbuse = page
+      .getByRole('group', { name: /has ever been a perpetrator of domestic abuse?/ })
+      .getByLabel('No');
+    this.offenceVictimDomesticAbuse = page
+      .getByRole('group', { name: /has ever been a victim of domestic abuse?/ })
+      .getByLabel('No', { exact: true });
+    this.offenceAnalysisHeading = page.locator('span').filter({ hasText: 'Offence analysis' });
     this.offenceAnalysisComplete = page.getByText('Complete', { exact: true });
   }
 
@@ -60,11 +76,9 @@ export default class OffencePage extends AapPage {
     await this.offenceVictimSex.check();
     await this.offenceVictimRace.selectOption('White - Gypsy or Irish Traveller');
     await this.saveAndContinue.click();
-    await this.saveAndContinue.click();
+    await this.continue.click();
 
-    await this.offenceHowManyInvolved.check();
-    await this.saveAndContinue.click();
-
+    await this.offenceLeaderOfTheCurrentIndex.check();
     await this.offenceImpactOnVictims.check();
     await this.offenceAcceptResponsibility.check();
     await this.offencePatternsOfOffending.fill('There are no obvious patterns at this point.');
@@ -74,5 +88,6 @@ export default class OffencePage extends AapPage {
     await this.offencePerpetratorDomesticAbuse.check();
     await this.offenceVictimDomesticAbuse.check();
     await this.markAsComplete.click();
+    await this.sectionComplete('Offence analysis');
   }
 }
