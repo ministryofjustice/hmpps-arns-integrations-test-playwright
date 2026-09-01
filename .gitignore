@@ -12,5 +12,5 @@ assessments.json
 arnsAssessmentToken.json
 
 # agent skills
-.agents/
 skills-lock.json
+.antigravity
