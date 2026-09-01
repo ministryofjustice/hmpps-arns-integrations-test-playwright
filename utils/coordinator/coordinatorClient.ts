@@ -16,11 +16,11 @@ export const getCoordinatorUrl = (baseUrl: string): string => {
 
 export const name = 'Test';
 
-export const createOasysAssociation = async (
+export const createOasysResponse = async (
   request: APIRequestContext,
   crn: string,
   oasysPk: string
-): Promise<OasysCreateResponse> => {
+): Promise<APIResponse> => {
   const create: OasysCreateRequest = {
     oasysAssessmentPk: oasysPk,
     planType: 'INITIAL',
@@ -38,7 +38,17 @@ export const createOasysAssociation = async (
     previousOasysSpPk: undefined,
     regionPrisonCode: 'MDI',
   };
-  const response = await request.post(`/oasys/create`, { data: create });
+  const response: APIResponse = await request.post(`/oasys/create`, { data: create });
+
+  return response;
+};
+
+export const createOasysAssociation = async (
+  request: APIRequestContext,
+  crn: string,
+  oasysPk: string
+): Promise<OasysCreateResponse> => {
+  const response: APIResponse = await createOasysResponse(request, crn, oasysPk);
 
   if (!response.ok()) {
     throw new Error(`Oasys association failed: ${response.status()} ${response.statusText()}`);
@@ -92,7 +102,7 @@ export const lock = async (request: APIRequestContext, oasysPk: string): Promise
     },
   };
 
-  const response = await request.post(`/oasys/${oasysPk}/lock`, { data: userDetails });
+  const response: APIResponse = await request.post(`/oasys/${oasysPk}/lock`, { data: userDetails });
   if (!response.ok()) {
     throw new Error(`Oasys lock failed: ${response.status()} ${response.statusText()}`);
   }

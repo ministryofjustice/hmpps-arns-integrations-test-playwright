@@ -2,7 +2,7 @@ import { APIRequestContext, APIResponse } from '@playwright/test';
 import { AddCollectionItemCommandResult, CreateCollectionResult } from '../assessmentTypes';
 import { crn } from './assessmentCommands';
 
-export async function createGoalsCollection(request: APIRequestContext, assessmentUuid: string): Promise<string> {
+export async function createGoalsCommand(request: APIRequestContext, assessmentUuid: string): Promise<APIResponse> {
   const response: APIResponse = await request.post('/command', {
     data: {
       commands: [
@@ -19,6 +19,11 @@ export async function createGoalsCollection(request: APIRequestContext, assessme
       ],
     },
   });
+  return response;
+}
+
+export async function createGoalsCollection(request: APIRequestContext, assessmentUuid: string): Promise<string> {
+  const response = await createGoalsCommand(request, assessmentUuid);
 
   if (!response.ok()) {
     throw new Error(`CreateAssessment failed: ${response.status()} ${response.statusText()}`);

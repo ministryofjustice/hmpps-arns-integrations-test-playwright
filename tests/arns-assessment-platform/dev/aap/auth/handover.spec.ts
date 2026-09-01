@@ -1,4 +1,4 @@
-import { test, expect, APIRequestContext } from '@playwright/test';
+import { test, expect, APIRequestContext, APIResponse } from '@playwright/test';
 import { getToken } from '../../../../../utils/aapClient';
 import {
   createOasysAssociation,
@@ -6,8 +6,13 @@ import {
   getCoordinatorUrl,
   getVersionDate,
 } from '../../../../../utils/coordinator/coordinatorClient';
-import { PreviousVersionsResponse } from '../../../../../utils/coordinator/coordinatorTypes';
-import { getHandoverLink, getHandoverUrl, getModsecError } from '../../../../../utils/handover/handoverClient';
+import { OasysCreateResponse, PreviousVersionsResponse } from '../../../../../utils/coordinator/coordinatorTypes';
+import {
+  getHandoverLink,
+  getHandoverResponse,
+  getHandoverUrl,
+  getModsecError,
+} from '../../../../../utils/handover/handoverClient';
 import { CreateHandoverLinkResponse } from '../../../../../utils/handover/handoverTypes';
 
 let handoverContext: APIRequestContext;
@@ -48,7 +53,7 @@ test.describe(
 
     test.beforeEach(async () => {
       const sentencePlanId: string = await test.step('OAsys association', async () => {
-        const oasysResponse = await createOasysAssociation(coordinatorContext, crn, oasysPk);
+        const oasysResponse: OasysCreateResponse = await createOasysAssociation(coordinatorContext, crn, oasysPk);
         expect(oasysResponse).toBeTruthy();
 
         return oasysResponse.sentencePlanId;
@@ -75,14 +80,48 @@ test.describe(
 );
 
 // https://dsdmoj.atlassian.net/wiki/spaces/ARN/pages/6150881391/ModSec+-+AAP+Team+Guide#Testing
-test(
+test.describe(
   'Modsec handover',
   {
     tag: '@security',
   },
-  async () => {
-    const modSecResponse: number = await getModsecError(handoverContext);
+  () => {
+    let planVersion: number;
+    const crn = Math.random().toString().substring(2, 7);
+    const oasysPk = Math.floor(Math.random() * 1000000000).toString();
 
-    expect(modSecResponse).toBe(406);
+    test.beforeEach(async () => {
+      const sentencePlanId: string = await test.step('OAsys association', async () => {
+        const oasysResponse: OasysCreateResponse = await createOasysAssociation(coordinatorContext, crn, oasysPk);
+        expect(oasysResponse).toBeTruthy();
+
+        return oasysResponse.sentencePlanId;
+      });
+
+      planVersion = await test.step('Get previous versions', async () => {
+        const queryResponse: PreviousVersionsResponse = await entityVersions(coordinatorContext, sentencePlanId);
+
+        expect(queryResponse).toBeTruthy();
+        expect(queryResponse).toHaveProperty('allVersions');
+        expect(queryResponse.allVersions[today].planVersion.entityType).toBe('AAP_PLAN');
+        expect(queryResponse.allVersions[today].planVersion.status).toBe('CREATED');
+        return queryResponse.allVersions[today].planVersion.version;
+      });
+    });
+
+    test('Modsec Not Acceptable', async () => {
+      await test.step('Url script', async () => {
+        const modSecResponse: number = await getModsecError(handoverContext);
+
+        expect(modSecResponse).toBe(406);
+      });
+
+      await test.step('SQL Injection', async () => {
+        const query = `SELECT * FROM assessments WHERE user_id = ${oasysPk}`;
+        const apiResponse: APIResponse = await getHandoverResponse(handoverContext, planVersion, query);
+
+        expect(apiResponse.status()).toBe(406);
+      });
+    });
   }
 );

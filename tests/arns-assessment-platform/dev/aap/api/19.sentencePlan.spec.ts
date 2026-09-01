@@ -1,6 +1,6 @@
 import { test, expect, APIRequestContext } from '@playwright/test';
 import { getBaseUrl, getModsecError, getToken, queryAssessment } from '../../../../../utils/aapClient';
-import { createGoalsCollection } from '../../../../../utils/aap/sentencePlan/goalsCommands';
+import { createGoalsCollection, createGoalsCommand } from '../../../../../utils/aap/sentencePlan/goalsCommands';
 import { AssessmentQueryResponse, CreateAssessmentResult } from '../../../../../utils/aap/assessmentTypes';
 import { createAssessmentSP } from '../../../../../utils/aap/sentencePlan/assessmentCommands';
 
@@ -93,8 +93,22 @@ test(
     tag: '@security',
   },
   async () => {
-    const modSecResponse: number = await getModsecError(apiContext);
+    await test.step('CRS violation', async () => {
+      const modSecResponse: number = await getModsecError(apiContext);
 
-    expect(modSecResponse).toBe(406);
+      expect(modSecResponse).toBe(406);
+    });
+
+    await test.step('SQL injection', async () => {
+      const createResponse: CreateAssessmentResult = await createAssessmentSP(apiContext);
+      expect(createResponse).toBeTruthy();
+
+      const assessmentUuid = createResponse.commands[0].result.assessmentUuid;
+      const query = `SELECT * FROM assessments WHERE assessment_id = ${assessmentUuid}`;
+
+      const modSecResponse = await createGoalsCommand(apiContext, query);
+
+      expect(modSecResponse.status()).toBe(406);
+    });
   }
 );
