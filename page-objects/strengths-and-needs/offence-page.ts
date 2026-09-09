@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
 import { AapPage } from './aap-page';
 
 export default class OffencePage extends AapPage {
@@ -23,6 +23,7 @@ export default class OffencePage extends AapPage {
   readonly offenceVictimDomesticAbuse: Locator;
   readonly offenceAnalysisHeading: Locator;
   readonly offenceAnalysisComplete: Locator;
+  readonly addAnotherVictim: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -35,7 +36,7 @@ export default class OffencePage extends AapPage {
     this.offenceVictimAge = page.getByRole('radio', { name: '0 to 4 years' });
     this.offenceVictimSex = page.getByRole('radio', { name: 'Male', exact: true });
     this.offenceVictimRace = page.getByLabel("What is the victim's ethnicity?");
-    this.offenceHowManyInvolved = page.locator('#offence_analysis_how_many_involved');
+    this.offenceHowManyInvolved = page.getByRole('radio', { name: 'None' });
     this.offenceLeaderOfTheCurrentIndex = page
       .getByRole('group', { name: /leader of the current index/ })
       .getByLabel('No', { exact: true });
@@ -59,8 +60,9 @@ export default class OffencePage extends AapPage {
     this.offenceVictimDomesticAbuse = page
       .getByRole('group', { name: /has ever been a victim of domestic abuse?/ })
       .getByLabel('No', { exact: true });
-    this.offenceAnalysisHeading = page.locator('span').filter({ hasText: 'Offence analysis' });
+    this.offenceAnalysisHeading = page.getByRole('heading', { name: 'Offence analysis' });
     this.offenceAnalysisComplete = page.getByText('Complete', { exact: true });
+    this.addAnotherVictim = page.getByRole('button', { name: 'Add another victim' });
   }
 
   async complete() {
@@ -76,7 +78,11 @@ export default class OffencePage extends AapPage {
     await this.offenceVictimSex.check();
     await this.offenceVictimRace.selectOption('White - Gypsy or Irish Traveller');
     await this.saveAndContinue.click();
-    await this.continue.click();
+    await expect(this.addAnotherVictim).toBeVisible();
+    await this.saveAndContinue.click();
+
+    await this.offenceHowManyInvolved.click();
+    await this.saveAndContinue.click();
 
     await this.offenceLeaderOfTheCurrentIndex.check();
     await this.offenceImpactOnVictims.check();
