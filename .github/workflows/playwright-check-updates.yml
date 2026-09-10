@@ -26,7 +26,7 @@ jobs:
           private-key: ${{ secrets.PLAYWRIGHT_APP_PRIVATE_KEY }}
 
 
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v6
         with:
           node-version: lts/*
