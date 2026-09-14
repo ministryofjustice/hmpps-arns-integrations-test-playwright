@@ -23,8 +23,9 @@ export class PrintPreviewPage {
     await expect(newPage).toHaveURL(/print-preview/);
     return new PrintPreviewPage(newPage);
   }
+
   async exportPdfAndWaitForDownload() {
-    const downloadPromise = this.page.waitForEvent('download');
+    const downloadPromise = this.page.waitForEvent('download', { timeout: 30_000 });
     await this.exportPDF.click();
     return await downloadPromise;
   }

@@ -67,8 +67,21 @@ export class TrainingLauncherPage {
     await this.oasysPk.fill(oasysPk);
   };
 
+  customiseSubjectDetailsStubbed = async (crn: string, oasysPk: string) => {
+    await this.goto('sp-private-beta');
+    await this.customise.click();
+    await this.page.getByRole('radio', { name: crn }).check();
+    await this.randomOASysPk.click();
+    await this.oasysPk.fill(oasysPk);
+  };
+
   customiseScenario = async (crn: string, oasysPk: string) => {
     await this.customiseSubjectDetails(crn, oasysPk);
+    await this.createSession.click();
+  };
+
+  customiseScenarioStubbed = async (crn: string, oasysPk: string) => {
+    await this.customiseSubjectDetailsStubbed(crn, oasysPk);
     await this.createSession.click();
   };
 
