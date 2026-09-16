@@ -44,6 +44,7 @@ export default class DrugPage extends AapPage {
     await this.saveAndContinue.click();
 
     await this.practitionerAnalysis.click();
+    await this.unknown.click();
     await this.practionerAnalysisQuestions();
     await this.markAsComplete.click();
     await this.sectionComplete('Drug use');
