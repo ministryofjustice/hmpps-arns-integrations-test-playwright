@@ -78,8 +78,9 @@ export function generateUserId(prefix: string = 'int-test'): string {
 
 export const getHandoverLink = async (
   request: APIRequestContext,
-  planVersion: number,
-  oasysPk: string
+  oasysPk: string,
+  planVersion: number = 0,
+  assessmentVersion: number = 0
 ): Promise<CreateHandoverLinkResponse> => {
   const createRequest: CreateHandoverLinkRequest = {
     user: {
@@ -92,8 +93,12 @@ export const getHandoverLink = async (
     subjectDetails,
     oasysAssessmentPk: oasysPk,
     criminogenicNeedsData: criminogenicNeedsData,
-    sentencePlanVersion: planVersion,
+    assessmentVersion: assessmentVersion,
   };
+
+  if (planVersion !== 0) {
+    createRequest.sentencePlanVersion = planVersion;
+  }
 
   const response: APIResponse = await request.post(`/handover`, { data: createRequest });
 
@@ -104,8 +109,8 @@ export const getHandoverLink = async (
   return await response.json();
 };
 
-export const createHandoverLink = async (request: APIRequestContext, planVersion: number, oasysPk: string) => {
-  const handoverResponse: CreateHandoverLinkResponse = await getHandoverLink(request, planVersion, oasysPk);
+export const createHandoverLink = async (request: APIRequestContext, version: number, oasysPk: string) => {
+  const handoverResponse: CreateHandoverLinkResponse = await getHandoverLink(request, oasysPk, version);
 
   return handoverResponse.handoverLink;
 };
