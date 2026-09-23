@@ -2,7 +2,7 @@ import { test, expect, APIRequestContext } from '@playwright/test';
 import { viewAssessment, getBaseUrl, getToken, AssessmentStep } from '../../../../utils/arnsClient';
 
 let apiContext: APIRequestContext;
-const TEST_CRN = 'X979117';
+const TEST_CRN = 'C912155';
 
 function validateStepStructure(step: AssessmentStep) {
   expect(step).toEqual(
