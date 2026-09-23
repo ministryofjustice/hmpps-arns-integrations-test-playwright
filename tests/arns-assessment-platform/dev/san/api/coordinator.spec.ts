@@ -100,8 +100,7 @@ test.describe(
         expect(queryResponse.sentencePlanVersion).not.toBe(planVersion);
       });
 
-      // TODO: Move to test folder which uses static data
-      await test.step.skip('Lock plan', async () => {
+      await test.step('Lock plan', async () => {
         await lock(coordinatorContext, oasysPk);
 
         const queryResponse: PreviousVersionsResponses = (await entityVersions(
@@ -113,8 +112,7 @@ test.describe(
         expect(queryResponse.allVersions[today].planVersion.status).toBe('LOCKED');
       });
 
-      // TODO: Move to test folder which uses static data
-      await test.step.skip('Soft delete plan', async () => {
+      await test.step('Soft delete plan', async () => {
         await softDelete(coordinatorContext, oasysPk);
 
         const queryResponse: PreviousVersionsResponses = (await entityVersions(
@@ -125,8 +123,7 @@ test.describe(
         expect(queryResponse).toBe('No associations found for the provided entityUuid');
       });
 
-      // TODO: Move to test folder which uses static data
-      await test.step.skip('Undelete plan', async () => {
+      await test.step('Undelete plan', async () => {
         await undelete(coordinatorContext, oasysPk);
 
         const queryResponse: PreviousVersionsResponses = (await entityVersions(

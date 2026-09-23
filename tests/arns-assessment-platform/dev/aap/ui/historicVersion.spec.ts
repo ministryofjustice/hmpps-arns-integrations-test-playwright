@@ -4,13 +4,16 @@ import { getToken } from '../../../../../utils/aapClient';
 import { createHandoverLink, getHandoverUrl } from '../../../../../utils/handover/handoverClient';
 import {
   createOasysAssociation,
+  entityVersions,
   getCoordinatorUrl,
-  getEntity,
+  getVersionDate,
+  lock,
+  PreviousVersionsResponses,
 } from '../../../../../utils/coordinator/coordinatorClient';
-import { EntityResponse } from '../../../../../utils/coordinator/coordinatorTypes';
 
 let apiContext: APIRequestContext;
 let coordinatorContext: APIRequestContext;
+const today = getVersionDate();
 
 test.beforeAll(async ({ playwright, baseURL }) => {
   apiContext = await playwright.request.newContext({
@@ -46,12 +49,12 @@ test.describe(
   () => {
     test.beforeEach(async () => {
       const oasysResponse = await createOasysAssociation(coordinatorContext, crn, oasysPk);
-      const queryResponse: EntityResponse = await getEntity(
+      await lock(coordinatorContext, oasysPk);
+      const previousVersion: PreviousVersionsResponses = await entityVersions(
         coordinatorContext,
-        oasysResponse.sentencePlanId,
-        'ASSESSMENT'
+        oasysResponse.sentencePlanId
       );
-      planVersion = queryResponse.sentencePlanVersion;
+      planVersion = previousVersion.allVersions[today].planVersion.version;
     });
 
     test('should navigate directly to historic version', async ({ page }) => {

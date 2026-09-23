@@ -94,8 +94,11 @@ export const getHandoverLink = async (
     oasysAssessmentPk: oasysPk,
     criminogenicNeedsData: criminogenicNeedsData,
     assessmentVersion: assessmentVersion,
-    sentencePlanVersion: planVersion,
   };
+
+  if (planVersion !== 0) {
+    createRequest.sentencePlanVersion = planVersion;
+  }
 
   const response: APIResponse = await request.post(`/handover`, { data: createRequest });
 
