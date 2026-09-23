@@ -92,7 +92,7 @@ export const getHandoverLink = async (
     subjectDetails,
     oasysAssessmentPk: oasysPk,
     criminogenicNeedsData: criminogenicNeedsData,
-    sentencePlanVersion: planVersion,
+    assessmentVersion: planVersion,
   };
 
   const response: APIResponse = await request.post(`/handover`, { data: createRequest });

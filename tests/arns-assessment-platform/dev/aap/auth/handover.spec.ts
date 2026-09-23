@@ -2,17 +2,15 @@ import { test, expect, APIRequestContext } from '@playwright/test';
 import { getToken } from '../../../../../utils/aapClient';
 import {
   createOasysAssociation,
-  entityVersions,
   getCoordinatorUrl,
-  getVersionDate,
+  getEntity,
 } from '../../../../../utils/coordinator/coordinatorClient';
-import { PreviousVersionsResponse } from '../../../../../utils/coordinator/coordinatorTypes';
+import { EntityResponse } from '../../../../../utils/coordinator/coordinatorTypes';
 import { getHandoverLink, getHandoverUrl, getModsecError } from '../../../../../utils/handover/handoverClient';
 import { CreateHandoverLinkResponse } from '../../../../../utils/handover/handoverTypes';
 
 let handoverContext: APIRequestContext;
 let coordinatorContext: APIRequestContext;
-const today = getVersionDate();
 
 test.beforeAll(async ({ playwright, baseURL }) => {
   handoverContext = await playwright.request.newContext({
@@ -42,31 +40,33 @@ test.describe(
     tag: '@dev',
   },
   () => {
-    let planVersion: number;
+    let assessmentVersion: number;
     const crn = Math.random().toString().substring(2, 7);
     const oasysPk = Math.floor(Math.random() * 1000000000).toString();
 
     test.beforeEach(async () => {
-      const sentencePlanId: string = await test.step('OAsys association', async () => {
+      const sanAssessmentId: string = await test.step('OAsys association', async () => {
         const oasysResponse = await createOasysAssociation(coordinatorContext, crn, oasysPk);
         expect(oasysResponse).toBeTruthy();
 
-        return oasysResponse.sentencePlanId;
+        return oasysResponse.sanAssessmentId;
       });
 
-      planVersion = await test.step('Get previous versions', async () => {
-        const queryResponse: PreviousVersionsResponse = await entityVersions(coordinatorContext, sentencePlanId);
+      assessmentVersion = await test.step('Get entity', async () => {
+        const queryResponse: EntityResponse = await getEntity(coordinatorContext, sanAssessmentId, 'ASSESSMENT');
 
         expect(queryResponse).toBeTruthy();
-        expect(queryResponse).toHaveProperty('allVersions');
-        expect(queryResponse.allVersions[today].planVersion.entityType).toBe('AAP_PLAN');
-        expect(queryResponse.allVersions[today].planVersion.status).toBe('CREATED');
-        return queryResponse.allVersions[today].planVersion.version;
+        expect(queryResponse).toHaveProperty('sanAssessmentVersion');
+        return queryResponse.sanAssessmentVersion;
       });
     });
 
     test('Get Handover link', async () => {
-      const handoverResponse: CreateHandoverLinkResponse = await getHandoverLink(handoverContext, planVersion, oasysPk);
+      const handoverResponse: CreateHandoverLinkResponse = await getHandoverLink(
+        handoverContext,
+        assessmentVersion,
+        oasysPk
+      );
 
       expect(handoverResponse).toBeTruthy();
       expect(handoverResponse.handoverLink).toContain('/handover/');
