@@ -64,8 +64,9 @@ test.describe(
     test('Get Handover link', async () => {
       const handoverResponse: CreateHandoverLinkResponse = await getHandoverLink(
         handoverContext,
-        assessmentVersion,
-        oasysPk
+        oasysPk,
+        0,
+        assessmentVersion
       );
 
       expect(handoverResponse).toBeTruthy();

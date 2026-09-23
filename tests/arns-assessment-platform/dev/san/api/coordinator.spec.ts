@@ -97,7 +97,6 @@ test.describe(
         )) as EntityResponse;
 
         expect(queryResponse).toBeTruthy();
-        //expect(queryResponse.planType).toBe('UNSIGNED');
         expect(queryResponse.sentencePlanVersion).not.toBe(planVersion);
       });
 
