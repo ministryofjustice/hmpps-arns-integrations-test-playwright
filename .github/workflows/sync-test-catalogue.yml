@@ -36,10 +36,16 @@ jobs:
       - name: Detect catalogue changes
         id: diff
         run: |
+          echo "GitHub SHA: ${GITHUB_SHA}"
+          echo "Current branch: $(git branch --show-current)"
+          echo "Current HEAD: $(git log -1 --oneline)"
           if git diff --quiet -- TestCatalogue.md; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Catalogue is up to date for this checkout."
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Catalogue differs from the checked-out branch."
+            git --no-pager diff -- TestCatalogue.md
           fi
 
       - name: Commit catalogue updates
