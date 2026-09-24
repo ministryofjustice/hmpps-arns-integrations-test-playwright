@@ -54,7 +54,7 @@ This is a catalogue for the Tests in this repository. It lists the name, where t
 | [User Updates A Sentence Plan From MPoP](tests/oastub-archive/18.userUpdatesSPFromMPoP.spec.ts#L6) | `tests/oastub-archive/18.userUpdatesSPFromMPoP.spec.ts` | Unspecified | Automated Playwright scenario: user updates a sentence plan from mpop. |
 | [User Updates Their Goal Agreement](tests/oastub-archive/13.userUpdatesTheirGoalAgreement.spec.ts#L6) | `tests/oastub-archive/13.userUpdatesTheirGoalAgreement.spec.ts` | Unspecified | Automated Playwright scenario: user updates their goal agreement. |
 | [User Views Sentence Plan With View And Edit Access](tests/oastub-archive/14.userAccessModeOptions.spec.ts#L5) | `tests/oastub-archive/14.userAccessModeOptions.spec.ts` | Unspecified | Automated Playwright scenario: User views sentence plan with view and edit access. |
-| [User Views Sentence Plan With View Only Access](tests/oastub-archive/14.userAccessModeOptions.spec.ts#L47) | `tests/oastub-archive/14.userAccessModeOptions.spec.ts` | Unspecified | Automated Playwright scenario: User views sentence plan with view only access.  |
+| [User Views Sentence Plan With View Only Access](tests/oastub-archive/14.userAccessModeOptions.spec.ts#L47) | `tests/oastub-archive/14.userAccessModeOptions.spec.ts` | Unspecified | Automated Playwright scenario: User views sentence plan with view only access. |
 
 ---
 
