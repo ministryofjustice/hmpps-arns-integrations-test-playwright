@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
   const trainingLauncher = new TrainingLauncherPage(page);
   const privacy = new PrivacyPage(page);
 
-  await trainingLauncher.customiseScenarioStubbed('X444444', '9350893');
+  await trainingLauncher.customiseScenarioStubbed('X444444', '7496904');
   await trainingLauncher.generateLink.click();
 
   await expect(page).toHaveTitle('Close other applications - Sentence plan');
@@ -54,6 +54,6 @@ test(
     await sentencePlan.about.click();
     await about.alcoholUse.click();
 
-    await expect(about.assessmentInfoAndScore.filter({ hasText: 'did not have to answer' })).toHaveCount(2);
+    await expect(about.assessmentInfoAndScore.filter({ hasText: 'did not have to answer' })).toHaveCount(1);
   }
 );
