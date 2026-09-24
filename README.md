@@ -81,3 +81,7 @@ We use a mix of [Husky](https://github.com/typicode/husky), [ESLint](https://esl
 ```bash
 npm run prepare
 ```
+
+### Test Catalogue
+
+Add description here
