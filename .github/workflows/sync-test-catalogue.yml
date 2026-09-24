@@ -1,0 +1,66 @@
+name: Sync test catalogue
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'tests/**/*.ts'
+      - 'TestCatalogue.md'
+      - 'scripts/sync-test-catalogue.mjs'
+  pull_request:
+    paths:
+      - 'tests/**/*.ts'
+      - 'TestCatalogue.md'
+      - 'scripts/sync-test-catalogue.mjs'
+  workflow_dispatch:
+
+jobs:
+  sync-catalogue:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Refresh catalogue from discovered test files
+        run: node scripts/sync-test-catalogue.mjs
+
+      - name: Detect catalogue changes
+        id: diff
+        run: |
+          echo "GitHub SHA: ${GITHUB_SHA}"
+          echo "Current branch: $(git branch --show-current)"
+          echo "Current HEAD: $(git log -1 --oneline)"
+          if git diff --quiet -- TestCatalogue.md; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Catalogue is up to date for this checkout."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Catalogue differs from the checked-out branch."
+            git --no-pager diff -- TestCatalogue.md
+          fi
+
+      - name: Commit catalogue updates
+        if: github.event_name == 'push' && steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add TestCatalogue.md
+          git commit -m "chore: sync test catalogue"
+          git push
+
+      - name: Fail on pull request if catalogue is out-of-date
+        if: github.event_name == 'pull_request' && steps.diff.outputs.changed == 'true'
+        run: |
+          echo "::error::Test catalogue is out of date. Please run: node scripts/sync-test-catalogue.mjs"
+          exit 1

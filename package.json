@@ -25,6 +25,7 @@
     "prepare": "husky",
     "k6:aap:local": "./performance/utils/run_k6_aap_local.sh",
     "k6:smoke:local": "./performance/utils/run_k6_aap_smoke_local.sh",
+    "catalogue:sync": "node scripts/sync-test-catalogue.mjs",
     "update": "ncu -u --filter @playwright/test"
   },
   "keywords": [],

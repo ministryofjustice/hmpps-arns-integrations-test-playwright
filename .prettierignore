@@ -4,13 +4,15 @@ test-results/
 playwright-report
 *.json
 
+# Generated catalogue
+TestCatalogue.md
+
 # IDE - VSCode
 .vscode/*
 
 # System Files
 .DS_Store
 Thumbs.db
-{"mode":"full","isActive":false}
 
 # Docs files
 *_spec3.json
