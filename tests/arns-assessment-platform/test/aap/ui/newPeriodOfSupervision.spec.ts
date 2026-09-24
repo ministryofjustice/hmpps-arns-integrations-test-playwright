@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
   const trainingLauncher = new TrainingLauncherPage(page);
   const privacy = new PrivacyPage(page);
 
-  await trainingLauncher.customiseSubjectDetails('K792077', '1623046');
+  await trainingLauncher.customiseSubjectDetails('I503813', '9640494');
   await trainingLauncher.newPeriodOfSupervision();
   await trainingLauncher.createSession.click();
   await trainingLauncher.generateLink.click();

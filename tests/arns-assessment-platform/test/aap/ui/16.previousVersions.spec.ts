@@ -8,7 +8,7 @@ test.beforeEach(async ({ page }) => {
   const trainingLauncher = new TrainingLauncherPage(page);
   const privacy = new PrivacyPage(page);
 
-  await trainingLauncher.customiseScenario('K792077', '9350893');
+  await trainingLauncher.customiseScenario('F286273', '6019199');
   await trainingLauncher.generateLink.click();
 
   await expect(page).toHaveTitle('Close other applications - Sentence plan');

@@ -15,18 +15,18 @@ This is a catalogue for the Tests in this repository. It lists the name, where t
 | [Private Beta Complete A Strengths And Needs Assessment](tests/arns-assessment-platform/dev/san/ui/01.completeSANassessment.spec.ts#L26) | `tests/arns-assessment-platform/dev/san/ui/01.completeSANassessment.spec.ts` | Dev | Automated Playwright scenario: complete a strengths and needs assessment. |
 | [Private Beta Should Agree Plan](tests/arns-assessment-platform/dev/aap/ui/13.agreePlan.spec.ts#L44) | `tests/arns-assessment-platform/dev/aap/ui/13.agreePlan.spec.ts` | Dev | Automated Playwright scenario: should agree plan. |
 | [Private Beta Should Create Goal And Steps As Private Beta User](tests/arns-assessment-platform/dev/aap/ui/02.createGoalAndStepsSP.spec.ts#L90) | `tests/arns-assessment-platform/dev/aap/ui/02.createGoalAndStepsSP.spec.ts` | Dev, Local | Automated Playwright scenario: should create goal and steps as private beta user. |
-| [Private Beta Should Navigate Directly To Historic Version](tests/arns-assessment-platform/dev/aap/ui/historicVersion.spec.ts#L54) | `tests/arns-assessment-platform/dev/aap/ui/historicVersion.spec.ts` | Dev | Automated Playwright scenario: should navigate directly to historic version. |
+| [Private Beta Should Navigate Directly To Historic Version](tests/arns-assessment-platform/dev/aap/ui/historicVersion.spec.ts#L60) | `tests/arns-assessment-platform/dev/aap/ui/historicVersion.spec.ts` | Dev | Automated Playwright scenario: should navigate directly to historic version. |
 
 ## ARNS Assessment Platform - Dev API and Auth
 
 | Test | Location | Environment | Description |
 | --- | --- | --- | --- |
-| [Coordinator API Coordinator Statuses](tests/arns-assessment-platform/dev/san/api/coordinator.spec.ts#L77) | `tests/arns-assessment-platform/dev/san/api/coordinator.spec.ts` | Dev | Automated Playwright scenario: Coordinator statuses. |
+| [Coordinator API Coordinator Statuses](tests/arns-assessment-platform/dev/san/api/coordinator.spec.ts#L84) | `tests/arns-assessment-platform/dev/san/api/coordinator.spec.ts` | Dev | Automated Playwright scenario: Coordinator statuses. |
 | [Create And Query AAP Sentence Plan](tests/arns-assessment-platform/dev/aap/api/19.sentencePlan.spec.ts#L23) | `tests/arns-assessment-platform/dev/aap/api/19.sentencePlan.spec.ts` | Dev | Automated Playwright scenario: create and query AAP sentence plan. |
-| [Handover API Get Handover Link](tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts#L68) | `tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts` | Dev | Automated Playwright scenario: Get Handover link. |
+| [Handover API Get Handover Link](tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts#L64) | `tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts` | Dev | Automated Playwright scenario: Get Handover link. |
 | [ModSec AAP](tests/arns-assessment-platform/dev/aap/api/19.sentencePlan.spec.ts#L90) | `tests/arns-assessment-platform/dev/aap/api/19.sentencePlan.spec.ts` | Security | Automated Playwright scenario: Modsec aap. |
-| [ModSec Coordinator](tests/arns-assessment-platform/dev/san/api/coordinator.spec.ts#L135) | `tests/arns-assessment-platform/dev/san/api/coordinator.spec.ts` | Security | Automated Playwright scenario: Modsec coordinator. |
-| [ModSec Handover](tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts#L78) | `tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts` | Security | Automated Playwright scenario: Modsec handover. |
+| [ModSec Coordinator](tests/arns-assessment-platform/dev/san/api/coordinator.spec.ts#L142) | `tests/arns-assessment-platform/dev/san/api/coordinator.spec.ts` | Security | Automated Playwright scenario: Modsec coordinator. |
+| [ModSec Handover](tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts#L79) | `tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts` | Security | Automated Playwright scenario: Modsec handover. |
 | [View ARNS Assessment Successfully Returns Correct Data Structure](tests/arns-assessment-platform/dev/arns/20.AssessmentView.spec.ts#L34) | `tests/arns-assessment-platform/dev/arns/20.AssessmentView.spec.ts` | Dev | Automated Playwright scenario: view ARNS assessment successfully returns correct data structure. |
 
 ## ARNS Assessment Platform - Test UI
