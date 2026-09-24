@@ -1,12 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import ts from 'typescript';
 
 const repoRoot = process.cwd();
 const cataloguePath = path.join(repoRoot, 'TestCatalogue.md');
 const testsRoot = path.join(repoRoot, 'tests');
-const startMarker = '<!-- AUTO-GENERATED TEST INVENTORY START -->';
-const endMarker = '<!-- AUTO-GENERATED TEST INVENTORY END -->';
 
 function collectSpecFiles(dir) {
   if (!fs.existsSync(dir)) {
@@ -31,63 +28,30 @@ function collectSpecFiles(dir) {
   return files.sort();
 }
 
-function getStringValue(node) {
-  if (!node) {
-    return '';
-  }
-
-  if (ts.isStringLiteralLike(node) || ts.isNoSubstitutionTemplateLiteral(node)) {
-    return node.text;
-  }
-
-  if (ts.isIdentifier(node)) {
-    return node.text;
-  }
-
-  return '';
-}
-
-function getTagsFromObjectLiteral(tagArg) {
-  if (!tagArg || !ts.isObjectLiteralExpression(tagArg)) {
+function extractTags(input) {
+  if (!input) {
     return [];
   }
 
-  const tagProperty = tagArg.properties.find((property) => {
-    if (!ts.isPropertyAssignment(property)) {
-      return false;
-    }
+  const matches = [...input.matchAll(/tag\s*:\s*(\[[^\]]*\]|"[^"]*"|'[^']*')/g)];
+  const tags = [];
 
-    return getStringValue(property.name).trim() === 'tag';
-  });
+  for (const match of matches) {
+    const value = match[1];
+    const trimmed = value.replace(/^\[|\]$/g, '').replace(/^['"]|['"]$/g, '');
+    const parts = trimmed
+      .split(',')
+      .map((part) => part.trim().replace(/^['"]|['"]$/g, ''))
+      .filter(Boolean);
 
-  if (!tagProperty || !ts.isPropertyAssignment(tagProperty)) {
-    return [];
-  }
-
-  const initializer = tagProperty.initializer;
-  const values = [];
-
-  if (ts.isStringLiteralLike(initializer)) {
-    values.push(initializer.text);
-  } else if (ts.isArrayLiteralExpression(initializer)) {
-    initializer.elements.forEach((element) => {
-      const value = getStringValue(element);
-      if (value) {
-        values.push(value);
+    for (const part of parts) {
+      if (part.startsWith('@')) {
+        tags.push(part);
       }
-    });
+    }
   }
 
-  return [
-    ...new Set(
-      values.flatMap((value) =>
-        value
-          .split(',')
-          .map((entry) => entry.trim())
-          .filter(Boolean)
-      )
-    ),
-  ];
+  return [...new Set(tags)];
 }
 
 function getEnvironmentLabel(tags) {
@@ -138,14 +102,11 @@ function humanizeTestTitle(title) {
     .replace(/\s+/g, ' ')
     .trim();
 
-  const words = plain.split(' ').map((word) => humanizeWord(word));
-  const formatted = words.join(' ');
-
-  if (formatted.toLowerCase().startsWith('should ')) {
-    return formatted.replace(/^Should\s+/, 'Should ');
-  }
-
-  return formatted.replace(/^\s+/, '');
+  const words = plain
+    .split(' ')
+    .filter(Boolean)
+    .map((word) => humanizeWord(word));
+  return words.join(' ');
 }
 
 function buildTestTitle(describeTitles, title) {
@@ -153,76 +114,98 @@ function buildTestTitle(describeTitles, title) {
   return fullStack.length > 1 ? humanizeTestTitle(fullStack.join(' - ')) : humanizeTestTitle(title);
 }
 
-function extractTestEntries(filePath) {
-  const sourceText = fs.readFileSync(filePath, 'utf8');
-  const sourceFile = ts.createSourceFile(filePath, sourceText, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
-  const relativeFilePath = path.relative(repoRoot, filePath).replace(/\\/g, '/');
-  const entries = [];
-  const describeStack = [];
+function findMatchingBracket(text, openIndex, openChar, closeChar) {
+  let depth = 0;
+  let quote = null;
+  let escaped = false;
 
-  function visit(node) {
-    if (!node) {
-      return;
+  for (let index = openIndex; index < text.length; index += 1) {
+    const char = text[index];
+
+    if (quote) {
+      if (escaped) {
+        escaped = false;
+      } else if (char === '\\') {
+        escaped = true;
+      } else if (char === quote) {
+        quote = null;
+      }
+      continue;
     }
 
-    if (ts.isCallExpression(node)) {
-      const expression = node.expression;
-
-      if (
-        ts.isPropertyAccessExpression(expression) &&
-        expression.expression.getText(sourceFile) === 'test' &&
-        expression.name.text === 'describe'
-      ) {
-        const describeTitle = getStringValue(node.arguments[0]);
-        const describeTags = getTagsFromObjectLiteral(node.arguments[1]);
-
-        if (describeTitle) {
-          describeStack.push({ title: describeTitle, tags: describeTags });
-        }
-
-        const callback = node.arguments.find(
-          (argument) => ts.isArrowFunction(argument) || ts.isFunctionExpression(argument)
-        );
-        if (callback) {
-          visit(callback);
-        }
-
-        if (describeTitle) {
-          describeStack.pop();
-        }
-
-        return;
-      }
-
-      if (ts.isIdentifier(expression) && expression.text === 'test') {
-        const title = getStringValue(node.arguments[0]);
-        const callTags = getTagsFromObjectLiteral(node.arguments[1]);
-
-        if (title) {
-          const inheritedTags = [...new Set(describeStack.flatMap((describe) => describe.tags))];
-          const mergedTags = [...new Set([...inheritedTags, ...callTags])];
-          const start = sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile));
-
-          entries.push({
-            title: buildTestTitle(
-              describeStack.map((describe) => describe.title),
-              title
-            ),
-            filePath: relativeFilePath,
-            line: start.line + 1,
-            tags: mergedTags,
-            description: `Automated Playwright scenario: ${title}.`,
-          });
-        }
-
-        return;
-      }
+    if (char === '"' || char === "'" || char === '`') {
+      quote = char;
+      continue;
     }
 
-    ts.forEachChild(node, visit);
+    if (char === openChar) {
+      depth += 1;
+    } else if (char === closeChar) {
+      depth -= 1;
+      if (depth === 0) {
+        return index;
+      }
+    }
   }
 
-  visit(sourceFile);
+  return text.length - 1;
+}
+
+function extractTestEntries(filePath) {
+  const sourceText = fs.readFileSync(filePath, 'utf8');
+  const relativeFilePath = path.relative(repoRoot, filePath).replace(/\\/g, '/');
+  const entries = [];
+  const describeEntries = [];
+
+  const describePattern = /test\.describe\s*\(\s*(["'`])((?:\\.|(?!\1).)*)\1/g;
+  for (const match of sourceText.matchAll(describePattern)) {
+    const description = match[2].replace(/\\(['"`])/g, '$1');
+    const openParenIndex = match.index + match[0].lastIndexOf('(');
+    if (openParenIndex === -1) {
+      continue;
+    }
+
+    const closeParenIndex = findMatchingBracket(sourceText, openParenIndex, '(', ')');
+    if (closeParenIndex === -1) {
+      continue;
+    }
+
+    const describeText = sourceText.slice(match.index, closeParenIndex + 1);
+    describeEntries.push({
+      title: description,
+      tags: extractTags(describeText),
+      start: match.index,
+      end: closeParenIndex,
+    });
+  }
+
+  const testPattern = /\btest\s*\(/g;
+  for (const match of sourceText.matchAll(testPattern)) {
+    const openParenIndex = match.index + match[0].lastIndexOf('(');
+    const closeParenIndex = findMatchingBracket(sourceText, openParenIndex, '(', ')');
+    const callText = sourceText.slice(match.index, closeParenIndex + 1);
+    const titleMatch = callText.match(/\btest\s*\(\s*(["'`])((?:\\.|(?!\1).)*)\1/);
+
+    if (!titleMatch) {
+      continue;
+    }
+
+    const title = titleMatch[2].replace(/\\(['"`])/g, '$1');
+    const inheritedDescribe = [...describeEntries]
+      .filter((describe) => describe.start < match.index && match.index < describe.end)
+      .at(-1);
+    const mergedTags = [...new Set([...(inheritedDescribe?.tags ?? []), ...extractTags(callText)])];
+    const line = sourceText.slice(0, match.index).split(/\r?\n/).length;
+
+    entries.push({
+      title: buildTestTitle(inheritedDescribe ? [inheritedDescribe.title] : [], title),
+      filePath: relativeFilePath,
+      line,
+      tags: mergedTags,
+      description: `Automated Playwright scenario: ${title}.`,
+    });
+  }
+
   return entries;
 }
 
@@ -287,58 +270,22 @@ function buildCatalogueFromScratch(entries) {
   ].join('\n');
 }
 
-function mergeGeneratedRowsIntoSections(content, entries) {
-  let updatedContent = content
-    .replace(/<!-- AUTO-GENERATED TEST INVENTORY START -->[\s\S]*?<!-- AUTO-GENERATED TEST INVENTORY END -->\n?/g, '')
-    .trimEnd();
-
-  for (const section of sectionDefinitions) {
-    const sectionEntries = entries
-      .filter((entry) => section.matches(entry))
-      .sort((left, right) => left.title.localeCompare(right.title));
-
-    if (!sectionEntries.length) {
-      continue;
-    }
-
-    const headingIndex = updatedContent.indexOf(section.heading);
-    if (headingIndex === -1) {
-      continue;
-    }
-
-    const nextHeadingIndex = updatedContent.indexOf('\n## ', headingIndex + section.heading.length);
-    const sectionEnd = nextHeadingIndex === -1 ? updatedContent.length : nextHeadingIndex;
-    const sectionContent = updatedContent.slice(headingIndex, sectionEnd);
-    const lines = sectionContent.split('\n');
-    let insertionLine = lines.length;
-
-    for (let index = 0; index < lines.length; index += 1) {
-      if (lines[index].startsWith('|')) {
-        insertionLine = index + 1;
-      }
-    }
-
-    const extraRows = sectionEntries.map((entry) => formatInventoryRow(entry));
-    const replacement = [...lines.slice(0, insertionLine), ...extraRows, ...lines.slice(insertionLine)].join('\n');
-
-    updatedContent = `${updatedContent.slice(0, headingIndex)}${replacement}${updatedContent.slice(sectionEnd)}`;
-  }
-
-  return `${updatedContent.trimEnd()}\n`;
-}
-
 const specFiles = collectSpecFiles(testsRoot);
-const allEntries = specFiles.flatMap((filePath) => extractTestEntries(path.join(repoRoot, filePath)));
+const allEntries = [];
+const seenEntries = new Set();
 
-if (!fs.existsSync(cataloguePath)) {
-  throw new Error(`Catalogue file not found: ${cataloguePath}`);
+for (const filePath of specFiles) {
+  const fileEntries = extractTestEntries(path.join(repoRoot, filePath));
+
+  for (const entry of fileEntries) {
+    const entryKey = `${entry.filePath}#L${entry.line}:${entry.title}`;
+    if (!seenEntries.has(entryKey)) {
+      seenEntries.add(entryKey);
+      allEntries.push(entry);
+    }
+  }
 }
 
-const existingCatalogue = fs.readFileSync(cataloguePath, 'utf8');
-const hasExistingSections = sectionDefinitions.some((section) => existingCatalogue.includes(section.heading));
-const updatedCatalogue = hasExistingSections
-  ? mergeGeneratedRowsIntoSections(existingCatalogue, allEntries)
-  : buildCatalogueFromScratch(allEntries);
-
-fs.writeFileSync(cataloguePath, updatedCatalogue, 'utf8');
+const generatedCatalogue = buildCatalogueFromScratch(allEntries);
+fs.writeFileSync(cataloguePath, generatedCatalogue, 'utf8');
 console.log(`Updated catalogue with ${allEntries.length} discovered Playwright tests.`);
