@@ -39,7 +39,7 @@
     "@types/node": "^22.19.17",
     "@types/oracledb": "^6.10.3",
     "audit-ci": "^7.1.0",
-    "dotenv": "^17.4.2",
+    "dotenv": "^18.0.1",
     "eslint": "^10.0.0",
     "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
