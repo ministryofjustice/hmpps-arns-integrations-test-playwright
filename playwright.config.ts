@@ -80,5 +80,17 @@ export default defineConfig({
       testDir: '../tests/arns-assessment-platform/dev/san',
       grep: /@dev/,
     },
+    {
+      name: 'chromium_arns',
+      use: { ...devices['Desktop Chrome'], channel: 'chromium' },
+      testDir: '../tests/arns-assessment-platform/dev/arns',
+      grep: /@dev/,
+    },
+    {
+      name: 'edge_arns',
+      use: { ...devices['Desktop Edge'], channel: 'msedge' },
+      testDir: '../tests/arns-assessment-platform/dev/arns',
+      grep: /@dev/,
+    },
   ],
 });
