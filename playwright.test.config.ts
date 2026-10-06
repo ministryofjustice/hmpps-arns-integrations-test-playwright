@@ -77,19 +77,19 @@ export default defineConfig({
     {
       name: 'edge_san',
       use: { ...devices['Desktop Edge'], channel: 'msedge' },
-      testDir: '*san/**/*.spec.ts',
+      testMatch: '*san/**/*.spec.ts',
       grep: /@dev|@test/,
     },
     {
       name: 'chromium_arns',
       use: { ...devices['Desktop Chrome'], channel: 'chromium' },
-      testDir: '*arns/**/*.spec.ts',
+      testMatch: '*arns/**/*.spec.ts',
       grep: /@dev|@test/,
     },
     {
       name: 'edge_arns',
       use: { ...devices['Desktop Edge'], channel: 'msedge' },
-      testDir: '*arns/**/*.spec.ts',
+      testMatch: '*arns/**/*.spec.ts',
       grep: /@dev|@test/,
     },
   ],

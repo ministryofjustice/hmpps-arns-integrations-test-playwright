@@ -1,0 +1,24 @@
+name: 'playwright artefacts'
+description: 'Playwright report and artefacts'
+inputs:
+  directory:
+    description: "working directory"
+    required: false
+    default: 'e2e-tests'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Publish Test Summary
+      uses: ctrf-io/github-test-reporter@7974087018bf4857cf5a9d78723e152038c3fa31
+      with:
+        report-path: '${{ inputs.directory }}/ctrf/ctrf-report.json'
+      if: always()
+    
+    - name: Archive screenshots & trace
+      if: failure()
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+      with:
+        name: screenshots-playwright
+        path: |
+          ${{ inputs.directory }}/test-results/**/*
