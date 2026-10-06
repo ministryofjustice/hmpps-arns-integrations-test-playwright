@@ -69,6 +69,9 @@ Test: `npm run test:api:ui`
 
 NOTE: a .env file is required to run certain test features locally. This file is available upon request as and when needed.
 
+### Octo STS
+Ability for other projects consume e2e test projects in GitHub Actions. [Accessing private repositories from GitHub Actions](https://user-guidance.analytical-platform.service.justice.gov.uk/github/accessing-private-repositories-from-github-actions#accessing-private-repositories-from-github-actions). See example: [moj-hmpps-assess-risks-and-needs.sts.yaml](.github/chainguard/moj-hmpps-assess-risks-and-needs.sts.yaml)
+
 ## Generating reports
 To open last HTML report run: npx playwright show-report
 
