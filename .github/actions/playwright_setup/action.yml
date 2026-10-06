@@ -1,0 +1,20 @@
+name: 'setup playwright'
+description: 'Install playwright'
+inputs:
+  directory:
+    description: "working directory"
+    required: false
+    default: './e2e-tests'
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+      with:
+        node-version: lts/*
+    - name: Install dependencies
+      run: npm ci
+      working-directory: ${{ inputs.directory }}
+    - name: Install playwright
+      run: npx playwright install
+      working-directory: ${{ inputs.directory }}
