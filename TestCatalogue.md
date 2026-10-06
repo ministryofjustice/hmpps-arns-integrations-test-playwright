@@ -16,6 +16,7 @@ This is a catalogue for the Tests in this repository. It lists the name, where t
 | [Private Beta Should Agree Plan](tests/arns-assessment-platform/dev/aap/ui/13.agreePlan.spec.ts#L44) | `tests/arns-assessment-platform/dev/aap/ui/13.agreePlan.spec.ts` | Dev | Automated Playwright scenario: should agree plan. |
 | [Private Beta Should Create Goal And Steps As Private Beta User](tests/arns-assessment-platform/dev/aap/ui/02.createGoalAndStepsSP.spec.ts#L90) | `tests/arns-assessment-platform/dev/aap/ui/02.createGoalAndStepsSP.spec.ts` | Dev, Local | Automated Playwright scenario: should create goal and steps as private beta user. |
 | [Private Beta Should Navigate Directly To Historic Version](tests/arns-assessment-platform/dev/aap/ui/historicVersion.spec.ts#L60) | `tests/arns-assessment-platform/dev/aap/ui/historicVersion.spec.ts` | Dev | Automated Playwright scenario: should navigate directly to historic version. |
+| [Should View Criminogenic Needs Information As MPoP User](tests/arns-assessment-platform/dev/arns/ui/viewCriminogenicNeedsFromMPoP.spec.ts#L24) | `tests/arns-assessment-platform/dev/arns/ui/viewCriminogenicNeedsFromMPoP.spec.ts` | Dev | Automated Playwright scenario: should view Criminogenic Needs information as mpop user. |
 
 ## ARNS Assessment Platform - Dev API and Auth
 
@@ -27,13 +28,14 @@ This is a catalogue for the Tests in this repository. It lists the name, where t
 | [ModSec AAP](tests/arns-assessment-platform/dev/aap/api/19.sentencePlan.spec.ts#L90) | `tests/arns-assessment-platform/dev/aap/api/19.sentencePlan.spec.ts` | Security | Automated Playwright scenario: Modsec aap. |
 | [ModSec Coordinator](tests/arns-assessment-platform/dev/san/api/coordinator.spec.ts#L142) | `tests/arns-assessment-platform/dev/san/api/coordinator.spec.ts` | Security | Automated Playwright scenario: Modsec coordinator. |
 | [ModSec Handover](tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts#L79) | `tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts` | Security | Automated Playwright scenario: Modsec handover. |
+| [Should View Criminogenic Needs Information As MPoP User](tests/arns-assessment-platform/dev/arns/ui/viewCriminogenicNeedsFromMPoP.spec.ts#L24) | `tests/arns-assessment-platform/dev/arns/ui/viewCriminogenicNeedsFromMPoP.spec.ts` | Dev | Automated Playwright scenario: should view Criminogenic Needs information as mpop user. |
 | [View API View ARNS Assessment Successfully Returns Correct Data Structure](tests/arns-assessment-platform/dev/arns/api/20.AssessmentView.spec.ts#L40) | `tests/arns-assessment-platform/dev/arns/api/20.AssessmentView.spec.ts` | Dev | Automated Playwright scenario: view ARNS assessment successfully returns correct data structure. |
 
 ## ARNS Assessment Platform - Test UI
 
 | Test | Location | Environment | Description |
 | --- | --- | --- | --- |
-| [Should Display Goals, Steps And Sentence Information](tests/arns-assessment-platform/test/aap/ui/18.viewSPFromMPoP.spec.ts#L22) | `tests/arns-assessment-platform/test/aap/ui/18.viewSPFromMPoP.spec.ts` | Test | Automated Playwright scenario: should display goals, steps and sentence information. |
+| [Should Display Goals, Steps And Sentence Information](tests/arns-assessment-platform/test/arns/ui/18.viewSPFromMPoP.spec.ts#L22) | `tests/arns-assessment-platform/test/arns/ui/18.viewSPFromMPoP.spec.ts` | Test | Automated Playwright scenario: should display goals, steps and sentence information. |
 | [Should View Sentence Plan As New Period Of Supervision](tests/arns-assessment-platform/test/aap/ui/newPeriodOfSupervision.spec.ts#L23) | `tests/arns-assessment-platform/test/aap/ui/newPeriodOfSupervision.spec.ts` | Test | Automated Playwright scenario: should view sentence plan as new period of supervision. |
 | [Should View Sentence Plan Previous Version As Private Beta User](tests/arns-assessment-platform/test/aap/ui/16.previousVersions.spec.ts#L20) | `tests/arns-assessment-platform/test/aap/ui/16.previousVersions.spec.ts` | Test | Automated Playwright scenario: should view sentence plan previous version as private beta user. |
 | [Should View Strengths And Needs Assessment Information As Private Beta User](tests/arns-assessment-platform/test/san/ui/03.viewStrengthsAndNeedsFromSentencePlan.spec.ts#L22) | `tests/arns-assessment-platform/test/san/ui/03.viewStrengthsAndNeedsFromSentencePlan.spec.ts` | Test | Automated Playwright scenario: should view Strengths and Needs assessment information as private beta user. |
