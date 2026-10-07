@@ -1,0 +1,5 @@
+issuer: https://token.actions.githubusercontent.com
+subject_pattern: repo:ministryofjustice/hmpps-arns-assessment-platform-ui:.*
+
+permissions:
+  contents: read
