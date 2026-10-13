@@ -27,6 +27,8 @@ test(
     tag: '@dev',
   },
   async ({ page }) => {
+    test.setTimeout(15_000);
+
     const sentencePlan = new SentencePlanPage(page);
     const createGoal = new CreateGoalPage(page);
     const areaOfNeed = new AreaOfNeedPage(page);

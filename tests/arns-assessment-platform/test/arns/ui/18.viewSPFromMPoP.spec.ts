@@ -25,6 +25,8 @@ test(
     tag: '@test',
   },
   async ({ page }) => {
+    test.setTimeout(15_000);
+
     const sentencePlan = new SentencePlanPage(page);
 
     await expect(sentencePlan.header).toContainText(crn);
