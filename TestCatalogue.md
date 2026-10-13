@@ -29,7 +29,6 @@ This is a catalogue for the Tests in this repository. It lists the name, where t
 | [ModSec Coordinator](tests/arns-assessment-platform/dev/san/api/coordinator.spec.ts#L142) | `tests/arns-assessment-platform/dev/san/api/coordinator.spec.ts` | Security | Automated Playwright scenario: Modsec coordinator. |
 | [ModSec Handover](tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts#L79) | `tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts` | Security | Automated Playwright scenario: Modsec handover. |
 | [Should View Criminogenic Needs Information As MPoP User](tests/arns-assessment-platform/dev/arns/ui/viewCriminogenicNeedsFromMPoP.spec.ts#L24) | `tests/arns-assessment-platform/dev/arns/ui/viewCriminogenicNeedsFromMPoP.spec.ts` | Dev | Automated Playwright scenario: should view Criminogenic Needs information as mpop user. |
-| [View API View ARNS Assessment Successfully Returns Correct Data Structure](tests/arns-assessment-platform/dev/arns/api/20.AssessmentView.spec.ts#L40) | `tests/arns-assessment-platform/dev/arns/api/20.AssessmentView.spec.ts` | Dev | Automated Playwright scenario: view ARNS assessment successfully returns correct data structure. |
 
 ## ARNS Assessment Platform - Test UI
 
