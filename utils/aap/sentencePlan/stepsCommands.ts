@@ -7,6 +7,7 @@ export async function createStepsCollection(
   assessmentUuid: string,
   goalUuid: string
 ): Promise<string> {
+  const crn = Math.random().toString().substring(2, 7);
   const response: APIResponse = await request.post('/command', {
     data: {
       commands: [
