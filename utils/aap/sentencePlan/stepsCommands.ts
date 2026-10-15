@@ -1,12 +1,13 @@
 import { APIRequestContext, APIResponse } from '@playwright/test';
 import { CreateCollectionResult } from '../assessmentTypes';
 
+const crn = Math.random().toString().substring(2, 7);
+
 export async function createStepsCollection(
   request: APIRequestContext,
   assessmentUuid: string,
   goalUuid: string
 ): Promise<string> {
-  const crn = Math.random().toString().substring(2, 7);
   const response: APIResponse = await request.post('/command', {
     data: {
       commands: [
