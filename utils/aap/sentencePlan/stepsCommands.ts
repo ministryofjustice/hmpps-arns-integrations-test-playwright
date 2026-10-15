@@ -1,6 +1,5 @@
 import { APIRequestContext, APIResponse } from '@playwright/test';
 import { CreateCollectionResult } from '../assessmentTypes';
-import { crn } from './assessmentCommands';
 
 export async function createStepsCollection(
   request: APIRequestContext,
