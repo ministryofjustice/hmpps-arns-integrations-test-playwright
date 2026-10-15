@@ -23,9 +23,8 @@ This is a catalogue for the Tests in this repository. It lists the name, where t
 | Test | Location | Environment | Description |
 | --- | --- | --- | --- |
 | [Coordinator API Coordinator Statuses](tests/arns-assessment-platform/dev/san/api/coordinator.spec.ts#L84) | `tests/arns-assessment-platform/dev/san/api/coordinator.spec.ts` | Dev | Automated Playwright scenario: Coordinator statuses. |
-| [Create And Query AAP Sentence Plan](tests/arns-assessment-platform/dev/aap/api/19.sentencePlan.spec.ts#L23) | `tests/arns-assessment-platform/dev/aap/api/19.sentencePlan.spec.ts` | Dev | Automated Playwright scenario: create and query AAP sentence plan. |
 | [Handover API Get Handover Link](tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts#L64) | `tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts` | Dev | Automated Playwright scenario: Get Handover link. |
-| [ModSec AAP](tests/arns-assessment-platform/dev/aap/api/19.sentencePlan.spec.ts#L90) | `tests/arns-assessment-platform/dev/aap/api/19.sentencePlan.spec.ts` | Security | Automated Playwright scenario: Modsec aap. |
+| [ModSec AAP](tests/arns-assessment-platform/dev/aap/api/19.sentencePlan.spec.ts#L21) | `tests/arns-assessment-platform/dev/aap/api/19.sentencePlan.spec.ts` | Security | Automated Playwright scenario: Modsec aap. |
 | [ModSec Coordinator](tests/arns-assessment-platform/dev/san/api/coordinator.spec.ts#L142) | `tests/arns-assessment-platform/dev/san/api/coordinator.spec.ts` | Security | Automated Playwright scenario: Modsec coordinator. |
 | [ModSec Handover](tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts#L79) | `tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts` | Security | Automated Playwright scenario: Modsec handover. |
 | [Should View Criminogenic Needs Information As MPoP User](tests/arns-assessment-platform/dev/arns/ui/viewCriminogenicNeedsFromMPoP.spec.ts#L24) | `tests/arns-assessment-platform/dev/arns/ui/viewCriminogenicNeedsFromMPoP.spec.ts` | Dev | Automated Playwright scenario: should view Criminogenic Needs information as mpop user. |

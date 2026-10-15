@@ -14,26 +14,6 @@ export const getBaseUrl = (baseUrl: string): string => {
   return 'https://arns-assessment-platform-api-dev.hmpps.service.justice.gov.uk';
 };
 
-export async function queryAssessment(request: APIRequestContext, assessmentUuid: string) {
-  const response = await request.post('/query', {
-    data: {
-      queries: [
-        {
-          type: 'AssessmentVersionQuery',
-          user: { id: 'test-user', name: 'Test User' },
-          assessmentIdentifier: { type: 'UUID', uuid: assessmentUuid },
-        },
-      ],
-    },
-  });
-
-  if (!response.ok()) {
-    throw new Error(`QueryAssessment failed: ${response.status()} ${response.statusText()}`);
-  }
-
-  return response.json();
-}
-
 export const getModsecError = async (request: APIRequestContext): Promise<number> => {
   const response: APIResponse = await request.get(`?q=<script>>alert(1)</script>`);
 
