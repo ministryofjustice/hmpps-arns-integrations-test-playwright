@@ -34,7 +34,7 @@ jobs:
         with:
           github-token: ${{ steps.generate-token.outputs.token }}
           script: |
-            await github.rest.repos.createDispatch({
+            await github.rest.repos.createDispatchEvent({
               owner: context.repo.owner,
               repo: 'hmpps-person-record',
               event_type: 'pact_changed',
