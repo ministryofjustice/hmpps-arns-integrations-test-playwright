@@ -31,7 +31,7 @@ jobs:
           app-id: ${{ secrets.INTEGRATION_TESTS_TRIGGER_APP_ID }}
           private-key: ${{ secrets.INTEGRATION_TESTS_TRIGGER_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
-          permission-actions: write
+          permission-contents: write
           repositories: hmpps-person-record
       - name: Run integration tests
         uses: actions/github-script@v9
