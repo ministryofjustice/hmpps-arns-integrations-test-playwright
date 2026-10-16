@@ -28,11 +28,21 @@ jobs:
           private-key: ${{ secrets.INTEGRATION_TESTS_TRIGGER_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
           permission-actions: write
-          repositories: hmpps-arns-integrations-test-playwright
-      - name: Apply webhooks
-        env:
-          hmpps-person-record_ACCESS_TOKEN: ${{ steps.generate-token.outputs.token }}
-          PACT_BROKER_USERNAME: ${{ secrets.PACT_BROKER_USERNAME }}
-          PACT_BROKER_PASSWORD: ${{ secrets.PACT_BROKER_PASSWORD }}
-        run: ./create-single-webhook.sh ${{ inputs.provider_name }} ${{ env[inputs.provider_name] }}
-        working-directory: ./seed
+          repositories: hmpps-person-record
+      - name: Run integration tests
+        uses: actions/github-script@v9
+        with:
+          github-token: ${{ steps.generate-token.outputs.token }}
+          script: |
+            await github.rest.actions.createRepositoryDispatch({
+              owner: context.repo.owner,
+              repo: 'hmpps-person-record',
+              event_type: 'pact_changed',
+              client_payload: {
+                consumerName: 'hmpps-single-accommodation-service-api',
+                consumerBranch: 'main',
+                providerAppVersion: '2026-10-16.5917.4a4e800',
+                providerBranch: 'refs/heads/feat/setup-provider-webhook',
+                providerTag: ['4a4e80027f95ceac462206e150ccf5ad271c911a']
+              }
+            })
