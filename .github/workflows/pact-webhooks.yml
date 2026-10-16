@@ -1,0 +1,38 @@
+name: Webhooks
+
+on:
+  push:
+    branches:
+      - 'pact-webhooks-temp'
+  workflow_dispatch:
+    inputs:
+      provider_name:
+        description: provider_name
+        required: true
+        type: string
+
+env:
+  hmpps-person-record: 'ctNyAoj2Rx6pJYuJSpYChw'
+
+jobs:
+  apply_webhooks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Generate Token
+        uses: actions/create-github-app-token@v3
+        id: generate-token
+        with:
+          app-id: ${{ secrets.INTEGRATION_TESTS_TRIGGER_APP_ID }}
+          private-key: ${{ secrets.INTEGRATION_TESTS_TRIGGER_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          permission-actions: write
+          repositories: hmpps-arns-integrations-test-playwright
+      - name: Apply webhooks
+        env:
+          ${{ provider_name }}_ACCESS_TOKEN: ${{ steps.generate-token.outputs.token }}
+          PACT_BROKER_USERNAME: ${{ secrets.PACT_BROKER_USERNAME }}
+          PACT_BROKER_PASSWORD: ${{ secrets.PACT_BROKER_PASSWORD }}
+        run: ./create-single-webhook.sh ${{ inputs.provider_name }} ${{ env[inputs.provider_name] }}
+        working-directory: ./seed
