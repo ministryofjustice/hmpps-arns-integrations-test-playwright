@@ -31,7 +31,7 @@ jobs:
           repositories: hmpps-arns-integrations-test-playwright
       - name: Apply webhooks
         env:
-          ${{ provider_name }}_ACCESS_TOKEN: ${{ steps.generate-token.outputs.token }}
+          hmpps-person-record_ACCESS_TOKEN: ${{ steps.generate-token.outputs.token }}
           PACT_BROKER_USERNAME: ${{ secrets.PACT_BROKER_USERNAME }}
           PACT_BROKER_PASSWORD: ${{ secrets.PACT_BROKER_PASSWORD }}
         run: ./create-single-webhook.sh ${{ inputs.provider_name }} ${{ env[inputs.provider_name] }}
