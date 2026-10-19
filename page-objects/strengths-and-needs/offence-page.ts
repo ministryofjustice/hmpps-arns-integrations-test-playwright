@@ -84,7 +84,6 @@ export default class OffencePage extends AapPage {
     await this.offenceHowManyInvolved.click();
     await this.saveAndContinue.click();
 
-    await this.offenceLeaderOfTheCurrentIndex.check();
     await this.offenceImpactOnVictims.check();
     await this.offenceAcceptResponsibility.check();
     await this.offencePatternsOfOffending.fill('There are no obvious patterns at this point.');
