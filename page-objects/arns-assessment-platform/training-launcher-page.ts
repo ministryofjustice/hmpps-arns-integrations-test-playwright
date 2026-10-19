@@ -22,12 +22,12 @@ export class TrainingLauncherPage {
     this.startSession = page.getByRole('button', { name: 'Start session' });
     this.generateLink = page.getByRole('button', { name: 'Generate link' });
     this.confirmPrivacy = page.getByRole('checkbox', { name: 'confirm_privacy' });
-    this.randomCrn = page.getByLabel('Randomize crn');
+    this.randomCrn = page.getByLabel('Randomise crn');
     this.crn = page.getByRole('textbox', { name: 'crn' });
-    this.randomOASysPk = page.getByLabel('Randomize oasys assessment pk');
+    this.randomOASysPk = page.getByLabel('Randomise oasys assessment pk');
     this.oasysPk = page.getByRole('textbox', { name: 'OASys Assessment PK' });
     this.spPrivateBeta = page.getByRole('tab', { name: 'SP Private Beta' });
-    this.customise = page.getByRole('button', { name: 'Customize scenario' });
+    this.customise = page.getByRole('button', { name: 'Customise scenario' });
     this.createSession = page.getByRole('button', { name: 'Create session' });
     this.privateBeta = page.getByRole('checkbox', { name: 'SAN Private Beta' });
     this.targetService = page.locator('[name="targetApplication"]');
@@ -67,8 +67,21 @@ export class TrainingLauncherPage {
     await this.oasysPk.fill(oasysPk);
   };
 
+  customiseSubjectDetailsStubbed = async (crn: string, oasysPk: string) => {
+    await this.goto('sp-private-beta');
+    await this.customise.click();
+    await this.page.getByRole('radio', { name: crn }).check();
+    await this.randomOASysPk.click();
+    await this.oasysPk.fill(oasysPk);
+  };
+
   customiseScenario = async (crn: string, oasysPk: string) => {
     await this.customiseSubjectDetails(crn, oasysPk);
+    await this.createSession.click();
+  };
+
+  customiseScenarioStubbed = async (crn: string, oasysPk: string) => {
+    await this.customiseSubjectDetailsStubbed(crn, oasysPk);
     await this.createSession.click();
   };
 

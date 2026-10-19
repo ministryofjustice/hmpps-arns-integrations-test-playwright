@@ -25,14 +25,15 @@ test(
     tag: '@test',
   },
   async ({ page }) => {
+    test.setTimeout(15_000);
+
     const sentencePlan = new SentencePlanPage(page);
 
     await expect(sentencePlan.header).toContainText(crn);
     await expect(sentencePlan.goalTitle).toContainText('I will work towards finding accommodation');
     await expect(sentencePlan.goalSummary).toContainText('Probation practitioner');
 
-    // Hide about page until ARNS API ready: https://dsdmoj.atlassian.net/browse/SP2-1984
-    // await sentencePlan.about.click();
-    // await expect(page.getByText('Adult Custody < 12m')).toBeVisible();
+    await sentencePlan.about.click();
+    await expect(page.getByText('Adult Custody < 12m')).toBeVisible();
   }
 );

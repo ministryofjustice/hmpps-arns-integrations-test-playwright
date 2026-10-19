@@ -1,5 +1,6 @@
 import { APIRequestContext, APIResponse } from '@playwright/test';
 import {
+  EntityResponse,
   OasysAssociationsResponse,
   OasysCreateRequest,
   OasysCreateResponse,
@@ -49,6 +50,8 @@ export const createOasysAssociation = async (
 
 export type PreviousVersionsResponses = PreviousVersionsResponse | string;
 
+export type EntityTypeResponse = EntityResponse | string;
+
 export const entityVersions = async (
   request: APIRequestContext,
   assessmentUuid: string
@@ -61,6 +64,24 @@ export const entityVersions = async (
 
   if (!response.ok()) {
     throw new Error(`Entity Versions failed: ${response.status()} ${response.statusText()}`);
+  }
+
+  return await response.json();
+};
+
+export const getEntity = async (
+  request: APIRequestContext,
+  assessmentUuid: string,
+  entityType: string
+): Promise<EntityTypeResponse> => {
+  const response: APIResponse = await request.get(`/entity/${assessmentUuid}/${entityType}`);
+
+  if (response.status() === 404) {
+    return await response.text();
+  }
+
+  if (!response.ok()) {
+    throw new Error(`Entity failed: ${response.status()} ${response.statusText()}`);
   }
 
   return await response.json();

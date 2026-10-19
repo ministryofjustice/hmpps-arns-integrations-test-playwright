@@ -4,12 +4,13 @@ import { PrivacyPage } from '../../../../../page-objects/arns-assessment-platfor
 import { SentencePlanPage } from '../../../../../page-objects/arns-assessment-platform/sentence-plan-page';
 import { CreateGoalPage } from '../../../../../page-objects/arns-assessment-platform/create-goal-page';
 import { AddStepsPage } from '../../../../../page-objects/arns-assessment-platform/add-steps-page';
+import { AreaOfNeedPage } from '../../../../../page-objects/arns-assessment-platform/area-of-need-page';
 
 test.beforeEach(async ({ page }) => {
   const trainingLauncher = new TrainingLauncherPage(page);
   const privacy = new PrivacyPage(page);
 
-  await trainingLauncher.customiseSubjectDetails('K792077', '1623046');
+  await trainingLauncher.customiseSubjectDetails('I503813', '9640494');
   await trainingLauncher.newPeriodOfSupervision();
   await trainingLauncher.createSession.click();
   await trainingLauncher.generateLink.click();
@@ -25,15 +26,17 @@ test(
     tag: '@test',
   },
   async ({ page }) => {
-    test.setTimeout(12_000);
+    test.setTimeout(20_000);
     await expect(page).toHaveTitle('Plan - Sentence plan');
     const sentencePlan = new SentencePlanPage(page);
     const goalTitle = 'new period of supervision';
 
     await test.step('create goal', async () => {
       const createGoal = new CreateGoalPage(page);
+      const areaOfNeed = new AreaOfNeedPage(page);
       await sentencePlan.createGoal.click();
       await expect(page).toHaveTitle('Create a goal - Sentence plan');
+      await areaOfNeed.select();
       await createGoal.createGoal(goalTitle);
     });
     await test.step('add steps', async () => {

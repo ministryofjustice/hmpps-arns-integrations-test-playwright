@@ -8,9 +8,15 @@ import {
   lock,
   PreviousVersionsResponses,
   getModsecError,
+  getEntity,
+  EntityTypeResponse,
 } from '../../../../../utils/coordinator/coordinatorClient';
 import { updateAnswers } from '../../../../../utils/aap/sentencePlan/assessmentCommands';
-import { OasysCreateResponse, PreviousVersionsResponse } from '../../../../../utils/coordinator/coordinatorTypes';
+import {
+  EntityResponse,
+  OasysCreateResponse,
+  PreviousVersionsResponse,
+} from '../../../../../utils/coordinator/coordinatorTypes';
 import { GroupCommandResult } from '../../../../../utils/aap/assessmentTypes';
 import { softDelete, undelete } from '../../../../../utils/coordinator/client/deleting';
 
@@ -59,18 +65,19 @@ test.describe(
         return oasysResponse.sentencePlanId;
       });
 
-      planVersion = await test.step('Get previous versions', async () => {
-        const queryResponse: PreviousVersionsResponses = (await entityVersions(
+      planVersion = await test.step('Get entity', async () => {
+        const queryResponse: EntityTypeResponse = (await getEntity(
           coordinatorContext,
-          sentencePlanId
-        )) as PreviousVersionsResponse;
+          sentencePlanId,
+          'AAP_PLAN'
+        )) as EntityResponse;
 
         expect(queryResponse).toBeTruthy();
-        expect(queryResponse).toHaveProperty('allVersions');
-        expect(queryResponse.allVersions[today].planVersion.entityType).toBe('AAP_PLAN');
-        expect(queryResponse.allVersions[today].planVersion.status).toBe('CREATED');
+        expect(queryResponse).toHaveProperty('sentencePlanVersion');
+        expect(queryResponse.planType).toBe('INITIAL');
+        expect(queryResponse.planComplete).toBe('INCOMPLETE');
 
-        return queryResponse.allVersions[today].planVersion.version;
+        return queryResponse.sentencePlanVersion;
       });
     });
 
@@ -83,14 +90,14 @@ test.describe(
       });
 
       await test.step('Get plan versions', async () => {
-        const queryResponse: PreviousVersionsResponses = (await entityVersions(
+        const queryResponse: EntityTypeResponse = (await getEntity(
           coordinatorContext,
-          sentencePlanId
-        )) as PreviousVersionsResponse;
+          sentencePlanId,
+          'AAP_PLAN'
+        )) as EntityResponse;
 
         expect(queryResponse).toBeTruthy();
-        expect(queryResponse.allVersions[today].planVersion.status).toBe('UNSIGNED');
-        expect(queryResponse.allVersions[today].planVersion.version).not.toBe(planVersion);
+        expect(queryResponse.sentencePlanVersion).not.toBe(planVersion);
       });
 
       await test.step('Lock plan', async () => {

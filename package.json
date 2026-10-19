@@ -11,14 +11,16 @@
     "dev:api:security": "playwright test --config=playwright.api.config.ts --grep @security",
     "dev:api:security:ui": "playwright test --config=playwright.api.config.ts --ui --grep @security",
     "dev:all:ci": "playwright test --project=chromium --project=edge",
-    "dev:aap:ci": "playwright test --project=chromium_aap --project=edge_aap",
-    "dev:san:ci": "playwright test --project=chromium_san --project=edge_san",
+    "dev:aap:ci": "SOURCE=AAP playwright test --project=chromium_aap --project=edge_aap",
+    "dev:san:ci": "SOURCE=SAN playwright test --project=chromium_san --project=edge_san",
+    "dev:arns:ci": "SOURCE=ARNS playwright test --project=chromium_arns --project=edge_arns",
     "dev:ui": "LOCAL_RUN=1 playwright test --project=chromium --ui",
     "local:ui": "LOCAL_RUN=1 playwright test --config=playwright.local.config.ts --project=chromium --ui",
     "test:ui": "LOCAL_RUN=1 playwright test --config=playwright.test.config.ts --project=chromium --ui",
     "test:all:ci": "playwright test --config=playwright.test.config.ts --project=chromium --project=edge --grep '@dev|@test'",
-    "test:aap:ci": "playwright test --config=playwright.test.config.ts --project=chromium_aap --project=edge_aap --grep '@dev|@test'",
-    "test:san:ci": "playwright test --config=playwright.test.config.ts --project=chromium_san --project=edge_san --grep '@dev|@test'",
+    "test:aap:ci": "SOURCE=AAP playwright test --config=playwright.test.config.ts --project=chromium_aap --project=edge_aap --grep '@dev|@test'",
+    "test:san:ci": "SOURCE=SAN playwright test --config=playwright.test.config.ts --project=chromium_san --project=edge_san --grep '@dev|@test'",
+    "test:arns:ci": "SOURCE=ARNS playwright test --config=playwright.test.config.ts --project=chromium_arns --project=edge_arns --grep '@dev|@test'",
     "lint": "eslint tests/** page-objects/**",
     "lint:fix": "eslint tests/** page-objects/** utils/** --fix",
     "prettier": "prettier . --check",
@@ -26,6 +28,7 @@
     "prepare": "husky",
     "k6:aap:local": "./performance/utils/run_k6_aap_local.sh",
     "k6:smoke:local": "./performance/utils/run_k6_aap_smoke_local.sh",
+    "catalogue:sync": "node scripts/sync-test-catalogue.mjs",
     "update": "ncu -u --filter @playwright/test"
   },
   "keywords": [],
@@ -37,22 +40,23 @@
     "@playwright/test": "^1.60.0",
     "@types/eslint__js": "^9.14.0",
     "@types/node": "^22.19.17",
-    "@types/oracledb": "^6.10.3",
     "audit-ci": "^7.1.0",
-    "dotenv": "^17.4.2",
-    "eslint": "^10.0.0",
+    "dotenv": "^18.0.4",
+    "eslint": "^10.12.0",
     "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
     "node-fetch": "^3.3.2",
     "npm-check-updates": "^22.2.2",
-    "playwright-ctrf-json-reporter": "^0.0.29",
+    "playwright-ctrf-json-reporter": "^0.1.0",
     "prettier": "3.8.3",
     "tsx": "^4.21.0",
-    "typescript-eslint": "^8.59.1"
+    "typescript-eslint": "^8.71.0"
   },
   "dependencies": {
     "@axe-core/playwright": "^4.11.3",
-    "oracledb": "^6.10.0",
     "ts-node": "^10.9.2"
+  },
+  "overrides": {
+    "brace-expansion": "^5.0.12"
   }
 }

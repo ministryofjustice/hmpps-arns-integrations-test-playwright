@@ -1,0 +1,43 @@
+name: Sync test catalogue
+
+on:
+  pull_request:
+    paths:
+      - 'tests/**/*.ts'
+      - 'TestCatalogue.md'
+      - 'scripts/sync-test-catalogue.mjs'
+  workflow_dispatch:
+
+jobs:
+  sync-catalogue:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Refresh catalogue from discovered test files
+        run: node scripts/sync-test-catalogue.mjs
+
+      - name: Commit catalogue updates back to the PR branch
+        if: github.event_name == 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add TestCatalogue.md
+          if git diff --cached --quiet; then
+            echo "Catalogue already up to date for this PR branch."
+            exit 0
+          fi
+          git commit -m "chore: sync test catalogue"
+          git push origin HEAD:${{ github.head_ref }}

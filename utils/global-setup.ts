@@ -48,25 +48,36 @@ async function globalSetup() {
   try {
     console.log('Starting global setup: Fetching API tokens...');
 
-    // Fetch AAP Token
-    await fetchAndSaveToken(
-      'AAP',
-      path.resolve(__dirname, 'aapToken.json'),
-      process.env.AAP_CLIENT_ID,
-      process.env.AAP_CLIENT_SECRET,
-      process.env.AAP_CLIENT_ID_SCRIPT,
-      process.env.AAP_CLIENT_SECRET_SCRIPT
-    );
+    const { SOURCE } = process.env;
 
-    // Fetch ARNS Assessment Token
-    await fetchAndSaveToken(
-      'ARNS Assessment',
-      path.resolve(__dirname, 'arnsAssessmentToken.json'),
-      process.env.ARNS_ASSESSMENT_CLIENT_ID,
-      process.env.ARNS_ASSESSMENT_CLIENT_SECRET,
-      process.env.ARNS_ASSESSMENT_CLIENT_ID_SCRIPT,
-      process.env.ARNS_ASSESSMENT_CLIENT_SECRET_SCRIPT
-    );
+    if (SOURCE === undefined) {
+      await fetchAndSaveToken(
+        'AAP',
+        path.resolve(__dirname, 'aapToken.json'),
+        process.env.AAP_CLIENT_ID,
+        process.env.AAP_CLIENT_SECRET,
+        process.env.AAP_CLIENT_ID_SCRIPT,
+        process.env.AAP_CLIENT_SECRET_SCRIPT
+      );
+
+      await fetchAndSaveToken(
+        'ARNS Assessment',
+        path.resolve(__dirname, 'arnsAssessmentToken.json'),
+        process.env.ARNS_ASSESSMENT_CLIENT_ID,
+        process.env.ARNS_ASSESSMENT_CLIENT_SECRET,
+        process.env.ARNS_ASSESSMENT_CLIENT_ID_SCRIPT,
+        process.env.ARNS_ASSESSMENT_CLIENT_SECRET_SCRIPT
+      );
+    } else if (SOURCE === 'AAP' || SOURCE === 'SAN') {
+      await fetchAndSaveToken(
+        'AAP',
+        path.resolve(__dirname, 'aapToken.json'),
+        process.env.AAP_CLIENT_ID,
+        process.env.AAP_CLIENT_SECRET,
+        process.env.AAP_CLIENT_ID_SCRIPT,
+        process.env.AAP_CLIENT_SECRET_SCRIPT
+      );
+    }
 
     console.log('All tokens fetched and saved successfully.');
   } catch (err) {
