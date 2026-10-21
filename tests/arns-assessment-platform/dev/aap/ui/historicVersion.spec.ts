@@ -57,7 +57,7 @@ test.describe(
       planVersion = previousVersion.allVersions[today].planVersion.version;
     });
 
-    test('should navigate directly to historic version', async ({ page }) => {
+    test('should navigate directly to Sentence Plan historic version', async ({ page }) => {
       const handoverLink = await createHandoverLink(apiContext, planVersion, oasysPk);
       const privacy = new PrivacyPage(page);
 

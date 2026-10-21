@@ -11,6 +11,7 @@ export class AapPage {
   readonly noRiskOfReoffending: Locator;
   readonly markAsComplete: Locator;
   readonly unknown: Locator;
+  readonly back: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -23,6 +24,7 @@ export class AapPage {
     this.noRiskOfReoffending = page.getByRole('group', { name: 'linked to risk of reoffending?' }).getByLabel('No');
     this.markAsComplete = page.getByRole('button', { name: 'Mark as complete' });
     this.unknown = page.getByRole('radio', { name: 'Unknown' });
+    this.back = page.getByRole('link', { name: 'Back', exact: true });
   }
 
   async sectionComplete(section: string) {
