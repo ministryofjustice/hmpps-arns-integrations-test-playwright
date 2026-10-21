@@ -18,10 +18,17 @@ export class PrivacyPage {
     await expect(this.page).toHaveTitle('Plan - Sentence plan');
   };
 
-  toHistoricPlan = async () => {
-    await expect(this.page).toHaveTitle('Close other applications - Sentence plan');
+  toSan = async () => {
+    await expect(this.page).toHaveTitle('Close other applications - Strengths and needs');
     await this.confirmPrivacy.click();
     await this.confirm.click();
-    await expect(this.page).toHaveTitle('View historic version - Sentence plan');
+    await expect(this.page).toHaveTitle('Accommodation - Strengths and needs');
+  };
+
+  toHistoricPlan = async (clientName: string = 'Sentence plan') => {
+    await expect(this.page).toHaveTitle(`Close other applications - ${clientName}`);
+    await this.confirmPrivacy.click();
+    await this.confirm.click();
+    await expect(this.page).toHaveTitle(`View historic version - ${clientName}`);
   };
 }
