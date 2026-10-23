@@ -10,22 +10,10 @@ runs:
   using: "composite"
   steps:
     - name: Publish Test Report
-      uses: ctrf-io/github-test-reporter@v1
+      uses: mikepenz/action-junit-report@6ef3fdcfcd5f0b5d14df3e659ef19b8c6820f93d
       if: always()
       with:
-        report-path: './junit.xml'
-        integrations-config: |
-          {
-            "junit-to-ctrf": {
-              "enabled": true,
-              "action": "convert",
-              "options": {
-                "output": "./ctrf/k6-report.json",
-                "toolname": "junit-to-ctrf",
-                "useSuiteName": false,
-              }
-            }
-          }
+        report_paths: '**/junit.xml'
 
     - name: Upload ${{ inputs.ui_name }} performance html report
       if: always()
