@@ -6,3 +6,5 @@ runs:
   steps:
     - name: Set up k6
       uses: grafana/setup-k6-action@43b9fc21641a76002687994433dd586f56e791b1
+      with:
+        browser: true

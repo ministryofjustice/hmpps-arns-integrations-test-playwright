@@ -1,8 +1,5 @@
 name: Performance UI Tests
 on:
-  push:
-    branches:
-      - 'ci/perf-setup'
   workflow_call:
     inputs:
       ui_name:
@@ -25,8 +22,7 @@ jobs:
       - name: run k6 ${{ inputs.ui_name }} test
         uses: grafana/run-k6-action@4082a08c7e40cf6d65863911077dfb60ae0a4f04
         with:
-          path: performance/tests/${{ inputs.ui_name }}-ui-smoke.js
-          browser: true
+          path: ./performance/tests/${{ inputs.ui_name }}-ui-smoke.js
 
       - name: Upload ${{ inputs.ui_name }} UI Report
         uses: ./.github/actions/k6_artefacts
