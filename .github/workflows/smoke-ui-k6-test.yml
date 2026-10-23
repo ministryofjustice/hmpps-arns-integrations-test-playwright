@@ -1,5 +1,12 @@
 name: Performance UI Tests
 on:
+  workflow_dispatch:
+    inputs:
+      ui_name:
+        description: 'UI performance test name to run'
+        required: false
+        default: 'san'
+        type: string
   workflow_call:
     inputs:
       ui_name:
