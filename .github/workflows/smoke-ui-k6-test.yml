@@ -1,0 +1,34 @@
+name: Performance UI Tests
+on:
+  push:
+    branches:
+      - 'ci/perf-setup'
+  workflow_call:
+    inputs:
+      ui_name:
+        description: 'UI performance test name to run'
+        required: false
+        default: 'san'
+        type: string
+
+jobs:
+  k6_test:
+    name: ${{ inputs.ui_name }} ui perf
+    runs-on: [ self-hosted, hmpps-github-actions-runner ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Set up k6
+        uses: ./.github/actions/k6_setup
+
+      - name: run k6 ${{ inputs.ui_name }} test
+        uses: grafana/run-k6-action@4082a08c7e40cf6d65863911077dfb60ae0a4f04
+        with:
+          path: performance/tests/${{ inputs.ui_name }}-ui-smoke.js
+          browser: true
+
+      - name: Upload ${{ inputs.ui_name }} UI Report
+        uses: ./.github/actions/k6_artefacts
+        with:
+          ui_name: ${{ inputs.ui_name }}

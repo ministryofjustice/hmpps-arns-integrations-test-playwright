@@ -1,0 +1,35 @@
+name: 'k6 artefacts'
+description: 'k6 upload artefacts'
+inputs:
+  ui_name:
+    description: "ui name"
+    required: false
+    default: 'san'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Publish Test Report
+      uses: ctrf-io/github-test-reporter@v1
+      if: always()
+      with:
+        report-path: './junit.xml'
+        integrations-config: |
+          {
+            "junit-to-ctrf": {
+              "enabled": true,
+              "action": "convert",
+              "options": {
+                "output": "./ctrf/k6-report.json",
+                "toolname": "junit-to-ctrf",
+                "useSuiteName": false,
+              }
+            }
+          }
+
+    - name: Upload ${{ inputs.ui_name }} performance html report
+      if: always()
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+      with:
+        name: k6-${{ inputs.ui_name }}-report-html
+        path: result.html

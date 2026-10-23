@@ -1,5 +1,7 @@
 import { browser } from 'k6/browser';
 import { Trend } from 'k6/metrics';
+import { htmlReport } from 'https://raw.githubusercontent.com/benc-uk/k6-reporter/latest/dist/bundle.js';
+import { jUnit, textSummary } from 'https://jslib.k6.io/k6-summary/0.0.2/index.js';
 
 const livingWithVisibleTime = new Trend('accommodation_page_2_visible', true);
 
@@ -35,7 +37,7 @@ export default async function () {
     await page.getByRole('checkbox', { name: 'I confirm I\'ll do this before' }).check();
     await page.getByRole('button', { name: 'Confirm' }).click();
     
-    await page.getByRole('heading', { name: 'Accommodation' });
+    await page.getByRole('heading', { name: 'Accommodation' }).waitFor({ state: 'visible' });
     await page.getByRole('radio', { name: 'Settled'}).check();
     await page.getByRole('radio', { name: 'Homeowner'}).check();
 
@@ -64,4 +66,12 @@ export default async function () {
   } finally {
     await page.close();
   }
+}
+
+export function handleSummary(data) {
+	return {
+    'junit.xml': jUnit(data),
+		'result.html': htmlReport(data),
+		stdout: textSummary(data, { indent: ' ', enableColors: true }),
+	};
 }
