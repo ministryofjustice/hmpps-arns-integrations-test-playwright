@@ -33,5 +33,6 @@ jobs:
 
       - name: Upload ${{ inputs.ui_name }} UI Report
         uses: ./.github/actions/k6_artefacts
+        if: always()
         with:
           ui_name: ${{ inputs.ui_name }}
