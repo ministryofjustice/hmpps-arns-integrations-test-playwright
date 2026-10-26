@@ -31,7 +31,7 @@ Tests are selected by **folder + tag**, so a test in the wrong place or with the
 - [ ] File naming follows the existing numbered pattern (`NN.descriptiveName.spec.ts`) where the folder uses it; number does not clash with an existing file.
 
 ### Timing and flakiness
-CI timeouts are tight: test timeout **8s**, expect timeout **3s** (60s/10s only with `LOCAL_RUN=1`). Review accordingly.
+UI configs use a test timeout of **8s** and expect timeout of **3s** in CI (60s/10s with `LOCAL_RUN=1`). The API configs do not set these timeouts and use Playwright defaults. Review against the config used to run the test.
 - [ ] No `page.waitForTimeout()` / hard sleeps. Use web-first assertions (`await expect(locator).toBeVisible()`, `toHaveURL`, `toHaveText`).
 - [ ] No `expect(await locator.textContent()).toBe(...)` — use `await expect(locator).toHaveText(...)` so it retries.
 - [ ] Every Playwright call and `expect` on a locator is `await`ed.
