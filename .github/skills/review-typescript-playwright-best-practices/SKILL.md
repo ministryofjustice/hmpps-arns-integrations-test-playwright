@@ -61,7 +61,7 @@ Treat new code as if `strict: true` were on. Don't demand that untouched existin
 - [ ] Hooks are the right scope: `beforeEach` for per-test state (pages), `beforeAll` only for expensive, read-only shared setup. Anything created in `beforeAll`/`beforeEach` is torn down in the matching `after*`.
 - [ ] Reusable setup that repeats across files should become a custom fixture (`test.extend<{...}>()`) instead of copy-pasted hooks.
 - [ ] Use the built-in `request` fixture or `playwright.request.newContext()` (disposed afterwards) for API calls, not `node-fetch`/`axios` inside tests.
-- [ ] Use `test.skip(condition, reason)` / `test.fixme(reason)` with a reason and ticket, not commented-out tests.
+- [ ] Use `test.skip(condition, reason)` / `test.fixme(condition, reason)` with a reason and ticket, not commented-out tests.
 - [ ] No `test.only`, `page.pause()`, `console.log` debugging, or hard-coded `headless: false`.
 - [ ] Test titles describe expected behaviour. One behaviour per test.
 
