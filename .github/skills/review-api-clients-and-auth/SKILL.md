@@ -41,4 +41,4 @@ Always also apply `review-typescript-playwright-best-practices`. `utils/**` is n
 - [ ] New projects follow `{browser}_{source}` naming and have matching `testDir` and `grep`.
 - [ ] `forbidOnly: !!process.env.CI` and the CTRF reporter (`outputDir: 'ctrf'`) are preserved — `playwright.yml` publishes `ctrf/ctrf-report.json`.
 - [ ] `trace`/`video`/`screenshot` settings still upload useful artefacts on failure (`test-results/**`).
-- [ ] `BASE_URL` override still works; default remains the dev environment.
+- [ ] Preserve each config's intended environment default (dev, test, or localhost). Where a `BASE_URL` override already exists, keep it working.
