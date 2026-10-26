@@ -22,7 +22,7 @@ This repo is a shared integration/E2E test suite. It runs standalone (schedules,
    | `.github/workflows/**`, `.github/chainguard/**`, `package.json` scripts | `review-ci-workflows` |
    | **Every** `*.ts` file (in addition to the above) | `review-typescript-playwright-best-practices` |
 
-3. **Apply the cross-cutting checks** below to every file. Optionally run `npx eslint <changed .ts files>` and `npx tsc --noEmit --strict --esModuleInterop --skipLibCheck <files>` to back up findings (strict errors in new code are findings; existing ones are follow-ups).
+3. **Apply the cross-cutting checks** below to every file. Optionally run `npx eslint <changed .ts files>` and `npx tsc --noEmit --strict --esModuleInterop --skipLibCheck --types node <files>` (`--types node` avoids a TS2688 error from the stray `@types/eslint__js` package) to back up findings (strict errors in new code are findings; existing ones are follow-ups).
 4. **Report** using the output format below. Do not edit files unless the user asks.
 
 ## Cross-cutting checks
