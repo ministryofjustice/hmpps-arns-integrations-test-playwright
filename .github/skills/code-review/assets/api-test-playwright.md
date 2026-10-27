@@ -1,11 +1,11 @@
 ---
-name: review-api-clients-and-auth
+name: api-test-playwright
 description: 'Review API client helpers, auth/token handling, global setup and Playwright config in the ARNS integration test repo. Use when reviewing utils/ (aapClient, arnsClient, coordinator, handover, aap sentencePlan commands), utils/global-setup.ts, playwright*.config.ts, environment variables, client credentials, OAuth tokens, base URLs, or secrets handling.'
 ---
 
-# Review API Clients, Auth and Config
+# Review API Test
 
-Always also apply `review-typescript-playwright-best-practices`. `utils/**` is not covered by `npm run lint`, so type-safety and async issues are only caught in review.
+Always also apply `typescript-playwright`.
 
 ## How auth works today
 - `utils/global-setup.ts` runs before every Playwright run. It POSTs `grant_type=client_credentials` to `TOKEN_URL` with Basic auth and writes the response to `utils/aapToken.json` / `utils/arnsAssessmentToken.json`.
@@ -33,12 +33,4 @@ Always also apply `review-typescript-playwright-best-practices`. `utils/**` is n
 - [ ] Helpers accept an `APIRequestContext` rather than creating their own uncached contexts per call.
 - [ ] Responses checked (`response.ok()` or explicit status) before `.json()`; errors surface status and body for debugging.
 - [ ] Request/response types declared in the relevant `*Types.ts` file and reused; no `any`.
-- [ ] Commands for AAP sentence plan live under `utils/aap/sentencePlan/` alongside the existing `assessmentCommands.ts`, `goalsCommands.ts`, `stepsCommands.ts`.
 - [ ] No synthetic data that looks like real person data (CRN, name, DOB) in hard-coded subject details.
-
-### Playwright configs
-- [ ] Changes to `timeout`, `expect.timeout`, `retries`, `workers` or `fullyParallel` are justified — they affect every caller pipeline. Increasing retries to hide flakiness should be challenged.
-- [ ] New projects follow `{browser}_{source}` naming and have matching `testDir` and `grep`.
-- [ ] `forbidOnly: !!process.env.CI` and the CTRF reporter (`outputDir: 'ctrf'`) are preserved — `playwright.yml` publishes `ctrf/ctrf-report.json`.
-- [ ] `trace`/`video`/`screenshot` settings still upload useful artefacts on failure (`test-results/**`).
-- [ ] Preserve each config's intended environment default (dev, test, or localhost). Where a `BASE_URL` override already exists, keep it working.

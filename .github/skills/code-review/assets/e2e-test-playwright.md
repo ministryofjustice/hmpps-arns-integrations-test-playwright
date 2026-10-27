@@ -1,11 +1,11 @@
 ---
-name: review-playwright-tests
+name: e2e-test-playwright
 description: 'Review Playwright spec files (*.spec.ts) under tests/ in the ARNS integration test repo. Use when reviewing UI, API, auth or security tests for AAP, SAN, ARNS or arns-assessment; checking tags (@dev, @test, @local, @security), folder placement vs playwright config projects, flakiness, waits, assertions, test isolation and test data.'
 ---
 
 # Review Playwright Tests
 
-Always also apply `review-typescript-playwright-best-practices` (locators, web-first assertions, isolation, fixtures, `test.step`, typing). This skill covers repo-specific wiring.
+Always also apply `typescript-playwright` (locators, web-first assertions, isolation, fixtures, `test.step`, typing). This skill covers repo-specific wiring.
 
 ## Know the wiring first
 
@@ -41,8 +41,6 @@ UI configs use a test timeout of **8s** and expect timeout of **3s** in CI (60s/
 ### Structure and isolation
 - [ ] UI tests use page objects from `page-objects/arns-assessment-platform/`; no raw selectors in specs beyond trivial one-offs.
 - [ ] Setup in `beforeEach`/`beforeAll` creates its own data (e.g. via `TrainingLauncherPage`, `page-objects/arns-assessment-platform/api/setup-plan.ts`, or `utils/aap/**` commands) rather than depending on pre-existing environment state.
-- [ ] `APIRequestContext` created in `beforeAll` is disposed in `afterAll`.
-- [ ] Created entities are cleaned up where an API exists (e.g. `utils/coordinator/client/deleting.ts`), or there is a reason not to.
 - [ ] Shared mutable module-level state (`let x;`) isn't mutated across tests in a way that breaks retries.
 - [ ] Test titles describe behaviour ("should create goal and steps as national rollout user"); they are published to `TestCatalogue.md`.
 - [ ] Long multi-page journeys are broken into `test.step(...)` blocks.
@@ -51,8 +49,6 @@ UI configs use a test timeout of **8s** and expect timeout of **3s** in CI (60s/
 
 ### Assertions
 - [ ] Each test asserts the outcome, not just that steps didn't throw.
-- [ ] API tests assert status code **and** relevant body fields; error-path tests assert the specific status (e.g. ModSec → 406).
-- [ ] Accessibility checks (if any) use `@axe-core/playwright` and scope/exclusions are justified.
 
 ### Data
 - [ ] Fixtures in `data/*.json` contain only synthetic data — no real CRNs, names, DOBs or PNC numbers.

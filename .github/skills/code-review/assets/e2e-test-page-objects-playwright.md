@@ -1,11 +1,11 @@
 ---
-name: review-page-objects
+name: e2e-test-page-objects-playwright
 description: 'Review Playwright page object classes under page-objects/ in the ARNS integration test repo. Use when reviewing locators, selector strategy (getByRole, getByLabel, data-qa), page object structure, reusable workflow methods, and duplication between page objects for AAP, Sentence Plan, Strengths and Needs (SAN) pages.'
 ---
 
 # Review Page Objects
 
-Always also apply `review-typescript-playwright-best-practices` (locator strategy, strictness, typing).
+Always also apply `typescript-playwright` (locator strategy, strictness, typing).
 
 Active page objects live in `page-objects/arns-assessment-platform/` and `page-objects/strengths-and-needs/`. `page-objects/oastub-archive/` is legacy — do not extend it.
 
