@@ -40,9 +40,6 @@ test.describe(
     tag: '@dev',
   },
   () => {
-    // TODO: re-enable once SAN v2 is removed from the test Handover (Coordinator GET /entity/{id}/ASSESSMENT returns 400)
-    test.skip(({ baseURL }) => baseURL.includes('test'), 'Coordinator entity lookup returns 400 in test');
-
     let assessmentVersion: number;
     const crn = Math.random().toString().substring(2, 7);
     const oasysPk = Math.floor(Math.random() * 1000000000).toString();

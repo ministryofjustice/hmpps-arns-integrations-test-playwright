@@ -37,8 +37,7 @@ test(
   }
 );
 
-// TODO: re-enable once SAN v2 is removed from the test Handover (stalls on the Handover oauth2 login)
-test.fixme(
+test(
   'should view Strengths and Needs previous version as private beta user',
   {
     tag: '@test',
