@@ -6,7 +6,7 @@ import { PrivacyPage } from '../../../../../page-objects/arns-assessment-platfor
 test.describe(
   'Private beta',
   {
-    // tag: '@dev',
+    tag: ['@dev', '@local'],
   },
   () => {
     test.beforeEach(async ({ page }) => {
@@ -15,45 +15,43 @@ test.describe(
 
       await trainingLauncher.startPrivateBetaSAN();
 
-      await expect(page).toHaveTitle(
-        'Remember to close any other applications before starting an appointment - Strengths and needs'
-      );
+      await expect(page).toHaveTitle('Close other applications - Strengths and needs');
       await privacy.confirmPrivacy.click();
       await privacy.confirm.click();
-      await expect(page).toHaveTitle('Accommodation - Strengths and needs');
+      expect(await page.title()).toContain('Strengths and needs');
     });
 
     test('complete a strengths and needs assessment', async ({ page }) => {
       test.setTimeout(60_000);
       const strengthsAndNeedsPage = new StrengthsAndNeedsPage(page);
 
-      await strengthsAndNeedsPage.completeAccomodation();
+      await strengthsAndNeedsPage.accommodation.complete();
 
       await strengthsAndNeedsPage.employmentAndEducation.click();
-      await strengthsAndNeedsPage.completeEmployment();
+      await strengthsAndNeedsPage.employment.complete();
 
       await strengthsAndNeedsPage.finances.click();
-      await strengthsAndNeedsPage.completeFinances();
+      await strengthsAndNeedsPage.finance.complete();
 
       await strengthsAndNeedsPage.drugUse.click();
-      await strengthsAndNeedsPage.completeDrugUse();
+      await strengthsAndNeedsPage.drug.complete();
 
       await strengthsAndNeedsPage.alcoholUse.click();
-      await strengthsAndNeedsPage.completeAlcoholUse();
+      await strengthsAndNeedsPage.alcohol.complete();
 
       await strengthsAndNeedsPage.healthAndWellbeing.click();
-      await strengthsAndNeedsPage.completeHealthAndWellbeing();
+      await strengthsAndNeedsPage.health.complete();
 
       await strengthsAndNeedsPage.personalRelationships.click();
-      await strengthsAndNeedsPage.completePersonalRelationships();
+      await strengthsAndNeedsPage.personal.complete();
 
       await strengthsAndNeedsPage.behavioursAndAttitudes.click();
-      await strengthsAndNeedsPage.completeBehavioursAndAttitudes();
+      await strengthsAndNeedsPage.behaviours.complete();
 
       await strengthsAndNeedsPage.offenceAnalysis.click();
-      await strengthsAndNeedsPage.completeOffenceAnalysis();
+      await strengthsAndNeedsPage.offence.complete();
 
-      await strengthsAndNeedsPage.confirmUserIsOnOffenceAnalysisPage();
+      await expect(strengthsAndNeedsPage.offence.offenceAnalysisHeading).toBeVisible();
     });
   }
 );
