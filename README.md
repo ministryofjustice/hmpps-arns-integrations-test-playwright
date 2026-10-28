@@ -1,5 +1,7 @@
 # hmpps-arns-integrations-test-playwright
 
+[![MOJ Repository Compliance Badge](https://github-community.service.justice.gov.uk/repository-standards/api/hmpps-arns-integrations-test-playwright/badge)](https://github-community.service.justice.gov.uk/repository-standards/technical-standard/repositories/hmpps-arns-integrations-test-playwright)
+
 ## Introduction
 This framework is built using Playwright and Typescript. The idea is to start with some journeys running across SAN and SP, and use those as smoke tests as and when needed to start with. The tests are configured to run as scheduled jobs using a self-hosted runner on Github Actions.
 
