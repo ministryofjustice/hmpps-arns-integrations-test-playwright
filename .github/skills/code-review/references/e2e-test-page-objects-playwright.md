@@ -5,7 +5,7 @@ description: 'Review Playwright page object classes under page-objects/ in the A
 
 # Review Page Objects
 
-Always also apply `typescript-playwright` (locator strategy, strictness, typing).
+Always also apply the [`typescript-playwright.md`](./typescript-playwright.md) reference (locator strategy, strictness, typing).
 
 Active page objects live in `page-objects/arns-assessment-platform/` and `page-objects/strengths-and-needs/`. `page-objects/oastub-archive/` is legacy — do not extend it.
 

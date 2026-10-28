@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: 'Entry point for reviewing a PR, diff, branch or files in the hmpps-arns-integrations-test-playwright repo. Use when asked to "review", "code review", "check this PR", "look over my changes". Classifies changed files and applies the matching review skills (playwright specs, page objects, API tests, k6  tests) and produces a structured findings report.'
+description: 'Entry point for reviewing a PR, diff, branch or files in the hmpps-arns-integrations-test-playwright repo. Use when asked to "review", "code review", "check this PR", "look over my changes". Classifies changed files, applies the matching bundled review references, and produces a structured findings report.'
 argument-hint: 'Optional: branch, PR, or file paths to review (defaults to current changes)'
 ---
 
@@ -11,14 +11,14 @@ This repo is a shared integration/E2E test suite. It runs standalone (schedules,
 ## Procedure
 
 1. **Collect the change set.** Use `git diff main...HEAD --name-status` (or the files/PR the user specified). Read every changed file fully, plus any file it imports that is relevant.
-2. **Classify each file** and load the matching skill:
+2. **Classify each file** and read the matching reference from the `references/` folder:
 
-   | Path pattern | Skill |
+   | Path pattern | Reference |
    |---|---|
-   | `tests/**/*.spec.ts`, `data/**` | `e2e-test-playwright` |
-   | `page-objects/**` | `e2e-test-page-objects-playwright` |
-   | `utils/**`, `playwright*.config.ts`, `.env*`, `*Token.json` | `api-test-playwright` |
-   | **Every** `*.ts` file (in addition to the above) | `typescript-playwright` |
+   | `tests/**/*.spec.ts`, `data/**` | [`e2e-test-playwright.md`](./references/e2e-test-playwright.md) |
+   | `page-objects/**` | [`e2e-test-page-objects-playwright.md`](./references/e2e-test-page-objects-playwright.md) |
+   | `utils/**`, `playwright*.config.ts`, `.env*`, `*Token.json` | [`api-test-playwright.md`](./references/api-test-playwright.md) |
+   | **Every** `*.ts` file (in addition to the above) | [`typescript-playwright.md`](./references/typescript-playwright.md) |
 
 3. **Apply the cross-cutting checks** below to every file.
 4. **Report** using the output format below. Do not edit files unless the user asks.

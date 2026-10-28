@@ -5,7 +5,7 @@ description: 'Review Playwright spec files (*.spec.ts) under tests/ in the ARNS 
 
 # Review Playwright Tests
 
-Always also apply `typescript-playwright` (locators, web-first assertions, isolation, fixtures, `test.step`, typing). This skill covers repo-specific wiring.
+Always also apply the [`typescript-playwright.md`](./typescript-playwright.md) reference (locators, web-first assertions, isolation, fixtures, `test.step`, typing). This reference covers repo-specific wiring.
 
 ## Know the wiring first
 

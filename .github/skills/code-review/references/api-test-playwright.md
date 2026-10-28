@@ -5,7 +5,7 @@ description: 'Review API client helpers, auth/token handling, global setup and P
 
 # Review API Test
 
-Always also apply `typescript-playwright`.
+Always also apply the [`typescript-playwright.md`](./typescript-playwright.md) reference.
 
 ## How auth works today
 - `utils/global-setup.ts` runs before every Playwright run. It POSTs `grant_type=client_credentials` to `TOKEN_URL` with Basic auth and writes the response to `utils/aapToken.json` / `utils/arnsAssessmentToken.json`.
