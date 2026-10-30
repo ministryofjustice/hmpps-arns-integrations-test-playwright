@@ -48,7 +48,7 @@
     "husky": "^9.1.7",
     "node-fetch": "^3.3.2",
     "npm-check-updates": "^22.2.2",
-    "playwright-ctrf-json-reporter": "^0.1.0",
+    "playwright-ctrf-json-reporter": "^0.2.0",
     "prettier": "3.8.3",
     "tsx": "^4.21.0",
     "typescript-eslint": "^8.71.0"
@@ -59,5 +59,10 @@
   },
   "overrides": {
     "brace-expansion": "^5.0.12"
+  },
+  "allowScripts": {
+    "esbuild@0.27.2": true,
+    "fsevents@2.3.2": true,
+    "fsevents@2.3.3": true
   }
 }
