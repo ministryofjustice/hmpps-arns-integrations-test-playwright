@@ -12,7 +12,7 @@ export class AddStepsPage {
     this.chooseSomeone = page.locator('select', { hasText: 'Choose someone' });
     this.whatShouldTheyDo = page.getByRole('textbox', { name: 'What should they do to achieve the goal' });
     this.saveAndContinue = page.getByRole('button', { name: 'Save and continue' });
-    this.chooseStatus = page.getByRole('button', { name: 'Choose status' });
+    this.chooseStatus = page.getByRole('button', { name: 'Not Started' });
   }
 
   whoWillDoTheStep = async (who: string) => {
