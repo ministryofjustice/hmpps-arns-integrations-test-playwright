@@ -115,6 +115,12 @@ export const createHandoverLink = async (request: APIRequestContext, version: nu
   return handoverResponse.handoverLink;
 };
 
+export const createSanHandoverLink = async (request: APIRequestContext, version: number, oasysPk: string) => {
+  const handoverResponse: CreateHandoverLinkResponse = await getHandoverLink(request, oasysPk, 0, version);
+
+  return handoverResponse.handoverLink;
+};
+
 export const getModsecError = async (request: APIRequestContext): Promise<number> => {
   const response: APIResponse = await request.get(`?q=<script>>alert(1)</script>`);
 

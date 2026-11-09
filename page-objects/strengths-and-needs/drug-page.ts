@@ -11,6 +11,7 @@ export default class DrugPage extends AapPage {
   readonly drugReceivingTreatment: Locator;
   readonly drugReasonsForUse: Locator;
   readonly drugAffectedLife: Locator;
+  readonly drugMisusedBenzo: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -23,6 +24,7 @@ export default class DrugPage extends AapPage {
     this.drugReceivingTreatment = page.getByRole('radio', { name: 'No' });
     this.drugReasonsForUse = page.getByRole('checkbox', { name: 'Cultural or religious practice' });
     this.drugAffectedLife = page.getByRole('checkbox', { name: 'Behaviour' });
+    this.drugMisusedBenzo = page.getByRole('checkbox', { name: 'Benzodiazepines (including' });
   }
 
   async complete() {
