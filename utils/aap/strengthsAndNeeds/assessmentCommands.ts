@@ -110,3 +110,85 @@ export async function updateDrugAnswers(
 
   return await response.json();
 }
+
+export async function updateAccommodationProperties(
+  request: APIRequestContext,
+  assessmentUuid: string,
+  crn: string
+): Promise<CommandResult> {
+  const response: APIResponse = await request.post('/command', {
+    data: {
+      commands: [
+        {
+          type: 'UpdateAssessmentPropertiesCommand',
+          assessmentUuid: assessmentUuid,
+          user: { id: 'test-user', name: 'Test User' },
+          identifiers: {
+            CRN: crn,
+          },
+          removed: [],
+          flags: ['SAN_BETA'],
+          added: {
+            accommodation_section_complete: {
+              type: 'Single',
+              value: 'NO',
+            },
+            is_user_submitted_accommodation_status: {
+              type: 'Single',
+              value: 'TRUE',
+            },
+          },
+        },
+      ],
+    },
+  });
+
+  if (!response.ok()) {
+    throw new Error(`UpdateAssessmentProperties failed: ${response.status()} ${response.statusText()}`);
+  }
+
+  return await response.json();
+}
+
+export async function updateAccommodationAnswers(
+  request: APIRequestContext,
+  assessmentUuid: string,
+  crn: string
+): Promise<CommandResult> {
+  const response: APIResponse = await request.post('/command', {
+    data: {
+      commands: [
+        {
+          type: 'UpdateAssessmentAnswersCommand',
+          assessmentUuid: assessmentUuid,
+          user: { id: 'test-user', name: 'Test User' },
+          identifiers: {
+            CRN: crn,
+          },
+          removed: [],
+          flags: ['SAN_BETA'],
+          added: {
+            current_accommodation: {
+              type: 'Single',
+              value: 'SETTLED',
+            },
+            type_of_settled_accommodation: {
+              type: 'Single',
+              value: 'HOMEOWNER',
+            },
+            living_with: {
+              type: 'Multi',
+              values: ['FAMILY', 'FRIENDS'],
+            }
+          },
+        },
+      ],
+    },
+  });
+
+  if (!response.ok()) {
+    throw new Error(`UpdateAssessmentAnswers failed: ${response.status()} ${response.statusText()}`);
+  }
+
+  return await response.json();
+}

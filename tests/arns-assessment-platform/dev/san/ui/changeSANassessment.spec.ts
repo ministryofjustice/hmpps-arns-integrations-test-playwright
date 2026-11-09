@@ -3,7 +3,7 @@ import { StrengthsAndNeedsPage } from '../../../../../page-objects/strengths-and
 import { TrainingLauncherPage } from '../../../../../page-objects/arns-assessment-platform/training-launcher-page';
 import { PrivacyPage } from '../../../../../page-objects/arns-assessment-platform/privacy-page';
 import { getBaseUrl, getToken, queryAssessment } from '../../../../../utils/aapClient';
-import { createDrugs } from '../../../../../page-objects/arns-assessment-platform/api/setup-assessment';
+import { createDrugs, createAccommodation } from '../../../../../page-objects/arns-assessment-platform/api/setup-assessment';
 import { AssessmentQueryResponse } from '../../../../../utils/aap/assessmentTypes';
 
 test.describe(
@@ -34,11 +34,10 @@ test.describe(
       const privacy = new PrivacyPage(page);
       await trainingLauncher.startPrivateBetaSAN();
       await privacy.toSan();
-
-      assessmentId = await createDrugs(page, apiContext);
     });
 
     test('change drugs on a strengths and needs assessment', async ({ page }) => {
+      assessmentId = await createDrugs(page, apiContext);
       const strengthsAndNeedsPage = new StrengthsAndNeedsPage(page);
 
       await strengthsAndNeedsPage.drugUse.click();
@@ -63,7 +62,29 @@ test.describe(
         'how_often_used_last_six_months_amphetamines_details'
       );
       expect(queryResponse.queries[0].result.answers).not.toHaveProperty('drugs_injected_amphetamines');
-      expect(queryResponse.queries[0].result.answers.drugs_injected.values).not.toContain('AMPHETAMINES');
+      expect(queryResponse.queries[0].result.answers).not.toHaveProperty('drugs_injected');
+    });
+
+    test('change accommodation on a strengths and needs assessment', async ({ page }) => {
+      assessmentId = await createAccommodation(page, apiContext);
+      await page.reload();
+      const strengthsAndNeedsPage = new StrengthsAndNeedsPage(page);
+
+      await strengthsAndNeedsPage.back.click();
+      await expect(strengthsAndNeedsPage.accommodation.homeowner).toBeChecked();
+      await strengthsAndNeedsPage.accommodation.temporary.setChecked(true);
+      await expect(strengthsAndNeedsPage.accommodation.settled).not.toBeChecked();
+      await strengthsAndNeedsPage.accommodation.unknown.setChecked(true);
+      await strengthsAndNeedsPage.saveAndContinue.click();
+      await expect(
+        strengthsAndNeedsPage.page.getByText(/accommodation suitable/).first()
+      ).toBeVisible();
+
+      const queryResponse = (await queryAssessment(apiContext, assessmentId)) as AssessmentQueryResponse;
+
+      expect(queryResponse).toBeTruthy();
+      expect(queryResponse.queries[0].result.answers).not.toHaveProperty('living_with');
+      expect(queryResponse.queries[0].result.answers).not.toHaveProperty('type_of_settled_accommodation');
     });
   }
 );
