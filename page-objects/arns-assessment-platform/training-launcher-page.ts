@@ -96,4 +96,28 @@ export class TrainingLauncherPage {
     await this.scenarioFlags.click();
     await this.newPeriod.click();
   };
+
+  getSenerioDetails = async (scenario: string = 'default') => {
+    await this.goto(scenario);
+    const personSection = this.page.locator('section.scenario-picker__section').filter({
+      has: this.page.getByRole('heading', { name: 'Person', exact: true }),
+    });
+    const getPersonDetail = (label: string) =>
+      personSection.getByText(label, { exact: true }).locator('xpath=following-sibling::dd[1]').innerText();
+
+    const [popName, popDateOfBirth, popCRN, popOASysPk, popPNC] = await Promise.all([
+      getPersonDetail('Name'),
+      getPersonDetail('Date of birth'),
+      getPersonDetail('CRN'),
+      getPersonDetail('OASys'),
+      getPersonDetail('PNC'),
+    ]);
+    return {
+      popName,
+      popDateOfBirth,
+      popCRN,
+      popOASysPk,
+      popPNC,
+    };
+  };
 }
