@@ -63,6 +63,7 @@ function getEnvironmentLabel(tags) {
   if (tags.includes('@dev')) labels.push('Dev');
   if (tags.includes('@test')) labels.push('Test');
   if (tags.includes('@local')) labels.push('Local');
+  if (tags.includes('@reg')) labels.push('Regression');
   if (tags.includes('@security')) labels.push('Security');
 
   return labels.length ? labels.join(', ') : tags.join(', ');
@@ -232,6 +233,10 @@ const sectionDefinitions = [
   {
     heading: '## ARNS Assessment Platform - Test API',
     matches: (entry) => /\/test\/.*\/api\//.test(entry.filePath),
+  },
+  {
+    heading: '## Sentence Plan Regression',
+    matches: (entry) => /\/sentence-plan-regression\//.test(entry.filePath),
   },
   {
     heading: '## Legacy / archived tests',

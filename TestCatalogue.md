@@ -47,6 +47,14 @@ This is a catalogue for the Tests in this repository. It lists the name, where t
 | [Coordinator Counter Signing](tests/arns-assessment-platform/test/san/api/coordinator.counter-sign.spec.ts#L78) | `tests/arns-assessment-platform/test/san/api/coordinator.counter-sign.spec.ts` | Test | Automated Playwright scenario: Coordinator counter signing. |
 | [Coordinator Self Signing](tests/arns-assessment-platform/test/san/api/coordinator.self-sign.spec.ts#L73) | `tests/arns-assessment-platform/test/san/api/coordinator.self-sign.spec.ts` | Test | Automated Playwright scenario: Coordinator self signing. |
 
+## Sentence Plan Regression
+
+| Test | Location | Environment | Description |
+| --- | --- | --- | --- |
+| [Compare Person Details Are Passed Through Correctly Default Scenario](tests/sentence-plan-regression/detailsPassedCorrectly.spec.ts#L44) | `tests/sentence-plan-regression/detailsPassedCorrectly.spec.ts` | Regression | Automated Playwright scenario: Default scenario. |
+| [Compare Person Details Are Passed Through Correctly National Rollout](tests/sentence-plan-regression/detailsPassedCorrectly.spec.ts#L48) | `tests/sentence-plan-regression/detailsPassedCorrectly.spec.ts` | Regression | Automated Playwright scenario: National Rollout. |
+| [Compare Person Details Are Passed Through Correctly Private Beta](tests/sentence-plan-regression/detailsPassedCorrectly.spec.ts#L52) | `tests/sentence-plan-regression/detailsPassedCorrectly.spec.ts` | Regression | Automated Playwright scenario: Private Beta. |
+
 ## Legacy / archived tests
 
 | Test | Location | Environment | Description |
