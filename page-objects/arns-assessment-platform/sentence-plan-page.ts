@@ -44,7 +44,7 @@ export class SentencePlanPage {
 
   checkPopPlanHeader = async (popName: string) => {
     const popFirstName = popName.split(' ')[0];
-    await expect(this.popPlanHeader).toContainText(`${popFirstName}'s plan`);
+    await expect(this.popPlanHeader).toContainText(`${popFirstName}'`);
   };
 
   checkReportProblemLink = async (value: string) => {

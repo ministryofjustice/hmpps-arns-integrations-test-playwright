@@ -103,7 +103,11 @@ export class TrainingLauncherPage {
       has: this.page.getByRole('heading', { name: 'Person', exact: true }),
     });
     const getPersonDetail = (label: string) =>
-      personSection.getByText(label, { exact: true }).locator('xpath=following-sibling::dd[1]').innerText();
+      personSection
+        .locator('.scenario-picker__inline-summary-item')
+        .filter({ has: this.page.locator('dt').getByText(label, { exact: true }) })
+        .locator('dd')
+        .innerText();
 
     const [popName, popDateOfBirth, popCRN, popOASysPk, popPNC] = await Promise.all([
       getPersonDetail('Name'),

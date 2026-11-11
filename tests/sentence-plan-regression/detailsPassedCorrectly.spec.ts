@@ -1,25 +1,7 @@
-import { APIRequestContext, expect, test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { TrainingLauncherPage } from '../../page-objects/arns-assessment-platform/training-launcher-page';
 import { PrivacyPage } from '../../page-objects/arns-assessment-platform/privacy-page';
 import { SentencePlanPage } from '../../page-objects/arns-assessment-platform/sentence-plan-page';
-import { getBaseUrl, getToken } from '../../utils/aapClient';
-
-let apiContext: APIRequestContext;
-
-test.beforeAll(async ({ playwright, baseURL }) => {
-  apiContext = await playwright.request.newContext({
-    baseURL: getBaseUrl(baseURL),
-    extraHTTPHeaders: {
-      Authorization: `Bearer ${getToken()}`,
-      'Content-Type': 'application/json',
-    },
-  });
-  console.log('Creating API context with baseURL:', getBaseUrl(baseURL));
-});
-
-test.afterAll(async () => {
-  await apiContext.dispose();
-});
 
 test.describe(
   'Compare Person Details are passed through correctly',
