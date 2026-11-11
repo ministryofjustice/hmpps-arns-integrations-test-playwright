@@ -21,7 +21,7 @@ test.describe(
         const privacy = new PrivacyPage(page);
         const sentencePlan = new SentencePlanPage(page);
 
-        const personDetails = await trainingLauncher.getSenerioDetails(scenario);
+        const personDetails = await trainingLauncher.getScenarioDetails(scenario);
         await trainingLauncher.generateHandoverLink();
 
         const subjectDetails = [

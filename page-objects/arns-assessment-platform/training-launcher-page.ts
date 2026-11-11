@@ -97,7 +97,7 @@ export class TrainingLauncherPage {
     await this.newPeriod.click();
   };
 
-  getSenerioDetails = async (scenario: string = 'default') => {
+  getScenarioDetails = async (scenario: string = 'default') => {
     await this.goto(scenario);
     const personSection = this.page.locator('section.scenario-picker__section').filter({
       has: this.page.getByRole('heading', { name: 'Person', exact: true }),
