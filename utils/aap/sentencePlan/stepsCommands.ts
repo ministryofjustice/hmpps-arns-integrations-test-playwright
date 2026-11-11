@@ -1,6 +1,7 @@
 import { APIRequestContext, APIResponse } from '@playwright/test';
 import { CreateCollectionResult } from '../assessmentTypes';
-import { crn } from './assessmentCommands';
+
+const crn = Math.random().toString().substring(2, 7);
 
 export async function createStepsCollection(
   request: APIRequestContext,

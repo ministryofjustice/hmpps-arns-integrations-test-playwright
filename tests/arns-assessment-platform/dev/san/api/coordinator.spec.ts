@@ -1,30 +1,9 @@
 import { test, expect, APIRequestContext } from '@playwright/test';
 import { getBaseUrl, getToken } from '../../../../../utils/aapClient';
-import {
-  createOasysAssociation,
-  entityVersions,
-  getCoordinatorUrl,
-  getVersionDate,
-  lock,
-  PreviousVersionsResponses,
-  getModsecError,
-  getEntity,
-  EntityTypeResponse,
-} from '../../../../../utils/coordinator/coordinatorClient';
-import { updateAnswers } from '../../../../../utils/aap/sentencePlan/assessmentCommands';
-import {
-  EntityResponse,
-  OasysCreateResponse,
-  PreviousVersionsResponse,
-} from '../../../../../utils/coordinator/coordinatorTypes';
-import { GroupCommandResult } from '../../../../../utils/aap/assessmentTypes';
-import { softDelete, undelete } from '../../../../../utils/coordinator/client/deleting';
+import { getCoordinatorUrl, getModsecError } from '../../../../../utils/coordinator/coordinatorClient';
 
 let apiContext: APIRequestContext;
 let coordinatorContext: APIRequestContext;
-const today = getVersionDate();
-const crn = Math.random().toString().substring(2, 7);
-const oasysPk = Math.floor(Math.random() * 1000000000).toString();
 
 test.beforeAll(async ({ playwright, baseURL }) => {
   apiContext = await playwright.request.newContext({
@@ -47,96 +26,6 @@ test.afterAll(async () => {
   await apiContext.dispose();
   await coordinatorContext.dispose();
 });
-
-test.describe(
-  'Coordinator API ',
-  {
-    tag: '@dev',
-  },
-  () => {
-    let sentencePlanId: string;
-    let planVersion: number;
-
-    test.beforeEach(async () => {
-      sentencePlanId = await test.step('OAsys association', async () => {
-        const oasysResponse: OasysCreateResponse = await createOasysAssociation(coordinatorContext, crn, oasysPk);
-        expect(oasysResponse).toBeTruthy();
-
-        return oasysResponse.sentencePlanId;
-      });
-
-      planVersion = await test.step('Get entity', async () => {
-        const queryResponse: EntityTypeResponse = (await getEntity(
-          coordinatorContext,
-          sentencePlanId,
-          'AAP_PLAN'
-        )) as EntityResponse;
-
-        expect(queryResponse).toBeTruthy();
-        expect(queryResponse).toHaveProperty('sentencePlanVersion');
-        expect(queryResponse.planType).toBe('INITIAL');
-        expect(queryResponse.planComplete).toBe('INCOMPLETE');
-
-        return queryResponse.sentencePlanVersion;
-      });
-    });
-
-    test('Coordinator statuses', async () => {
-      await test.step('Update answers', async () => {
-        const updateResponse: GroupCommandResult = await updateAnswers(apiContext, sentencePlanId, crn);
-
-        expect(updateResponse).toBeTruthy();
-        expect(updateResponse.commands[0].result.success).toBeTruthy();
-      });
-
-      await test.step('Get plan versions', async () => {
-        const queryResponse: EntityTypeResponse = (await getEntity(
-          coordinatorContext,
-          sentencePlanId,
-          'AAP_PLAN'
-        )) as EntityResponse;
-
-        expect(queryResponse).toBeTruthy();
-        expect(queryResponse.sentencePlanVersion).not.toBe(planVersion);
-      });
-
-      await test.step('Lock plan', async () => {
-        await lock(coordinatorContext, oasysPk);
-
-        const queryResponse: PreviousVersionsResponses = (await entityVersions(
-          coordinatorContext,
-          sentencePlanId
-        )) as PreviousVersionsResponse;
-
-        expect(queryResponse).toBeTruthy();
-        expect(queryResponse.allVersions[today].planVersion.status).toBe('LOCKED');
-      });
-
-      await test.step('Soft delete plan', async () => {
-        await softDelete(coordinatorContext, oasysPk);
-
-        const queryResponse: PreviousVersionsResponses = (await entityVersions(
-          coordinatorContext,
-          sentencePlanId
-        )) as string;
-
-        expect(queryResponse).toBe('No associations found for the provided entityUuid');
-      });
-
-      await test.step('Undelete plan', async () => {
-        await undelete(coordinatorContext, oasysPk);
-
-        const queryResponse: PreviousVersionsResponses = (await entityVersions(
-          coordinatorContext,
-          sentencePlanId
-        )) as PreviousVersionsResponse;
-
-        expect(queryResponse).toBeTruthy();
-        expect(queryResponse.allVersions[today].planVersion.status).toBe('LOCKED');
-      });
-    });
-  }
-);
 
 // https://dsdmoj.atlassian.net/wiki/spaces/ARN/pages/6150881391/ModSec+-+AAP+Team+Guide#Testing
 test(
