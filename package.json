@@ -14,6 +14,8 @@
     "dev:san:ci": "SOURCE=SAN playwright test --project=chromium_san --project=edge_san",
     "dev:arns:ci": "SOURCE=ARNS playwright test --project=chromium_arns --project=edge_arns",
     "dev:ui": "LOCAL_RUN=1 playwright test --project=chromium --ui",
+    "dev:reg:ui": "LOCAL_RUN=1 playwright test --project=chromium_regression --ui --ui-host=127.0.0.1",
+    "dev:reg": "LOCAL_RUN=1 playwright test --project=chromium_regression",
     "local:ui": "LOCAL_RUN=1 playwright test --config=playwright.local.config.ts --project=chromium --ui",
     "test:ui": "LOCAL_RUN=1 playwright test --config=playwright.test.config.ts --project=chromium --ui",
     "test:all:ci": "playwright test --config=playwright.test.config.ts --project=chromium --project=edge --grep '@dev|@test'",

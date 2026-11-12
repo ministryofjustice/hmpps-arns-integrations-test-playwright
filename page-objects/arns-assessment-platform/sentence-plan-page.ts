@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test';
+import { Locator, expect, Page } from '@playwright/test';
 
 export class SentencePlanPage {
   readonly page: Page;
@@ -14,6 +14,9 @@ export class SentencePlanPage {
   readonly viewPreviousVersions: Locator;
   readonly removedGoals: Locator;
   readonly printAllGoals: Locator;
+  readonly subjectDetails: Locator;
+  readonly reportProblem: Locator;
+  readonly appReportProblemDetails: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -29,5 +32,22 @@ export class SentencePlanPage {
     this.viewPreviousVersions = page.getByRole('link', { name: 'View previous versions' });
     this.removedGoals = page.getByRole('link', { name: 'Removed goals' });
     this.printAllGoals = page.getByRole('button', { name: 'Print all goals' });
+    this.subjectDetails = page.locator('[data-qa="plan-header"]');
+    this.reportProblem = page.getByRole('link', { name: 'Report a problem' });
+    this.appReportProblemDetails = page.locator('[id="report-problem-details"]');
   }
+  checkSubjectDetails = async (value: string) => {
+    await expect(this.subjectDetails).toContainText(value);
+  };
+
+  checkPlanHeaderName = async (PersonName: string) => {
+    const personFirstName = PersonName.split(' ')[0];
+    await expect(this.subjectDetails).toContainText(`${personFirstName}'`);
+  };
+
+  checkReportProblemLink = async (value: string) => {
+    await expect(this.reportProblem).toBeVisible();
+    await this.reportProblem.click();
+    await expect(this.appReportProblemDetails).toContainText(value);
+  };
 }

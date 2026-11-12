@@ -92,5 +92,11 @@ export default defineConfig({
       testDir: './tests/arns-assessment-platform/dev/arns',
       grep: /@dev/,
     },
+    {
+      name: 'chromium_regression',
+      use: { ...devices['Desktop Chrome'], channel: 'chromium' },
+      testDir: './tests/sentence-plan-regression',
+      grep: /@reg/,
+    },
   ],
 });
