@@ -30,7 +30,7 @@ const verifyPersonDetailsArePassedThrough = async (page: Page, scenario: string)
     await sentencePlan.checkSubjectDetails(detail);
   }
 
-  await sentencePlan.checkPopPlanHeader(personDetails.popName);
+  await sentencePlan.checkPlanHeaderName(personDetails.popName);
   await sentencePlan.checkReportProblemLink(personDetails.popCRN);
   await sentencePlan.checkReportProblemLink(personDetails.popOASysPk);
 };
