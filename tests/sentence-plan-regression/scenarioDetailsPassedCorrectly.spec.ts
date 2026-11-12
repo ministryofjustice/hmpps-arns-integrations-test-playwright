@@ -14,10 +14,10 @@ const verifyPersonDetailsArePassedThrough = async (page: Page, scenario: string)
   console.log(personDetails);
 
   const subjectDetails = [
-    personDetails.popCRN,
-    personDetails.popPNC,
-    personDetails.popName,
-    personDetails.popDateOfBirth,
+    personDetails.personCRN,
+    personDetails.PersonPNC,
+    personDetails.personName,
+    personDetails.personDateOfBirth,
   ];
 
   await expect(page).toHaveTitle('Close other applications - Sentence plan');
@@ -32,9 +32,9 @@ const verifyPersonDetailsArePassedThrough = async (page: Page, scenario: string)
     await sentencePlan.checkSubjectDetails(detail);
   }
 
-  await sentencePlan.checkPlanHeaderName(personDetails.popName);
-  await sentencePlan.checkReportProblemLink(personDetails.popCRN);
-  await sentencePlan.checkReportProblemLink(personDetails.popOASysPk);
+  await sentencePlan.checkPlanHeaderName(personDetails.personName);
+  await sentencePlan.checkReportProblemLink(personDetails.personCRN);
+  await sentencePlan.checkReportProblemLink(personDetails.personOASysPk);
 };
 
 test.describe(

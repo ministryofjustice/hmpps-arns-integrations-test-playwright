@@ -40,8 +40,8 @@ export class SentencePlanPage {
     await expect(this.subjectDetails).toContainText(value);
   };
 
-  checkPlanHeaderName = async (popName: string) => {
-    const personFirstName = popName.split(' ')[0];
+  checkPlanHeaderName = async (PersonName: string) => {
+    const personFirstName = PersonName.split(' ')[0];
     await expect(this.subjectDetails).toContainText(`${personFirstName}'`);
   };
 

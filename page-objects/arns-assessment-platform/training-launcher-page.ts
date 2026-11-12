@@ -109,7 +109,7 @@ export class TrainingLauncherPage {
         .locator('dd')
         .innerText();
 
-    const [popName, popDateOfBirth, popCRN, popOASysPk, popPNC] = await Promise.all([
+    const [personName, personDateOfBirth, personCRN, personOASysPk, PersonPNC] = await Promise.all([
       getPersonDetail('Name'),
       getPersonDetail('Date of birth'),
       getPersonDetail('CRN'),
@@ -117,11 +117,11 @@ export class TrainingLauncherPage {
       getPersonDetail('PNC'),
     ]);
     return {
-      popName,
-      popDateOfBirth,
-      popCRN,
-      popOASysPk,
-      popPNC,
+      personName,
+      personDateOfBirth,
+      personCRN,
+      personOASysPk,
+      PersonPNC,
     };
   };
 }
