@@ -11,6 +11,8 @@ const verifyPersonDetailsArePassedThrough = async (page: Page, scenario: string)
   const personDetails = await trainingLauncher.getScenarioDetails(scenario);
   await trainingLauncher.generateHandoverLink();
 
+  console.log(personDetails);
+
   const subjectDetails = [
     personDetails.popCRN,
     personDetails.popPNC,
@@ -36,7 +38,7 @@ const verifyPersonDetailsArePassedThrough = async (page: Page, scenario: string)
 };
 
 test.describe(
-  'Compare Person Details are passed through correctly',
+  'Person details are passed correctly from training launcher',
   {
     tag: '@reg',
   },
