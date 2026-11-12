@@ -51,9 +51,9 @@ This is a catalogue for the Tests in this repository. It lists the name, where t
 
 | Test | Location | Environment | Description |
 | --- | --- | --- | --- |
-| [Compare Person Details Are Passed Through Correctly Default Scenario](tests/sentence-plan-regression/detailsPassedCorrectly.spec.ts#L44) | `tests/sentence-plan-regression/detailsPassedCorrectly.spec.ts` | Regression | Automated Playwright scenario: Default scenario. |
-| [Compare Person Details Are Passed Through Correctly National Rollout](tests/sentence-plan-regression/detailsPassedCorrectly.spec.ts#L48) | `tests/sentence-plan-regression/detailsPassedCorrectly.spec.ts` | Regression | Automated Playwright scenario: National Rollout. |
-| [Compare Person Details Are Passed Through Correctly Private Beta](tests/sentence-plan-regression/detailsPassedCorrectly.spec.ts#L52) | `tests/sentence-plan-regression/detailsPassedCorrectly.spec.ts` | Regression | Automated Playwright scenario: Private Beta. |
+| [Person Details Are Passed Correctly From Training Launcher Default Scenario](tests/sentence-plan-regression/detailsPassedCorrectly.spec.ts#L46) | `tests/sentence-plan-regression/detailsPassedCorrectly.spec.ts` | Regression | Automated Playwright scenario: Default scenario. |
+| [Person Details Are Passed Correctly From Training Launcher National Rollout](tests/sentence-plan-regression/detailsPassedCorrectly.spec.ts#L50) | `tests/sentence-plan-regression/detailsPassedCorrectly.spec.ts` | Regression | Automated Playwright scenario: National Rollout. |
+| [Person Details Are Passed Correctly From Training Launcher Private Beta](tests/sentence-plan-regression/detailsPassedCorrectly.spec.ts#L54) | `tests/sentence-plan-regression/detailsPassedCorrectly.spec.ts` | Regression | Automated Playwright scenario: Private Beta. |
 
 ## Legacy / archived tests
 
