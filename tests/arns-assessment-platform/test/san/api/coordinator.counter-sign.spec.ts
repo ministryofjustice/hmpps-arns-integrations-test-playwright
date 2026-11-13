@@ -59,9 +59,9 @@ test.beforeEach(async () => {
     expect(queryResponse).toHaveProperty('allVersions');
 
     const planDate =
-      Object.entries(queryResponse.countersignedVersions).find(([, e]) => Object.keys(e).includes('planVersion')) ?? [];
+      Object.entries(queryResponse.allVersions).find(([, e]) => Object.keys(e).includes('planVersion')) ?? [];
     const planLastUpdatedDate = planDate[0] ?? '';
-    expect(queryResponse.countersignedVersions[planLastUpdatedDate].planVersion.entityType).toBe('AAP_PLAN');
+    expect(queryResponse.allVersions[planLastUpdatedDate].planVersion.entityType).toBe('AAP_PLAN');
 
     const assessmentDate =
       Object.entries(queryResponse.allVersions).find(([, e]) => Object.keys(e).includes('assessmentVersion')) ?? [];
@@ -70,7 +70,7 @@ test.beforeEach(async () => {
 
     return {
       assessmentVersion: queryResponse.allVersions[assessmentLastUpdatedDate].assessmentVersion.version,
-      planVersion: queryResponse.countersignedVersions[planLastUpdatedDate].planVersion.version,
+      planVersion: queryResponse.allVersions[planLastUpdatedDate].planVersion.version,
     };
   });
 });
