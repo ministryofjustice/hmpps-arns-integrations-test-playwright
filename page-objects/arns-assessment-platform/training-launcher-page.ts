@@ -16,6 +16,8 @@ export class TrainingLauncherPage {
   readonly targetService: Locator;
   readonly scenarioFlags: Locator;
   readonly newPeriod: Locator;
+  readonly criminogenicNeeds: Locator;
+  readonly useMockedCriminogenicNeeds: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -33,6 +35,8 @@ export class TrainingLauncherPage {
     this.targetService = page.locator('[name="targetApplication"]');
     this.scenarioFlags = page.locator('[data-panel-id="flags"]');
     this.newPeriod = page.getByRole('checkbox', { name: 'New Period of Supervision' });
+    this.criminogenicNeeds = page.locator('[data-panel-id="criminogenic-needs"]');
+    this.useMockedCriminogenicNeeds = page.getByRole('checkbox', { name: 'Use mocked criminogenic needs' });
   }
 
   goto = async (scenario: string = 'default') => {
@@ -80,6 +84,13 @@ export class TrainingLauncherPage {
     await this.createSession.click();
   };
 
+  customiseScenarioWithArnsApi = async (crn: string, oasysPk: string) => {
+    await this.customiseSubjectDetails(crn, oasysPk);
+    await this.criminogenicNeeds.click();
+    await this.useMockedCriminogenicNeeds.setChecked(false);
+    await this.createSession.click();
+  };
+
   customiseScenarioStubbed = async (crn: string, oasysPk: string) => {
     await this.customiseSubjectDetailsStubbed(crn, oasysPk);
     await this.createSession.click();
@@ -95,5 +106,10 @@ export class TrainingLauncherPage {
   newPeriodOfSupervision = async () => {
     await this.scenarioFlags.click();
     await this.newPeriod.click();
+  };
+
+  useCriminogenicNeeds = async () => {
+    await this.criminogenicNeeds.click();
+    await this.page.getByRole('checkbox', { name: 'Criminogenic Needs' }).check();
   };
 }
