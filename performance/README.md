@@ -5,51 +5,70 @@ To run locally first install [k6](https://github.com/grafana/k6). The browser mo
 To run the tests head/headless you will need chromium installed - to install chromium run
 `brew install --force chromium --no-quarantine ` 
 
-## Test Configuration
-Tests are designed to allow running browser and API tests independently or in parallel for SAN assessments. You can monitor the UI while applying different API load scenarios.
+## Tests and run scripts
 
-Set the SCENARIO environment variable to control what test(s) are executed.
+| Test (`tests/`) | What it does | Local run script (`utils/`) |
+| --- | --- | --- |
+| `aapApi.js` | AAP API journey | `run_k6_aap_local.sh` |
+| `aapApi-smoke.js` / `aapApi-load.js` | AAP API smoke / load profiles | `run_k6_aap_smoke_local.sh` / `run_k6_aap_load_local.sh` |
+| `aapApiAndUi.js` | AAP API load plus a 2 VU browser probe in parallel | edit the last line of `run_k6_aap_local.sh` |
+| `aapAggregate.js` | AAP aggregate consistency | pipeline only |
+| `coordinatorApi.js` | Coordinator API | `run_k6_coordinator_local.sh` |
+| `handoverApi.js` | Handover service API | `run_k6_handover_local.sh` |
+| `san-ui-smoke.js` | SAN browser smoke via the training launcher | `npm run dev:san:k6` / `npm run test:san:k6` |
+| `trainingLauncher.js` | Training launcher journey over HTTP (see below) | `run_k6_training_launcher_local.sh` |
 
-Available Scenarios:
+## Training launcher journey (`trainingLauncher.js`)
 
-BROWSER – Browser-based UI test
+> **Caution:** the defaults are a **1 VU, 1 iteration smoke**. Do not run a load profile (`VUS`, `DURATION`, `CUSTOM_STAGES`) against the training environment without agreement from the team. Training may proxy handover/coordinator calls to the TEST services, so load there can affect other teams.
 
-API – Performance/load test scenarios:
+The test replays the requests the training session launcher makes, without a browser:
 
-- load
-- soak
-- smoke
-- stress
+1. `GET /training-session-launcher/browse?scenario=<SCENARIO>`: reads `_csrf`, `scenarioId` and `seed` from the scenario form.
+2. `POST /training-session-launcher/browse` (Start session): creates the session in Redis (keyed by the `preferencesId` cookie) and in the coordinator. Expects a 302 to `sessions`.
+3. `GET /training-session-launcher/sessions`: reads `_csrf` and the new `trainingSessionId`.
+4. `POST /training-session-launcher/sessions` with `action=generateLink`: expects a 302 to the handover service link.
+5. `GET <handover link>`: follows the handover OAuth redirects into the target service (Sentence Plan by default).
 
-## Running the tests
-To run the tests locally these can be executed from the command line in a terminal. 
-From the root of the project, you can run the following commands, or navigate to the directory of the run_test.sh file and run that (you can configure which scenario to run in there too).
+Each iteration uses a fresh cookie jar, so it behaves like a new learner. No credentials are needed.
 
-- Browser test only
-`SCENARIO=browser k6 run performance/tests/browserAndApi.js`
-
-- API tests
-Before running those, you need to capture the one-time handover link as  extracted url. The extract scenario must be run first to get that value, which is run as part of the execution of the bash script.
-
-## Technical description:
-
-The run_test.sh script is a Bash automation wrapper designed to run a two-phase performance testing workflow using k6. It first executes a browser-based extraction step to retrieve a dynamic URL, then passes that URL as an environment variable to run following API-based performance tests.
-
-To use the run_test.sh file to run the api tests, navigate to the `utils` directory and run:
+Run from the repo root:
 
 ```
-chmod +x run_test.sh
-./run_test.sh
+# 1 VU smoke against training (default BASE_URL)
+k6 run performance/tests/trainingLauncher.js
+
+# against a local UI (hmpps-arns-assessment-platform-ui docker stack on :3000)
+k6 run -e BASE_URL=http://localhost:3000 performance/tests/trainingLauncher.js
+
+# or use the wrapper script
+cd performance/utils && ./run_k6_training_launcher_local.sh
 ```
 
-To run the browser tests in head mode and see the browser (HEADLESS:FALSE)
-`SCENARIO=browser K6_BROWSER_HEADLESS=false k6 run performance/tests/browserAndApi.js`
+| Env var | Default | Notes |
+| --- | --- | --- |
+| `BASE_URL` | `https://arns-assessment-platform-training.hmpps.service.justice.gov.uk` | UI host |
+| `SCENARIO` | `default` | Preset scenario id on the browse page |
+| `TARGET_APPLICATION` | `sentence-plan` | Value posted with `generateLink` |
+| `EXPECTED_LANDING_PATH` | `/sentence-plan/` | Final URL must contain this after the handover |
+| `VUS` / `ITERATIONS` | `1` / `1` | Per-VU iterations (smoke) |
+| `DURATION` | unset | If set, runs `VUS` constant VUs for this duration |
+| `CUSTOM_STAGES` | unset | JSON stages for a ramping-vus profile; overrides the above |
+| `P90_THRESHOLD` / `P95_THRESHOLD` | `1000` / `2000` (ms) | `http_req_duration` thresholds |
+| `MIN_THINK_TIME` / `MAX_THINK_TIME` | `1` / `3` (s) | Think time between steps |
 
-NOTE: you may want to adjust the `duration` value in the Browser test to match which API scenario you're running, but not necessarily.
+Thresholds: `checks` rate > 99%, `http_req_failed` < 1%, `launcher_journey_failures` = 0, plus the p90/p95 above. Per-step timings are reported as `launcher_browse_duration`, `launcher_create_session_duration`, `launcher_generate_link_duration` and `launcher_handover_follow_duration` (whole redirect chain).
 
-The tests also cover the AAP API.
+For capacity planning (ATE-26 comments) a peak FL5 day is roughly 70 to 85 concurrent users. Example load profile, only with agreement:
+`CUSTOM_STAGES='[{"duration":"5m","target":85},{"duration":"20m","target":85},{"duration":"2m","target":0}]' k6 run -e BASE_URL=... performance/tests/trainingLauncher.js`
 
-- AAP API tests
+## Browser tests
+
+To run the browser tests head mode and see the browser:
+`K6_BROWSER_HEADLESS=false BASE_URL=https://arns-assessment-platform-dev.hmpps.service.justice.gov.uk k6 run performance/tests/san-ui-smoke.js`
+
+## AAP API tests
+
 Smoke and Aggregate consistency tests run on the pipeline as scheduled jobs. 
 Dashboards and graphs of various metrics report can be downloaded when they run.
 Other tests (load, stress, soak) are setup as separate workflows that can be manually triggered.
