@@ -5,7 +5,6 @@ import { SentencePlanPage } from '../../../../../page-objects/arns-assessment-pl
 import { CreateGoalPage } from '../../../../../page-objects/arns-assessment-platform/create-goal-page';
 import { AddStepsPage } from '../../../../../page-objects/arns-assessment-platform/add-steps-page';
 import { PrintPreviewPage } from '../../../../../page-objects/arns-assessment-platform/print-preview-page';
-import { AreaOfNeedPage } from '../../../../../page-objects/arns-assessment-platform/area-of-need-page';
 
 const goalTitle = 'I will work towards finding accommodation, so that I am no longer homeless';
 
@@ -22,7 +21,6 @@ test.describe(
       const sentencePlan = new SentencePlanPage(page);
       const createGoal = new CreateGoalPage(page);
       const addSteps = new AddStepsPage(page);
-      const areaOfNeed = new AreaOfNeedPage(page);
 
       await trainingLauncher.startNationalRollout();
       await expect(page).toHaveTitle('Close other applications - Sentence plan');
