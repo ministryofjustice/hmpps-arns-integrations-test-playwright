@@ -53,7 +53,7 @@ test.describe(
       });
 
       assessmentVersion = await test.step('Get entity', async () => {
-        const queryResponse: EntityResponse = await getEntity(coordinatorContext, sanAssessmentId, 'ASSESSMENT');
+        const queryResponse: EntityResponse = await getEntity(coordinatorContext, sanAssessmentId, 'SAN_AAP');
 
         expect(queryResponse).toBeTruthy();
         expect(queryResponse).toHaveProperty('sanAssessmentVersion');

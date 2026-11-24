@@ -4,6 +4,7 @@ import { AapPage } from './aap-page';
 export default class AccommodationPage extends AapPage {
   readonly settled: Locator;
   readonly homeowner: Locator;
+  readonly temporary: Locator;
   readonly livingWith: Locator;
   readonly suitableHousingLocation: Locator;
   readonly suitableHousing: Locator;
@@ -12,6 +13,7 @@ export default class AccommodationPage extends AapPage {
     super(page);
     this.settled = page.getByRole('radio', { name: 'Settled' });
     this.homeowner = page.getByRole('radio', { name: 'Homeowner' });
+    this.temporary = page.getByRole('radio', { name: 'Temporary' });
     this.livingWith = page.getByRole('checkbox', { name: 'Family' });
     this.suitableHousingLocation = page.getByRole('group', { name: 'Is the location of' }).getByLabel('Yes');
     this.suitableHousing = page.getByRole('radio', { name: 'Yes, with concerns' });
