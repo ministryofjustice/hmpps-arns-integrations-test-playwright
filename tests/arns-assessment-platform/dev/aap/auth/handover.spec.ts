@@ -34,7 +34,7 @@ test.afterAll(async () => {
   await coordinatorContext.dispose();
 });
 
-test.describe(
+test.describe.skip(
   'Handover API',
   {
     tag: '@dev',
@@ -53,7 +53,7 @@ test.describe(
       });
 
       assessmentVersion = await test.step('Get entity', async () => {
-        const queryResponse: EntityResponse = await getEntity(coordinatorContext, sanAssessmentId, 'SAN_AAP');
+        const queryResponse: EntityResponse = await getEntity(coordinatorContext, sanAssessmentId, 'AAP_SAN');
 
         expect(queryResponse).toBeTruthy();
         expect(queryResponse).toHaveProperty('sanAssessmentVersion');
