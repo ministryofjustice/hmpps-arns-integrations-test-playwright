@@ -52,7 +52,7 @@ test(
     await previousVersions.viewAssessment.click();
 
     const assessment = await assessmentVersion;
-    await expect(assessment).toHaveTitle('Summary - Strengths and needs');
+    await expect(assessment).toHaveTitle('Accommodation analysis - Strengths and needs');
     await expect(assessment.getByText('This version is from')).toBeVisible();
   }
 );
