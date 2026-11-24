@@ -15,7 +15,7 @@ This is a catalogue for the Tests in this repository. It lists the name, where t
 | [Private Beta Complete A Strengths And Needs Assessment](tests/arns-assessment-platform/dev/san/ui/01.completeSANassessment.spec.ts#L24) | `tests/arns-assessment-platform/dev/san/ui/01.completeSANassessment.spec.ts` | Dev, Local | Automated Playwright scenario: complete a strengths and needs assessment. |
 | [Private Beta Should Agree Plan](tests/arns-assessment-platform/dev/aap/ui/13.agreePlan.spec.ts#L44) | `tests/arns-assessment-platform/dev/aap/ui/13.agreePlan.spec.ts` | Dev | Automated Playwright scenario: should agree plan. |
 | [Private Beta Should Create Goal And Steps As Private Beta User](tests/arns-assessment-platform/dev/aap/ui/02.createGoalAndStepsSP.spec.ts#L90) | `tests/arns-assessment-platform/dev/aap/ui/02.createGoalAndStepsSP.spec.ts` | Dev, Local | Automated Playwright scenario: should create goal and steps as private beta user. |
-| [Should Navigate Directly To Historic Version](tests/arns-assessment-platform/dev/aap/ui/historicVersion.spec.ts#L60) | `tests/arns-assessment-platform/dev/aap/ui/historicVersion.spec.ts` | Unspecified | Automated Playwright scenario: should navigate directly to historic version. |
+| [Private Beta Should Navigate Directly To Historic Version](tests/arns-assessment-platform/dev/aap/ui/historicVersion.spec.ts#L60) | `tests/arns-assessment-platform/dev/aap/ui/historicVersion.spec.ts` | Dev | Automated Playwright scenario: should navigate directly to historic version. |
 | [Should View Criminogenic Needs Information As MPoP User](tests/arns-assessment-platform/dev/arns/ui/viewCriminogenicNeedsFromMPoP.spec.ts#L24) | `tests/arns-assessment-platform/dev/arns/ui/viewCriminogenicNeedsFromMPoP.spec.ts` | Dev | Automated Playwright scenario: should view Criminogenic Needs information as mpop user. |
 
 ## ARNS Assessment Platform - Dev API and Auth
@@ -23,10 +23,10 @@ This is a catalogue for the Tests in this repository. It lists the name, where t
 | Test | Location | Environment | Description |
 | --- | --- | --- | --- |
 | [Coordinator API Coordinator Statuses](tests/arns-assessment-platform/dev/san/api/coordinator.spec.ts#L84) | `tests/arns-assessment-platform/dev/san/api/coordinator.spec.ts` | Dev | Automated Playwright scenario: Coordinator statuses. |
-| [Get Handover Link](tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts#L64) | `tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts` | Unspecified | Automated Playwright scenario: Get Handover link. |
+| [Handover API Get Handover Link](tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts#L53) | `tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts` | Dev | Automated Playwright scenario: Get Handover link. |
 | [ModSec AAP](tests/arns-assessment-platform/dev/aap/api/19.sentencePlan.spec.ts#L21) | `tests/arns-assessment-platform/dev/aap/api/19.sentencePlan.spec.ts` | Security | Automated Playwright scenario: Modsec aap. |
 | [ModSec Coordinator](tests/arns-assessment-platform/dev/san/api/coordinator.spec.ts#L142) | `tests/arns-assessment-platform/dev/san/api/coordinator.spec.ts` | Security | Automated Playwright scenario: Modsec coordinator. |
-| [ModSec Handover](tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts#L79) | `tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts` | Security | Automated Playwright scenario: Modsec handover. |
+| [ModSec Handover](tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts#L68) | `tests/arns-assessment-platform/dev/aap/auth/handover.spec.ts` | Security | Automated Playwright scenario: Modsec handover. |
 | [Should View Criminogenic Needs Information As MPoP User](tests/arns-assessment-platform/dev/arns/ui/viewCriminogenicNeedsFromMPoP.spec.ts#L24) | `tests/arns-assessment-platform/dev/arns/ui/viewCriminogenicNeedsFromMPoP.spec.ts` | Dev | Automated Playwright scenario: should view Criminogenic Needs information as mpop user. |
 
 ## ARNS Assessment Platform - Test UI
