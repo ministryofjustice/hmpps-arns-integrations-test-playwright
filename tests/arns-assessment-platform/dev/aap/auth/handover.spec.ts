@@ -49,6 +49,7 @@ test.describe(
         return sanVersion;
       });
     });
+  });
 
     test('Get Handover link', async () => {
       const handoverResponse: CreateHandoverLinkResponse = await getHandoverLink(
@@ -58,11 +59,10 @@ test.describe(
         assessmentVersion
       );
 
-      expect(handoverResponse).toBeTruthy();
-      expect(handoverResponse.handoverLink).toContain('/handover/');
-    });
-  }
-);
+    expect(handoverResponse).toBeTruthy();
+    expect(handoverResponse.handoverLink).toContain('/handover/');
+  });
+});
 
 // https://dsdmoj.atlassian.net/wiki/spaces/ARN/pages/6150881391/ModSec+-+AAP+Team+Guide#Testing
 test(
