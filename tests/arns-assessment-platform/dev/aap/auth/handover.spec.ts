@@ -1,11 +1,6 @@
 import { test, expect, APIRequestContext } from '@playwright/test';
 import { getToken } from '../../../../../utils/aapClient';
-import {
-  createOasysAssociation,
-  getCoordinatorUrl,
-  getEntity,
-} from '../../../../../utils/coordinator/coordinatorClient';
-import { EntityResponse } from '../../../../../utils/coordinator/coordinatorTypes';
+import { createOasysAssociation, getCoordinatorUrl } from '../../../../../utils/coordinator/coordinatorClient';
 import { getHandoverLink, getHandoverUrl, getModsecError } from '../../../../../utils/handover/handoverClient';
 import { CreateHandoverLinkResponse } from '../../../../../utils/handover/handoverTypes';
 
@@ -34,43 +29,40 @@ test.afterAll(async () => {
   await coordinatorContext.dispose();
 });
 
-test.describe.skip('Handover API', // {
-//   tag: '@dev',
-// },
-() => {
-  let assessmentVersion: number;
-  const crn = Math.random().toString().substring(2, 7);
-  const oasysPk = Math.floor(Math.random() * 1000000000).toString();
+test.describe(
+  'Handover API',
+  {
+    tag: '@dev',
+  },
+  () => {
+    let assessmentVersion: number | null;
+    const crn = Math.random().toString().substring(2, 7);
+    const oasysPk = Math.floor(Math.random() * 1000000000).toString();
 
-  test.beforeEach(async () => {
-    const sanAssessmentId: string = await test.step('OAsys association', async () => {
-      const oasysResponse = await createOasysAssociation(coordinatorContext, crn, oasysPk);
-      expect(oasysResponse).toBeTruthy();
+    test.beforeEach(async () => {
+      assessmentVersion = await test.step('OAsys association', async () => {
+        const oasysResponse = await createOasysAssociation(coordinatorContext, crn, oasysPk);
+        expect(oasysResponse).toBeTruthy();
 
-      return oasysResponse.sanAssessmentId;
+        const sanVersion = oasysResponse.sanAssessmentVersion === 0 ? null : oasysResponse.sanAssessmentVersion;
+
+        return sanVersion;
+      });
     });
 
-    assessmentVersion = await test.step('Get entity', async () => {
-      const queryResponse: EntityResponse = await getEntity(coordinatorContext, sanAssessmentId, 'AAP_SAN');
+    test('Get Handover link', async () => {
+      const handoverResponse: CreateHandoverLinkResponse = await getHandoverLink(
+        handoverContext,
+        oasysPk,
+        null,
+        assessmentVersion
+      );
 
-      expect(queryResponse).toBeTruthy();
-      expect(queryResponse).toHaveProperty('sanAssessmentVersion');
-      return queryResponse.sanAssessmentVersion;
+      expect(handoverResponse).toBeTruthy();
+      expect(handoverResponse.handoverLink).toContain('/handover/');
     });
-  });
-
-  test('Get Handover link', async () => {
-    const handoverResponse: CreateHandoverLinkResponse = await getHandoverLink(
-      handoverContext,
-      oasysPk,
-      0,
-      assessmentVersion
-    );
-
-    expect(handoverResponse).toBeTruthy();
-    expect(handoverResponse.handoverLink).toContain('/handover/');
-  });
-});
+  }
+);
 
 // https://dsdmoj.atlassian.net/wiki/spaces/ARN/pages/6150881391/ModSec+-+AAP+Team+Guide#Testing
 test(
