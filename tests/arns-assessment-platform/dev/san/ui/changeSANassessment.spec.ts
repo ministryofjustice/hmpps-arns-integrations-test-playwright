@@ -3,7 +3,10 @@ import { StrengthsAndNeedsPage } from '../../../../../page-objects/strengths-and
 import { TrainingLauncherPage } from '../../../../../page-objects/arns-assessment-platform/training-launcher-page';
 import { PrivacyPage } from '../../../../../page-objects/arns-assessment-platform/privacy-page';
 import { getBaseUrl, getToken, queryAssessment } from '../../../../../utils/aapClient';
-import { createDrugs, createAccommodation } from '../../../../../page-objects/arns-assessment-platform/api/setup-assessment';
+import {
+  createDrugs,
+  createAccommodation,
+} from '../../../../../page-objects/arns-assessment-platform/api/setup-assessment';
 import { AssessmentQueryResponse } from '../../../../../utils/aap/assessmentTypes';
 
 test.describe(
@@ -76,9 +79,7 @@ test.describe(
       await expect(strengthsAndNeedsPage.accommodation.settled).not.toBeChecked();
       await strengthsAndNeedsPage.accommodation.unknown.setChecked(true);
       await strengthsAndNeedsPage.saveAndContinue.click();
-      await expect(
-        strengthsAndNeedsPage.page.getByText(/accommodation suitable/).first()
-      ).toBeVisible();
+      await expect(strengthsAndNeedsPage.page.getByText(/accommodation suitable/).first()).toBeVisible();
 
       const queryResponse = (await queryAssessment(apiContext, assessmentId)) as AssessmentQueryResponse;
 

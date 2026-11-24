@@ -179,7 +179,7 @@ export async function updateAccommodationAnswers(
             living_with: {
               type: 'Multi',
               values: ['FAMILY', 'FRIENDS'],
-            }
+            },
           },
         },
       ],

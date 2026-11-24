@@ -15,6 +15,8 @@
     "dev:san:ci": "SOURCE=SAN playwright test --project=chromium_san --project=edge_san",
     "dev:arns:ci": "SOURCE=ARNS playwright test --project=chromium_arns --project=edge_arns",
     "dev:ui": "LOCAL_RUN=1 playwright test --project=chromium --ui",
+    "dev:reg:ui": "LOCAL_RUN=1 playwright test --project=chromium_regression --ui --ui-host=127.0.0.1",
+    "dev:reg": "LOCAL_RUN=1 playwright test --project=chromium_regression",
     "local:ui": "LOCAL_RUN=1 playwright test --config=playwright.local.config.ts --project=chromium --ui",
     "test:ui": "LOCAL_RUN=1 playwright test --config=playwright.test.config.ts --project=chromium --ui",
     "test:all:ci": "playwright test --config=playwright.test.config.ts --project=chromium --project=edge --grep '@dev|@test'",
@@ -26,6 +28,8 @@
     "prettier": "prettier . --check",
     "prettier:fix": "prettier . --write",
     "prepare": "husky",
+    "dev:san:k6": "BASE_URL=https://arns-assessment-platform-dev.hmpps.service.justice.gov.uk k6 run ./performance/tests/san-ui-smoke.js",
+    "test:san:k6": "k6 run ./performance/tests/san-ui-smoke.js",
     "k6:aap:local": "./performance/utils/run_k6_aap_local.sh",
     "k6:smoke:local": "./performance/utils/run_k6_aap_smoke_local.sh",
     "catalogue:sync": "node scripts/sync-test-catalogue.mjs",
@@ -39,24 +43,32 @@
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.60.0",
     "@types/eslint__js": "^9.14.0",
-    "@types/node": "^22.19.17",
+    "@types/node": "^26.6.6",
     "audit-ci": "^7.1.0",
-    "dotenv": "^18.0.4",
-    "eslint": "^10.12.0",
+    "dotenv": "^18.0.9",
+    "eslint": "^10.14.0",
     "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
     "node-fetch": "^3.3.2",
-    "npm-check-updates": "^22.2.2",
-    "playwright-ctrf-json-reporter": "^0.1.0",
-    "prettier": "3.8.3",
-    "tsx": "^4.21.0",
-    "typescript-eslint": "^8.71.0"
+    "npm-check-updates": "^23.1.1",
+    "playwright-ctrf-json-reporter": "^0.2.0",
+    "prettier": "3.9.10",
+    "tsx": "^4.23.15",
+    "typescript-eslint": "^8.72.1"
   },
   "dependencies": {
-    "@axe-core/playwright": "^4.11.3",
+    "@axe-core/playwright": "^4.14.0",
     "ts-node": "^10.9.2"
   },
   "overrides": {
-    "brace-expansion": "^5.0.12"
+    "brace-expansion": "^5.0.12",
+    "eslint": {
+      "minimatch": "^11.0.1"
+    }
+  },
+  "allowScripts": {
+    "fsevents@2.3.2": true,
+    "fsevents@2.3.3": true,
+    "esbuild@0.28.2": true
   }
 }

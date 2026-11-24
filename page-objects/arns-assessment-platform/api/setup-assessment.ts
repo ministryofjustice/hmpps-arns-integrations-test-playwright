@@ -1,5 +1,10 @@
 import { APIRequestContext, Page } from '@playwright/test';
-import { updateAccommodationAnswers, updateAccommodationProperties, updateDrugAnswers, updateDrugProperties } from '../../../utils/aap/strengthsAndNeeds/assessmentCommands';
+import {
+  updateAccommodationAnswers,
+  updateAccommodationProperties,
+  updateDrugAnswers,
+  updateDrugProperties,
+} from '../../../utils/aap/strengthsAndNeeds/assessmentCommands';
 
 const extractCrn = (details: string): string => {
   const fields = details.split('|');

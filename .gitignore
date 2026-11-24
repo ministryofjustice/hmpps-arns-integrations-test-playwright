@@ -14,3 +14,7 @@ arnsAssessmentToken.json
 # agent skills
 .agents/
 skills-lock.json
+
+# Perf
+junit.xml
+result.html
