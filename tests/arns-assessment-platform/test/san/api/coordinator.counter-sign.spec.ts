@@ -66,7 +66,7 @@ test.beforeEach(async () => {
     const assessmentDate =
       Object.entries(queryResponse.allVersions).find(([, e]) => Object.keys(e).includes('assessmentVersion')) ?? [];
     const assessmentLastUpdatedDate = assessmentDate[0] ?? '';
-    expect(queryResponse.allVersions[assessmentLastUpdatedDate].assessmentVersion.entityType).toBe('ASSESSMENT');
+    expect(queryResponse.allVersions[assessmentLastUpdatedDate].assessmentVersion.entityType).toBe('AAP_SAN');
 
     return {
       assessmentVersion: queryResponse.allVersions[assessmentLastUpdatedDate].assessmentVersion.version,
