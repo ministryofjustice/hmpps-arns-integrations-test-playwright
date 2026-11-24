@@ -34,46 +34,43 @@ test.afterAll(async () => {
   await coordinatorContext.dispose();
 });
 
-test.describe.skip(
-  'Handover API',
-  {
-    tag: '@dev',
-  },
-  () => {
-    let assessmentVersion: number;
-    const crn = Math.random().toString().substring(2, 7);
-    const oasysPk = Math.floor(Math.random() * 1000000000).toString();
+test.describe.skip('Handover API', // {
+//   tag: '@dev',
+// },
+() => {
+  let assessmentVersion: number;
+  const crn = Math.random().toString().substring(2, 7);
+  const oasysPk = Math.floor(Math.random() * 1000000000).toString();
 
-    test.beforeEach(async () => {
-      const sanAssessmentId: string = await test.step('OAsys association', async () => {
-        const oasysResponse = await createOasysAssociation(coordinatorContext, crn, oasysPk);
-        expect(oasysResponse).toBeTruthy();
+  test.beforeEach(async () => {
+    const sanAssessmentId: string = await test.step('OAsys association', async () => {
+      const oasysResponse = await createOasysAssociation(coordinatorContext, crn, oasysPk);
+      expect(oasysResponse).toBeTruthy();
 
-        return oasysResponse.sanAssessmentId;
-      });
-
-      assessmentVersion = await test.step('Get entity', async () => {
-        const queryResponse: EntityResponse = await getEntity(coordinatorContext, sanAssessmentId, 'AAP_SAN');
-
-        expect(queryResponse).toBeTruthy();
-        expect(queryResponse).toHaveProperty('sanAssessmentVersion');
-        return queryResponse.sanAssessmentVersion;
-      });
+      return oasysResponse.sanAssessmentId;
     });
 
-    test('Get Handover link', async () => {
-      const handoverResponse: CreateHandoverLinkResponse = await getHandoverLink(
-        handoverContext,
-        oasysPk,
-        0,
-        assessmentVersion
-      );
+    assessmentVersion = await test.step('Get entity', async () => {
+      const queryResponse: EntityResponse = await getEntity(coordinatorContext, sanAssessmentId, 'AAP_SAN');
 
-      expect(handoverResponse).toBeTruthy();
-      expect(handoverResponse.handoverLink).toContain('/handover/');
+      expect(queryResponse).toBeTruthy();
+      expect(queryResponse).toHaveProperty('sanAssessmentVersion');
+      return queryResponse.sanAssessmentVersion;
     });
-  }
-);
+  });
+
+  test('Get Handover link', async () => {
+    const handoverResponse: CreateHandoverLinkResponse = await getHandoverLink(
+      handoverContext,
+      oasysPk,
+      0,
+      assessmentVersion
+    );
+
+    expect(handoverResponse).toBeTruthy();
+    expect(handoverResponse.handoverLink).toContain('/handover/');
+  });
+});
 
 // https://dsdmoj.atlassian.net/wiki/spaces/ARN/pages/6150881391/ModSec+-+AAP+Team+Guide#Testing
 test(
