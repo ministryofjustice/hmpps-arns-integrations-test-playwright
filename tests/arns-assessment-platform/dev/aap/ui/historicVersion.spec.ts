@@ -41,10 +41,8 @@ const crn = Math.random().toString().substring(2, 7);
 const oasysPk = Math.floor(Math.random() * 1000000000).toString();
 let planVersion: number;
 
-test.describe.skip('Private beta', // {
-//   tag: '@dev',
-// },
-() => {
+test.describe.skip('Private beta', () => {
+  // }, //   tag: '@dev', // {
   test.beforeEach(async () => {
     const oasysResponse = await createOasysAssociation(coordinatorContext, crn, oasysPk);
     await lock(coordinatorContext, oasysPk);

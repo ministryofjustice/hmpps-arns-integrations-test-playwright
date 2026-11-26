@@ -37,7 +37,7 @@ export class TrainingLauncherPage {
 
   goto = async (scenario: string = 'default') => {
     await this.page.goto(`/training-session-launcher/browse?scenario=${scenario}`);
-    await expect(this.page).toHaveTitle('Assess and plan');
+    await expect(this.page).toHaveTitle('Select a scenario - Training - Assess and plan');
     await expect(this.page.getByRole('heading', { name: 'Select a scenario' })).toBeVisible();
   };
 
